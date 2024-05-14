@@ -1,0 +1,2 @@
+/* This is our main server. We import our routes here from the routes folder. 
+This will result in less conflict. Just google or chatGPT how to export routes*/
