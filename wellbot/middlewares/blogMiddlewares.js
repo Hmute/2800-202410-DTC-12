@@ -1,0 +1,1 @@
+// This is the middleware for blog page only. Do not access if you're not Marc. Create your own.
