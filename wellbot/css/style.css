@@ -1,0 +1,32 @@
+body {
+    background-color: #393E46;
+    color: #EEEEEE;
+}
+
+.header {
+    background-color: #222831;
+}
+
+.nav-link img {
+    width: 24px;
+    height: 24px;
+}
+
+.bottom-nav {
+    background-color: #116C71;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    height: 60px;
+    /* Adjust this value to match the desired footer height */
+}
+
+.nav-icon {
+    font-size: 2em;
+    /* Adjust this value to match the desired icon size */
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: auto;
+}
