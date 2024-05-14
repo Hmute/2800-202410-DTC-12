@@ -1,0 +1,105 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    background: #222831; /* Fallback color */
+    background: linear-gradient(
+       135deg,
+       #1f2327,
+       #30353a
+    ); /* Gradient effect */
+    color: #eeeeee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+ }
+ 
+ .container {
+    text-align: center;
+    max-width: 300px; /* Optional: limit container width */
+ }
+ 
+ .logo-wrap {
+    margin-bottom: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    width: 180px;
+    height: 190px;
+    border-radius: 50%;
+    background: linear-gradient(
+       135deg,
+       #2cb8c4,
+       #116c71
+    ); /* Gradient effect */
+    box-sizing: border-box;
+    padding: 15px;
+ }
+ 
+ .main-logo {
+    max-width: 100%; /* Ensure the image does not exceed the size of the oval */
+    height: auto;
+ }
+ 
+ .brand-name {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-transform: uppercase; /* Convert text to uppercase */
+    letter-spacing: 2px; /* Add spacing between letters */
+    background: linear-gradient(
+       135deg,
+       #2cb8c4,
+       #116c71
+    ); /* Gradient effect */
+    -webkit-background-clip: text; /* Apply gradient only to text */
+    -webkit-text-fill-color: transparent; /* Hide original text color */
+ }
+ 
+ .tagline {
+    font-size: 1rem; /* Adjust the font size as needed */
+    margin-bottom: 30px;
+ }
+ 
+ .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center; /* Center buttons horizontally */
+ }
+ 
+ .btn {
+    width: 200px; /* Fixed width for both buttons */
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    display: inline-block;
+ }
+ 
+ .btn-primary {
+    background-color: #116c71;
+    color: white;
+ }
+ 
+ .btn-secondary {
+    background-color: transparent;
+    color: #116c71;
+    border: 2px solid #116c71;
+ }
+ 
+ .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    padding: 12px;
+ }
+ 
+ .btn-primary:hover {
+    background-color: #0d4f53;
+ }
+ 
