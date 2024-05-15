@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 3000;
 //############################################Do not touch######################################################
 app.use('/css', express.static(path.join(__dirname, 'css'))); // Need this to access the css files. Do not remove.
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Need this to access the css files. Do not remove.
+app.use('/script', express.static(path.join(__dirname, 'script'))); // Need this to access the css files. Do not remove.
 app.set('view engine', 'ejs');
 //####################################################################################################
 
@@ -27,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log('Connected to MongoDB');
   })
