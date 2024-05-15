@@ -10,8 +10,20 @@
   overflow: hidden;
 }
 
+.custom-card-height {
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.custom-card-height:active {
+  transform: scale(0.98);
+  /* Slightly scale down when clicked */
+  opacity: 0.8;
+  /* Reduce opacity when clicked */
+}
+
 /* Control the width so that I could put a proper margin with mx-auto */
-.width-98{
+.width-98 {
   max-width: 98%;
 }
 
@@ -19,10 +31,10 @@ h2 {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
 }
+
 #section {
   font-family: 'Lora', sans-serif;
   font-weight: 700;
-  margin-left: 10px;
 }
 
 small {
@@ -44,12 +56,10 @@ small {
   display: flex;
   overflow-x: auto;
   gap: 10px;
-  /* Optional: Adds spacing between the cards */
 }
 
 .card {
   min-width: 400px;
-  /* Adjust this width as needed */
   flex: 0 0 auto;
 }
 
@@ -57,27 +67,23 @@ small {
   min-width: 150px;
 }
 
+/* Css for the + and list icons */
 .fab-container {
   position: fixed;
   bottom: 70px;
-  /* Adjust this to place the button above the footer */
   right: 20px;
   z-index: 1000;
-  /* Ensure the button stays above other elements */
 }
 
 .fab-container-view {
   position: fixed;
   bottom: 140px;
-  /* Adjust this to place the button above the "create" button */
   right: 20px;
   z-index: 1000;
-  /* Ensure the button stays above other elements */
 }
 
 .fab-button {
   background-color: #007bff;
-  /* Change this color to match your design */
   border: none;
   border-radius: 50%;
   width: 56px;
@@ -88,15 +94,14 @@ small {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   color: white;
-  /* Color for the FontAwesome icon */
 }
 
 .fab-button .fas {
   font-size: 24px;
-  /* Adjust the size of the icon */
 }
 
 .main-content {
   padding-bottom: 75px;
 }
+
 /* Make some css here for click animation */
