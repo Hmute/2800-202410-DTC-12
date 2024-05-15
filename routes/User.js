@@ -29,6 +29,7 @@ const userSchema = new mongoose.Schema({
     resetPasswordExpires: Date
 });
 
+// Ensure passwords are hashed before saving
 userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next(); // Don't rehash if password hasn't changed
     try {

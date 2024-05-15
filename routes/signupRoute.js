@@ -14,11 +14,10 @@ router.post('/', async (req, res) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
             fullName: req.body.fullName,
             email: req.body.email,
-            password: hashedPassword,
+            password: req.body.password, // Password will be hashed in the pre-save hook
         });
         await user.save();
 

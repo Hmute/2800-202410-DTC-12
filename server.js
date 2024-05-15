@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -56,7 +56,7 @@ app.use('/resetPassword', resetPasswordRoute);
 app.use('/signup', signupRoute);
 app.use(blogRoute);
 
-//Richard's script for collapsing meals and exercises button on homepage
+// Richard's script for collapsing meals and exercises button on homepage
 app.get('/home', (req, res) => {
   res.render('home', { page: 'dashboard' });
 });
