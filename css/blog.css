@@ -1,0 +1,34 @@
+/* This is to control the height of the blog image */
+.custom-image-height {
+  height: 200px;
+  object-fit: cover;
+}
+
+/* This is to control the height of the card in the blog page */
+.custom-card-height {
+  max-height: 300px;
+  overflow: hidden;
+}
+
+/* Control the width so that I could put a proper margin with mx-auto */
+.width-98{
+  max-width: 98%;
+}
+
+h2 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+
+small {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: grey;
+}
+
+.text-left-custom {
+  text-align: left;
+}
+
+
+/* Make some css here for click animation */
