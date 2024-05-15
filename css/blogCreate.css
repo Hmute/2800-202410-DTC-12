@@ -1,0 +1,10 @@
+.icon-container {
+  height: 300px;
+  /* Adjust this value to set the desired height */
+  display: flex;
+  align-items: center;
+  /* Vertically center the icon */
+  justify-content: center;
+  /* Horizontally center the icon */
+  background-color: grey;
+}

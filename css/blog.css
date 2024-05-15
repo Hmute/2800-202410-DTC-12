@@ -19,6 +19,11 @@ h2 {
   font-family: 'Roboto', sans-serif;
   font-weight: 700;
 }
+#section {
+  font-family: 'Lora', sans-serif;
+  font-weight: 700;
+  margin-left: 10px;
+}
 
 small {
   font-family: 'Roboto', sans-serif;
@@ -30,5 +35,68 @@ small {
   text-align: left;
 }
 
+.border-bottom-custom {
+  border-bottom: 2px solid #292626;
+  border-width: thin;
+}
 
+.scrollable-x {
+  display: flex;
+  overflow-x: auto;
+  gap: 10px;
+  /* Optional: Adds spacing between the cards */
+}
+
+.card {
+  min-width: 400px;
+  /* Adjust this width as needed */
+  flex: 0 0 auto;
+}
+
+.add-y {
+  min-width: 150px;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 70px;
+  /* Adjust this to place the button above the footer */
+  right: 20px;
+  z-index: 1000;
+  /* Ensure the button stays above other elements */
+}
+
+.fab-container-view {
+  position: fixed;
+  bottom: 140px;
+  /* Adjust this to place the button above the "create" button */
+  right: 20px;
+  z-index: 1000;
+  /* Ensure the button stays above other elements */
+}
+
+.fab-button {
+  background-color: #007bff;
+  /* Change this color to match your design */
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  color: white;
+  /* Color for the FontAwesome icon */
+}
+
+.fab-button .fas {
+  font-size: 24px;
+  /* Adjust the size of the icon */
+}
+
+.main-content {
+  padding-bottom: 75px;
+}
 /* Make some css here for click animation */
