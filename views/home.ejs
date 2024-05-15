@@ -1,0 +1,82 @@
+<%- include("templates/header") %>
+    <!-- This is the meal card -->
+    <div class="accordion" id="accordionExample">
+        <div class="card">
+            <div class="card-header" id="headingOne" style="background-color: #D9D9D9;">
+                <h5 class="mb-0">
+                    <button class="btn btn-link text-black" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+                        style="text-decoration: none">
+                        <a class hover: blue> Meal</a>
+                    </button>
+                </h5>
+            </div>
+    
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="card-body">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-header">
+                          <b>Breakfast</b>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item first-breakfast-item">Boiled Egg</li>
+                          <li class="list-group-item second-breakfast-item">Fried Chicken</li>
+                          <li class="list-group-item third-breakfast-item">Korean Fried Chicken</li>
+                        </ul>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- This is the exercise card -->
+        <div class="accordion" id="accordionExample">
+            <div class="card">
+                <div class="card-header" id="headingTwo" style="background-color: #D9D9D9;">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed text-black" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"
+                            style="text-decoration: none">
+                            <a class hover: blue>Exercises</a>
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="card-body">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                              <h5 class="card-title"><b>Bench Press</b></h5>
+                              <p class="card-text set">5 Sets</p>
+                              <p class="card-text reps">15 Reps</p>
+                              <p class="card-text kg">45 kg</p>
+                              <p class="card-text time"></p>
+                              <a href="#" class="btn btn-primary">Log</a>
+                            </div>
+                          </div>
+                          
+                          <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>Bicep Curls</b></h5>
+                                <p class="card-text set">5 Sets</p>
+                                <p class="card-text reps">15 Reps</p>
+                                <p class="card-text kg">45 kg</p>
+                                <p class="card-text time"></p>
+                                <a href="#" class="btn btn-primary">Log</a>
+                              </div>
+                          </div>
+                          
+                          <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title"><b>Jog</b></h5>
+                                <p class="card-text set"></p>
+                                <p class="card-text reps"></p>
+                                <p class="card-text kg"></p>
+                                <p class="card-text time">20 minutes</p>
+                                <a href="#" class="btn btn-primary">Log</a>
+                              </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<script> '/script/collapse.js'</script>
+<%- include("templates/footer") %>  

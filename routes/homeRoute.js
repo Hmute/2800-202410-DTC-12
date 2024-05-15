@@ -3,6 +3,6 @@ const app = express();
 const ejs = require('ejs'); // need to import because it's 'require' (npm i ejs)
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/homepage', (req, res) => {
+    res.render('homepage');
 });

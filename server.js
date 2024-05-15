@@ -1,7 +1,7 @@
 /* This is our main server. We import our routes here from the routes folder. 
 This will result in less conflict. Just google or chatGPT how to export routes*/
 
-//Richard's script for collapsing meals and exercises button on homepage
+
 const express = require('express');
 const app = express();
 const path = require('path'); // Import the path module for path.join
@@ -15,8 +15,9 @@ app.use('/images', express.static(path.join(__dirname, 'images'))); // Need this
 app.set('view engine', 'ejs');
 //####################################################################################################
 
-app.get('/', (req, res) => {
-    res.render('index');
+//Richard's script for collapsing meals and exercises button on homepage
+app.get('/home', (req, res) => {
+    res.render('home', {page: 'dashboard'});
 });
 
 app.use(blogRoute);
