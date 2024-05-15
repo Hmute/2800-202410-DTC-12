@@ -3,18 +3,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const path = require('path');
-const nodemailer = require('nodemailer');
-const crypto = require('crypto');
-const ejs = require('ejs'); // need to import because it's 'require' (npm i ejs)
+const MongoStore = require('connect-mongo');
+
 // Routes
 const forgotPasswordRoute = require('./routes/forgotPasswordRoute');
 const launchRoute = require('./routes/launchRoute');
 const loginRoute = require('./routes/loginRoute');
 const resetPasswordRoute = require('./routes/resetPasswordRoute');
 const signupRoute = require('./routes/signupRoute');
+const blogRoute = require('./routes/blogRoute');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
-const blogRoute = require('./routes/blogRoute');
 
 //############################################Do not touch######################################################
 app.use('/css', express.static(path.join(__dirname, 'css'))); // Need this to access the css files. Do not remove.
@@ -23,58 +23,45 @@ app.use('/script', express.static(path.join(__dirname, 'script'))); // Need this
 app.set('view engine', 'ejs');
 //####################################################################################################
 
-
 // Express Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-// app.set('views', path.join(__dirname, 'wellbot/html/templates'));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log('MongoDB connected!'))
-.catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+  });
 
-// Nodemailer Transporter (Fill in your email configuration)
-const transporter = nodemailer.createTransport({
-  // Your email service configuration (e.g., Gmail, SendGrid, etc.)
-});
+// Session Secret
+const sessionSecret = process.env.SESSION_SECRET;
 
-// Session Configuration
-let sessionSecret;
-if (process.env.SESSION_SECRET) {
-  sessionSecret = process.env.SESSION_SECRET;
-  console.log("Using session secret from .env:", sessionSecret);
-} else {
-  sessionSecret = crypto.randomBytes(64).toString('hex');
-  console.log("Generated new session secret (add this to your .env file):", sessionSecret);
-}
-
+// Express Session Configuration
 app.use(session({
   secret: sessionSecret,
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
 }));
 
-
+// Routes
 app.use('/forgot-password', forgotPasswordRoute);
 app.use('/', launchRoute);
 app.use('/login', loginRoute);
 app.use('/reset-password', resetPasswordRoute);
 app.use('/signup', signupRoute);
-
+app.use(blogRoute);
 
 //Richard's script for collapsing meals and exercises button on homepage
 app.get('/home', (req, res) => {
-    res.render('home', {page: 'dashboard'});
+  res.render('home', { page: 'dashboard' });
 });
-
-app.use(blogRoute);
 
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
-

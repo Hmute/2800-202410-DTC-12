@@ -8,6 +8,11 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
+    // Check if passwords match
+    if (req.body.password !== req.body.confirmPassword) {
+        return res.render('signup', { error: 'Passwords do not match' });
+    }
+
     try {
         const hashedPassword = await bcrypt.hash(req.body.password, 10);
         const user = new User({
@@ -16,12 +21,15 @@ router.post('/', async (req, res) => {
             password: hashedPassword,
         });
         await user.save();
-        res.redirect('/login');
+
+        // Redirect to a valid route after successful signup
+        res.redirect('/home'); 
     } catch (err) {
-        if (err.code === 11000) { // Check for duplicate email error
+        if (err.code === 11000) { 
             res.render('signup', { error: 'Email already exists' });
         } else {
-            res.status(500).send("Error registering new user.");
+            console.error("Signup error:", err);  // Log the error for debugging
+            res.render('signup', { error: 'An error occurred during signup' }); // Generic error message for the user
         }
     }
 });

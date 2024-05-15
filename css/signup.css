@@ -12,11 +12,11 @@ body {
 
 .container {
     text-align: center;
-    max-width: 300px; 
-    width: 100%; 
+    max-width: 400px; 
+    width: 90%; 
     padding: 0 15px; 
+    margin-top: -50px; 
 }
-
 /* Logo Styles */
 .logo-wrap {
     margin-bottom: 20px;
@@ -45,15 +45,12 @@ h2 {
     background: linear-gradient(135deg, #2cb8c4, #116c71);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-align: center;
-    padding-left: 15px; 
 }
 
 /* Form Styles */
 form {
-    width: 100%;
-    max-width: 300px; 
-    margin: 0 auto;
+    width: 100%; /* Make the form take full container width */
+    max-width: none; /* Remove max-width on form */
 }
 
 .form-group {
@@ -63,7 +60,7 @@ form {
 input[type="text"],
 input[type="email"],
 input[type="password"] {
-    width: 100%;
+    width: 100%; /* Make input fields take full form width */
     padding: 15px;
     border: none;
     border-radius: 5px;
@@ -124,6 +121,7 @@ input[type="password"]:focus {
 /* Forgot Password Link */
 .forgot-password {
     margin-top: 25px; 
+    width: 100%; /* Make the link take full container width */
     text-align: center; 
     color: #2cb8c4;
     text-decoration: none;
