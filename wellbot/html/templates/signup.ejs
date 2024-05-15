@@ -1,25 +1,21 @@
-<%- include('templates/header') %>
-    <div class="container">
-        <div class="logo-wrap">
-            <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" />
-        </div>
-        <h2>Sign Up</h2>
-        <form>
-            <div class="form-group">
-                <input type="text" class="form-control" id="full-name" name="full-name" required placeholder="Full Name" />
-            </div>
-            <div class="form-group">
-                <input type="email" class="form-control" id="email" name="email" required placeholder="Email" />
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="password" name="password" required placeholder="Password" />
-            </div>
-            <div class="form-group">
-                <input type="password" class="form-control" id="confirm-password" name="confirm-password" required placeholder="Confirm Password" />
-            </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
-        </form>
-        <a href="login.html" class="forgot-password text-center d-block">Already have an account? Login</a>
+<div class="container">
+    <div class="logo-wrap">
+        <!-- <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" /> -->
     </div>
-
-    <%- include('templates/footer') %>
+    <h2>Sign Up</h2>
+    <form action="/signup" method="POST"> <div class="form-group">
+            <input type="text" class="form-control" id="full-name" name="full-name" required placeholder="Full Name" />
+        </div>
+        <div class="form-group">
+            <input type="email" class="form-control" id="email" name="email" required placeholder="Email" />
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="password" name="password" required placeholder="Password" />
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="confirm-password" name="confirm-password" required placeholder="Confirm Password" />
+        </div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    <a href="/login" class="forgot-password text-center d-block">Already have an account? Login</a>
+</div>

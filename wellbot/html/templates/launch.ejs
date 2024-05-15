@@ -1,15 +1,21 @@
-<%- include('templates/header') %> 
+
 
 <div class="container">
    <div class="logo-wrap">
-      <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" />
+     <!-- <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" /> -->
    </div>
    <h1 class="brand-name">WELLBOT</h1>
    <p class="tagline">AI-powered fitness, tailored to you.</p>
-
+ 
    <div class="button-container">
-      <a href="signup.html" class="btn btn-primary">Get Started</a>
-      <a href="login.html" class="btn btn-secondary">Log In</a>
+     <form method="POST" action="/"> 
+       <button type="submit" name="action" value="getStarted" class="btn btn-primary">Get Started</button>
+     </form>
+     <form method="POST" action="/">
+       <button type="submit" name="action" value="login" class="btn btn-secondary">Log In</button>
+     </form>
    </div>
-</div>
-<%- include('templates/footer') %> 
+ </div>
+ 
+
+ 
