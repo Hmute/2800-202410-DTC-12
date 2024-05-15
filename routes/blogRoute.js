@@ -7,4 +7,7 @@ router.get('/blog', (req, res) => {
     res.render('blogPage', {page: 'Blog Posts'});
 });
 
+router.get('/blog/create', (req, res) => {
+    res.render('blogCreate', {page: 'Blog'})
+});
 module.exports = router;
