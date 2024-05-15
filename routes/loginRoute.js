@@ -12,7 +12,7 @@ router.post('/', async (req, res) => {
         const user = await User.findOne({ email: req.body.email });
         if (user && await bcrypt.compare(req.body.password, user.password)) {
             req.session.user = user;
-            res.redirect('/profile');
+            res.redirect('/home'); // Redirect to home page after successful login
         } else {
             res.render('login', { error: 'Invalid credentials' });
         }

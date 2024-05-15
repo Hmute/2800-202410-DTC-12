@@ -1,18 +1,28 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./User');
+const User = require('./User'); // Adjust path as necessary
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
+const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
 router.get('/', (req, res) => {
-    res.render('forgot-password', { error: null });
+    console.log("Forgot password GET route hit");
+    res.render('forgotPassword', { error: null, message: null });
 });
 
 router.post('/', async (req, res) => {
+    console.log("Forgot password POST route hit");
     try {
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
-            return res.render('forgot-password', { error: 'Email not found' });
+            return res.render('forgotPassword', { error: 'Email not found', message: null });
         }
         
         const token = crypto.randomBytes(20).toString('hex');
@@ -20,7 +30,7 @@ router.post('/', async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
         await user.save();
 
-        const resetLink = `http://localhost:${process.env.PORT}/reset-password/${token}`;
+        const resetLink = `http://localhost:${process.env.PORT || 3000}/resetPassword/${token}`;
         const mailOptions = {
             to: user.email,
             subject: 'WellBot Password Reset',
@@ -28,7 +38,7 @@ router.post('/', async (req, res) => {
         };
         await transporter.sendMail(mailOptions);
 
-        res.render('forgot-password', { message: 'Password reset email sent' });
+        res.render('forgotPassword', { message: 'Password reset email sent', error: null });
     } catch (err) {
         res.status(500).send("Error sending password reset email.");
     }

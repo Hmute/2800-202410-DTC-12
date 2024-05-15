@@ -11,9 +11,9 @@ router.get('/:token', async (req, res) => {
         });
 
         if (!user) {
-            return res.render('forgot-password', { error: 'Invalid or expired token' });
+            return res.render('forgotPassword', { error: 'Invalid or expired token' });
         }
-        res.render('reset-password', { token: req.params.token });
+        res.render('resetPassword', { token: req.params.token });
     } catch (err) {
         res.status(500).send("Error finding user for password reset."); 
     }
@@ -26,7 +26,7 @@ router.post('/:token', async (req, res) => {
             resetPasswordExpires: { $gt: Date.now() } 
         });
         if (!user) {
-            return res.render('forgot-password', { error: 'Invalid or expired token' });
+            return res.render('forgotPassword', { error: 'Invalid or expired token' });
         }
 
         const hashedPassword = await bcrypt.hash(req.body.password, 10);

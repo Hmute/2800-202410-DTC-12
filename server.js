@@ -49,10 +49,10 @@ app.use(session({
 }));
 
 // Routes
-app.use('/forgot-password', forgotPasswordRoute);
+app.use('/forgotPassword', forgotPasswordRoute);
 app.use('/', launchRoute);
 app.use('/login', loginRoute);
-app.use('/reset-password', resetPasswordRoute);
+app.use('/resetPassword', resetPasswordRoute);
 app.use('/signup', signupRoute);
 app.use(blogRoute);
 
