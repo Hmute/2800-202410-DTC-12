@@ -12,6 +12,7 @@ const blogRoute = require('./routes/blogRoute');
 //############################################Do not touch######################################################
 app.use('/css', express.static(path.join(__dirname, 'css'))); // Need this to access the css files. Do not remove.
 app.use('/images', express.static(path.join(__dirname, 'images'))); // Need this to access the css files. Do not remove.
+app.use('/script', express.static(path.join(__dirname, 'script'))); // Need this to access the css files. Do not remove.
 app.set('view engine', 'ejs');
 //####################################################################################################
 

@@ -8,3 +8,110 @@
   /* Horizontally center the icon */
   background-color: grey;
 }
+
+.back-button-container {
+  top: 10px;
+  left: 10px;
+}
+
+.clickable-div {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.clickable-div:active {
+  transform: scale(0.98);
+  /* Slightly scale down when clicked */
+  opacity: 0.7;
+  /* Optionally reduce opacity when clicked */
+}
+
+select {
+  width: 100px;
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  font-size: large;
+}
+
+/* Style the down arrow indicator */
+select:after {
+  content: '▼';
+  position: absolute;
+  right: 10px;
+  top: 14px;
+  color: #888;
+  /* Change the color of the arrow */
+  pointer-events: none;
+  /* Prevent clicks on the arrow */
+}
+
+/* Optional: style focus state */
+select:focus {
+  border-color: #0056b3;
+  /* Change border color when the element is focused */
+  outline: none;
+  /* Remove default focus outline */
+}
+
+.title-container {
+  background-color: #ffffff;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  max-width: 500px;
+}
+
+input[type="text"] {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: x-large;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  width: 100px;
+}
+
+.button:hover,
+.button:focus {
+  background-color: #2b3744;
+  transform: scale(1.05);
+  outline: none;
+}
+
+.content-textarea {
+  width: 400px;
+  height: 150px;
+  padding: 10px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+
+.fullscreen-textarea {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%; height: 100%;
+  z-index: 999;
+  border: none;
+  padding-top: 50px; /* Padding to not overlap the top bar */
+}
