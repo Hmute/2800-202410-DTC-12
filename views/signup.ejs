@@ -4,69 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
-    <link rel="stylesheet" href="css/signup.css" />
+    <link rel="stylesheet" href="css/signup.css" /> <!-- Link to the external CSS file -->
 </head>
 <body>
     <div class="container">
+        <!-- Wrapper for the logo -->
         <div class="logo-wrap">
-            <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" />
+            <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" /> <!-- Display the Wellbot logo -->
         </div>
-        <h2>Sign Up</h2>
-        <div id="error-container"></div>
+        <h2>Sign Up</h2> <!-- Display the page title -->
+        <div id="error-container"></div> <!-- Error container for displaying errors -->
+        
+        <!-- Sign up form -->
         <form id="signup-form" action="/signup" method="POST">
             <div class="form-group">
-                <input type="text" class="form-control" id="fullName" name="fullName" required placeholder="Full Name" />
+                <input type="text" class="form-control" id="fullName" name="fullName" required placeholder="Full Name" /> <!-- Full Name input field -->
             </div>
             <div class="form-group">
-                <input type="email" class="form-control" id="email" name="email" required placeholder="Email" />
+                <input type="email" class="form-control" id="email" name="email" required placeholder="Email" /> <!-- Email input field -->
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" id="password" name="password" required placeholder="Password" />
+                <input type="password" class="form-control" id="password" name="password" required placeholder="Password" /> <!-- Password input field -->
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password" />
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required placeholder="Confirm Password" /> <!-- Confirm Password input field -->
             </div>
-            <button type="submit" class="btn btn-primary">Sign Up</button>
+            <button type="submit" class="btn btn-primary">Sign Up</button> <!-- Submit button -->
         </form>
+        
+        <!-- Link to the login page for users who already have an account -->
         <a href="/login" class="forgot-password text-center d-block">Already have an account? Login</a>
     </div>
+    
+    <!-- Client-side validation script -->
     <script>
         document.getElementById('signup-form').addEventListener('submit', function(event) {
-            const fullName = document.getElementById('fullName').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+            const fullName = document.getElementById('fullName').value.trim(); // Get the trimmed full name value
+            const email = document.getElementById('email').value.trim(); // Get the trimmed email value
+            const password = document.getElementById('password').value; // Get the password value
+            const confirmPassword = document.getElementById('confirmPassword').value; // Get the confirm password value
 
-            let errors = [];
+            let errors = []; // Initialize an array to store error messages
 
+            // Validate full name
             if (!fullName) {
-                errors.push('Full Name is required');
+                errors.push('Full Name is required'); // Add error if full name is empty
             }
 
+            // Validate email format
             const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if (!emailPattern.test(email)) {
-                errors.push('Please enter a valid email address');
+                errors.push('Please enter a valid email address'); // Add error if email is invalid
             }
 
+            // Validate password length
             if (password.length < 8) {
-                errors.push('Password must be at least 8 characters long');
+                errors.push('Password must be at least 8 characters long'); // Add error if password is too short
             }
 
+            // Validate password match
             if (password !== confirmPassword) {
-                errors.push('Passwords do not match');
+                errors.push('Passwords do not match'); // Add error if passwords do not match
             }
 
+            // Display errors if any
             if (errors.length > 0) {
-                event.preventDefault();
+                event.preventDefault(); // Prevent form submission if there are errors
                 const errorContainer = document.getElementById('error-container');
                 errorContainer.innerHTML = ''; // Clear previous errors
                 errors.forEach(error => {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'error-message';
-                    errorDiv.innerText = error;
-                    errorContainer.appendChild(errorDiv);
+                    const errorDiv = document.createElement('div'); // Create a new div for each error
+                    errorDiv.className = 'error-message'; // Set the class for styling
+                    errorDiv.innerText = error; // Set the error message text
+                    errorContainer.appendChild(errorDiv); // Add the error div to the container
                     setTimeout(() => {
-                        errorDiv.style.opacity = 1;
+                        errorDiv.style.opacity = 1; // Make the error visible after a short delay
                     }, 100);
                 });
             }

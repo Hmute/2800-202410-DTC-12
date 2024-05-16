@@ -4,21 +4,23 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <title>Document</title>
-      <link rel="stylesheet" href="css/launch.css" />
+      <link rel="stylesheet" href="css/launch.css" /> <!-- Link to the external CSS file -->
    </head>
    <body>
       <div class="container">
+         <!-- Wrapper for the logo -->
          <div class="logo-wrap">
             <img
                src="images/Wellbot.png"
                alt="Wellbot Logo"
                class="main-logo"
-            />
+            /> <!-- Display the Wellbot logo -->
          </div>
-         <h1 class="brand-name">WELLBOT</h1>
-         <p class="tagline">AI-powered fitness, tailored to you.</p>
+         <h1 class="brand-name">WELLBOT</h1> <!-- Display the brand name -->
+         <p class="tagline">AI-powered fitness, tailored to you.</p> <!-- Display the tagline -->
 
          <div class="button-container">
+            <!-- Form to handle the 'Get Started' action -->
             <form method="POST" action="/">
                <button
                   type="submit"
@@ -27,8 +29,9 @@
                   class="btn btn-primary"
                >
                   Get Started
-               </button>
+               </button> <!-- Button to submit the form and trigger the 'getStarted' action -->
             </form>
+            <!-- Form to handle the 'Log In' action -->
             <form method="POST" action="/">
                <button
                   type="submit"
@@ -37,7 +40,7 @@
                   class="btn btn-secondary"
                >
                   Log In
-               </button>
+               </button> <!-- Button to submit the form and trigger the 'login' action -->
             </form>
          </div>
       </div>
