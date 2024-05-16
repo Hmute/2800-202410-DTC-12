@@ -5,8 +5,18 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const path = require('path');
 const MongoStore = require('connect-mongo');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+// Define rate limit for API requests
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests, please try again later.'
+});
+
+app.use('/bot/generate', apiLimiter);
 
 // Global Middlewares
 app.use(express.urlencoded({ extended: true }));
@@ -22,6 +32,8 @@ const launchRoute = require('./routes/launchRoute');
 const loginRoute = require('./routes/loginRoute');
 const signupRoute = require('./routes/signupRoute');
 const blogRoute = require('./routes/blogRoute');
+const botRoute = require('./routes/botRoute');
+
 
 // Database
 const mongoUser = process.env.MONGODB_USER;
@@ -46,6 +58,7 @@ app.use('/', launchRoute);
 app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
 app.use('/blog', blogRoute);
+app.use('/bot', botRoute);
 
 // Richard's script for collapsing meals and exercises button on homepage (Change this soon richard)
 app.get('/home', (req, res) => {
