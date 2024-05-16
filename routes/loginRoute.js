@@ -12,13 +12,13 @@ router.post('/', async (req, res) => {
         const user = await User.findOne({ email: req.body.email });
 
         if (!user) {
-            return res.render('login', { error: 'Invalid credentials' });
+            return res.render('login', { error: 'Invalid email or password' });
         }
 
         const isMatch = await bcrypt.compare(req.body.password, user.password);
 
         if (!isMatch) {
-            return res.render('login', { error: 'Invalid credentials' });
+            return res.render('login', { error: 'Invalid email or password' });
         }
 
         req.session.user = user;
