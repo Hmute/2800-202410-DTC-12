@@ -32,8 +32,7 @@ function handleHomeClick() {
 
 function handleGenerateClick() {
   console.log("Generate link clicked");
-  //Put the bot page here
-  window.location.href = "";
+  window.location.href = "/bot";
 }
 
 function handleMessagesClick() {
