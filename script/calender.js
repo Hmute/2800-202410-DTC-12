@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const confirmDateButton = document.getElementById('confirmDate');
     const monthButton = document.getElementById('monthButton');
     const datepicker = document.getElementById('datepicker');
-    let selectedDate;
+    let selectedDate = new Date();
     let currentDate = new Date();
 
     function updateMonthButton(date) {
@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
         monthButton.textContent = date.toLocaleDateString('en-US', options);
     }
 
-    function updateCalendar(referenceDate, keepSelected = false) {
-        const daysOfWeek = ['Sat', 'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+    function updateCalendar(referenceDate) {
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         calendarContainer.innerHTML = ''; // Clear the current calendar items
 
         const startDate = new Date(referenceDate);
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const dayName = daysOfWeek[date.getDay()];
             const newCalendarItem = document.createElement('div');
             newCalendarItem.classList.add('calendar-item');
-            if (keepSelected && date.getDate() === referenceDate.getDate()) {
+            if (date.toDateString() === referenceDate.toDateString()) {
                 newCalendarItem.classList.add('selected');
             }
             newCalendarItem.innerHTML = `${dayName}<br>${date.getDate()}`;
@@ -34,46 +34,45 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function initializeCalendar() {
-        updateCalendar(currentDate, true);
+        updateCalendar(currentDate);
 
         calendarContainer.addEventListener('click', function (event) {
             if (event.target.classList.contains('calendar-item')) {
-                const selectedIndex = Array.from(calendarContainer.children).indexOf(event.target);
-                const selectedDateValue = parseInt(event.target.innerHTML.split('<br>')[1]);
+                const clickedDate = new Date(event.target.dataset.date);
 
                 document.querySelectorAll('.calendar-item').forEach(item => {
                     item.classList.remove('selected');
                 });
                 event.target.classList.add('selected');
 
-                let newDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), selectedDateValue);
-                if (selectedIndex === 0 && selectedDateValue > currentDate.getDate()) {
-                    newDate.setMonth(newDate.getMonth() - 1);
-                } else if (selectedIndex === calendarContainer.children.length - 1 && selectedDateValue < currentDate.getDate()) {
-                    newDate.setMonth(newDate.getMonth() + 1);
+                // Update the current date and selected date
+                currentDate = clickedDate;
+                selectedDate = clickedDate;
+
+                if (datepicker._flatpickr) {
+                    datepicker._flatpickr.setDate(selectedDate, true);
                 }
 
-                currentDate = newDate;
-                selectedDate = newDate.toISOString().split('T')[0];
-                datepicker.value = selectedDate;
-
-                updateCalendar(currentDate, true);
+                // Refresh the calendar to shift dates
+                updateCalendar(currentDate);
             }
         });
     }
 
     function initializeDatePicker() {
-        flatpickr("#datepicker", {
-            defaultDate: new Date(),
-            onChange: function(selectedDates) {
-                selectedDate = selectedDates[0];
-            }
-        });
+        if (!datepicker._flatpickr) {
+            flatpickr("#datepicker", {
+                defaultDate: new Date(),
+                onChange: function(selectedDates) {
+                    selectedDate = selectedDates[0];
+                }
+            });
+        }
     }
 
     $('#dateModal').on('show.bs.modal', function () {
         initializeDatePicker();
-        if (selectedDate) {
+        if (selectedDate && datepicker._flatpickr) {
             datepicker._flatpickr.setDate(selectedDate, true);
         }
     });
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
     confirmDateButton.addEventListener('click', function () {
         if (selectedDate) {
             currentDate = new Date(selectedDate);
-            updateCalendar(currentDate, true);
+            updateCalendar(currentDate);
         }
         $('#dateModal').modal('hide');
     });
