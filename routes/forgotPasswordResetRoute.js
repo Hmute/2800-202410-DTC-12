@@ -14,7 +14,7 @@ const limiter = rateLimit({
     max: 5, // Limit each IP to 5 requests per windowMs
     message: 'Too many requests from this IP, please try again later.'
 });
-router.use(limiter); 
+router.use(limiter);
 
 // GET: Display forgot password form
 router.get('/', (req, res) => {
@@ -63,7 +63,7 @@ router.get('/:token', async (req, res) => {
     try {
         const user = await User.findOne({
             resetPasswordToken: req.params.token,
-            resetPasswordExpires: { $gt: Date.now() }, 
+            resetPasswordExpires: { $gt: Date.now() },
         });
 
         if (!user) {
@@ -73,7 +73,7 @@ router.get('/:token', async (req, res) => {
         res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: null, message: null });
     } catch (err) {
         console.error('Error finding user for password reset:', err);
-        res.status(500).send('An error occurred.'); 
+        res.status(500).send('An error occurred.');
     }
 });
 
@@ -95,16 +95,13 @@ router.post('/:token', async (req, res) => {
             return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'Passwords do not match.', message: null });
         }
 
-        // Hash the new password before saving
-        const saltRounds = 10; 
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        user.password = hashedPassword; 
+        user.password = password; // Set the new password (pre-save hook will hash it)
         user.resetPasswordToken = undefined; // Clear token and expiration after reset
         user.resetPasswordExpires = undefined;
-        
+
         await user.save(); // Save user with updated password
 
-        res.redirect('/login'); 
+        res.redirect('/login');
     } catch (err) {
         console.error('Error resetting password:', err);
         res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'An error occurred while resetting the password. Please try again.', message: null });

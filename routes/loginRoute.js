@@ -4,7 +4,7 @@ const User = require('./User');
 const bcrypt = require('bcrypt');
 
 router.get('/', (req, res) => {
-    res.render('login', { error: null }); 
+    res.render('login', { error: null });
 });
 
 router.post('/', async (req, res) => {
@@ -16,18 +16,18 @@ router.post('/', async (req, res) => {
             return res.render('login', { error: 'Invalid email or password' });
         }
 
-        // Hash the entered password and compare it to the stored hash
-        const isMatch = await bcrypt.compare(password, user.password); 
+        // Compare the entered password with the hashed password
+        const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             return res.render('login', { error: 'Invalid email or password' });
         }
 
         req.session.user = user; // Set the session
-        res.redirect('/home');  // Redirect on successful login
+        res.redirect('/home'); // Redirect on successful login
     } catch (err) {
         console.error('Error logging in:', err);
-        res.render('login', { error: 'An error occurred during login' }); 
+        res.render('login', { error: 'An error occurred during login' });
     }
 });
 
