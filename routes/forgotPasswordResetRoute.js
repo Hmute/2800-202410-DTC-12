@@ -91,6 +91,10 @@ router.post('/:token', async (req, res) => {
 
         const { password, confirmPassword } = req.body;
 
+        if (password.length < 8) {
+            return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'Password must be at least 8 characters long.', message: null });
+        }
+
         if (password !== confirmPassword) {
             return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'Passwords do not match.', message: null });
         }
