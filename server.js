@@ -7,6 +7,7 @@ const path = require("path");
 const MongoStore = require("connect-mongo");
 
 const app = express();
+
 // Global Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public")); // There is no public folder. The hell is this for?
