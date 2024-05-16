@@ -1,0 +1,56 @@
+<%- include('templates/header') %>
+    <form action="/bot/generate" method="POST">
+        <label>Primary Goal</label>
+        <select name="goal">
+            <option value="Lose fat">Lose fat</option>
+            <option value="Build muscle">Build muscle</option>
+            <option value="Maintain">Maintain</option>
+        </select><br>
+
+        <label>Training Method</label>
+        <select name="method">
+            <option value="Resistance + cardio">Resistance + cardio</option>
+            <option value="Resistance only">Resistance only</option>
+        </select><br>
+
+        <label>Workout Type</label>
+        <select name="type">
+            <option value="No equipment">No equipment</option>
+            <option value="Weighted">Weighted</option>
+            <option value="Body Weighted">Body Weighted</option>
+        </select><br>
+
+        <label>Strength Level</label>
+        <select name="level">
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Advance">Advance</option>
+        </select><br>
+
+        <label>Training Days</label>
+        <select name="days" multiple>
+            <option value="Sunday">Sunday</option>
+            <option value="Monday">Monday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+            <option value="Thursday">Thursday</option>
+            <option value="Friday">Friday</option>
+            <option value="Saturday">Saturday</option>
+        </select><br>
+
+        <label>Workout Time</label>
+        <select name="time">
+            <option value="30 mins">30 mins</option>
+            <option value="45 mins">45 mins</option>
+            <option value="60 mins">60 mins</option>
+            <option value="75 mins">75 mins</option>
+            <option value="90 mins">90 mins</option>
+        </select><br>
+
+        <div class="fab-container">
+            <button class="fab-button" type="submit">
+                <i class="fas fa-plus"></i> Generate Workout
+            </button>
+        </div>
+    </form>
+    <%- include('templates/footer') %>

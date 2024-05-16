@@ -1,0 +1,9 @@
+<%- include('templates/header') %>
+    <ul>
+        <% recommendations.forEach(function(rec) { %>
+            <li>
+                <%= rec %>
+            </li>
+            <% }); %>
+    </ul>
+    <%- include('templates/footer') %>
