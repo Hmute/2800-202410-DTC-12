@@ -17,6 +17,7 @@ body {
     padding: 0 15px; 
     margin-top: -50px; 
 }
+
 /* Logo Styles */
 .logo-wrap {
     margin-bottom: 20px;
@@ -133,4 +134,35 @@ input[type="password"]:focus {
 .forgot-password:active,
 .forgot-password:focus {
     color: #2cb8c4 !important; 
+}
+
+/* Error Message Styles */
+.error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+    text-align: left;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    position: relative;
+}
+
+.error-message::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #f8d7da;
+}
+
+.error-message p {
+    margin: 0;
 }

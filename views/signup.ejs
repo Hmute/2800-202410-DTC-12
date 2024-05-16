@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="css/signup.css" />
 </head>
 <body>
@@ -12,7 +12,8 @@
             <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" />
         </div>
         <h2>Sign Up</h2>
-        <form action="/signup" method="POST">
+        <div id="error-container"></div>
+        <form id="signup-form" action="/signup" method="POST">
             <div class="form-group">
                 <input type="text" class="form-control" id="fullName" name="fullName" required placeholder="Full Name" />
             </div>
@@ -29,5 +30,47 @@
         </form>
         <a href="/login" class="forgot-password text-center d-block">Already have an account? Login</a>
     </div>
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', function(event) {
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            let errors = [];
+
+            if (!fullName) {
+                errors.push('Full Name is required');
+            }
+
+            const emailPattern = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (!emailPattern.test(email)) {
+                errors.push('Please enter a valid email address');
+            }
+
+            if (password.length < 8) {
+                errors.push('Password must be at least 8 characters long');
+            }
+
+            if (password !== confirmPassword) {
+                errors.push('Passwords do not match');
+            }
+
+            if (errors.length > 0) {
+                event.preventDefault();
+                const errorContainer = document.getElementById('error-container');
+                errorContainer.innerHTML = ''; // Clear previous errors
+                errors.forEach(error => {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerText = error;
+                    errorContainer.appendChild(errorDiv);
+                    setTimeout(() => {
+                        errorDiv.style.opacity = 1;
+                    }, 100);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
