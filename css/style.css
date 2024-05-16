@@ -17,7 +17,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    /* Adjust this value to match the desired footer height */
+    position:sticky;
 }
 
 .nav-icon {
