@@ -17,21 +17,20 @@ const createDoneButton = () => {
     doneBtn.textContent = "Done";
     doneBtn.id = "doneBtn";
     doneBtn.style.position = "absolute";
-    doneBtn.style.top = "10px"; // Position it slightly below the top edge of the viewport
-    doneBtn.style.right = "10px"; // Position it slightly from the right edge of the viewport
-    doneBtn.style.zIndex = "1000"; // Make sure it's on top
-
+    doneBtn.style.top = "10px";
+    doneBtn.style.right = "10px";
+    doneBtn.style.zIndex = "1000";
     doneBtn.style.padding = "10px 15px";
     doneBtn.style.color = "blue";
     doneBtn.style.border = "none";
     doneBtn.style.borderRadius = "5px";
     doneBtn.style.cursor = "pointer";
-
+    
     doneBtn.onclick = function () {
-      textArea.blur(); // Optionally perform other actions like saving the textarea content
+      textArea.blur();
     };
 
-    document.body.appendChild(doneBtn); // Append to body to ensure it's not clipped by any parent with overflow hidden
+    document.body.appendChild(doneBtn);
   }
 };
 
