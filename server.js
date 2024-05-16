@@ -1,3 +1,4 @@
+// Dependencies
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -7,21 +8,22 @@ const MongoStore = require('connect-mongo');
 
 const app = express();
 
+// Global Middlewares
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static("public")); // There is no public folder. The hell is this for?
-app.use("/css", express.static(path.join(__dirname, "css")));
-app.use("/images", express.static(path.join(__dirname, "images")));
-app.use("/script", express.static(path.join(__dirname, "script")));
-app.set("view engine", "ejs");
+app.use(express.static('public'));
+app.use('/css', express.static(path.join(__dirname, 'css')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/script', express.static(path.join(__dirname, 'script')));
+app.set('view engine', 'ejs');
 
 // Routes
-const forgotPasswordRoute = require("./routes/forgotPasswordRoute");
-const launchRoute = require("./routes/launchRoute");
-const loginRoute = require("./routes/loginRoute");
-const resetPasswordRoute = require("./routes/resetPasswordRoute");
-const signupRoute = require("./routes/signupRoute");
-const blogRoute = require("./routes/blogRoute");
+const forgotPasswordResetRoute = require('./routes/forgotPasswordResetRoute');
+const launchRoute = require('./routes/launchRoute');
+const loginRoute = require('./routes/loginRoute');
+const signupRoute = require('./routes/signupRoute');
+const blogRoute = require('./routes/blogRoute');
 
+// Database
 const mongoUser = process.env.MONGODB_USER;
 const mongoPassword = process.env.MONGODB_PASSWORD;
 const mongoHost = process.env.MONGODB_HOST;
@@ -39,34 +41,31 @@ app.use(
 );
 
 // Use routes here
-app.use("/forgotPassword", forgotPasswordRoute);
-app.use("/", launchRoute);
-app.use("/login", loginRoute);
-app.use("/resetPassword", resetPasswordRoute);
-app.use("/signup", signupRoute);
+app.use('/forgotPasswordReset', forgotPasswordResetRoute);
+app.use('/', launchRoute);
+app.use('/login', loginRoute);
+app.use('/signup', signupRoute);
 app.use(blogRoute);
+
 // Richard's script for collapsing meals and exercises button on homepage (Change this soon richard)
-app.get("/home", (req, res) => {
-  res.render("home", { page: "dashboard" });
+app.get('/home', (req, res) => {
+  res.render('home', { page: 'dashboard' });
 });
 
 async function main() {
   await mongoose
     .connect(mongoUri)
     .then(() => {
-      console.log("Connected to MongoDB");
+      console.log('Connected to MongoDB');
     })
     .catch((err) => {
-      console.error("MongoDB connection error:", err);
+      console.error('MongoDB connection error:', err);
     });
 
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server is running on port ${port}`);
-    });
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
-  }
-
+  const port = process.env.PORT || 3000;
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
 
 main();
