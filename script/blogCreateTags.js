@@ -62,3 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  window.location.href = '/blog'
+});
