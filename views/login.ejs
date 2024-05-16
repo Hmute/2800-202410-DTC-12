@@ -4,52 +4,59 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="css/login.css" /> <!-- Link to the external CSS file -->
 </head>
 <body>
     <div class="container">
+        <!-- Wrapper for the logo -->
         <div class="logo-wrap">
-            <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" />
+            <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" /> <!-- Display the Wellbot logo -->
         </div>
-        <h2>Login</h2>
+        <h2>Login</h2> <!-- Display the page title -->
         <div id="error-container"></div> <!-- Error container for displaying errors -->
+        
+        <!-- Login form -->
         <form id="login-form" action="/login" method="POST">
             <div class="form-group">
-                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required />
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email" required /> <!-- Email input field -->
             </div>
             <div class="form-group">
-                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required />
+                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required /> <!-- Password input field -->
             </div>
-            <button type="submit" class="btn btn-primary">Login</button>
+            <button type="submit" class="btn btn-primary">Login</button> <!-- Submit button -->
         </form>
+        
+        <!-- Forgot password link -->
         <a href="/forgotPasswordReset" class="forgot-password text-center d-block">Forgot Your Password?</a>
     </div>
+    
+    <!-- Client-side validation script -->
     <script>
         document.getElementById('login-form').addEventListener('submit', function(event) {
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
+            const email = document.getElementById('email').value.trim(); // Get the trimmed email value
+            const password = document.getElementById('password').value; // Get the password value
 
-            let errors = [];
+            let errors = []; // Initialize an array to store error messages
 
             if (!email) {
-                errors.push('Email is required');
+                errors.push('Email is required'); // Add error if email is empty
             }
 
             if (password.length < 8) {
-                errors.push('Password must be at least 8 characters long');
+                errors.push('Password must be at least 8 characters long'); // Add error if password is too short
             }
 
             if (errors.length > 0) {
-                event.preventDefault();
+                event.preventDefault(); // Prevent form submission if there are errors
                 const errorContainer = document.getElementById('error-container');
                 errorContainer.innerHTML = ''; // Clear previous errors
                 errors.forEach(error => {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'error-message';
-                    errorDiv.innerText = error;
-                    errorContainer.appendChild(errorDiv);
+                    const errorDiv = document.createElement('div'); // Create a new div for each error
+                    errorDiv.className = 'error-message'; // Set the class for styling
+                    errorDiv.innerText = error; // Set the error message text
+                    errorContainer.appendChild(errorDiv); // Add the error div to the container
                     setTimeout(() => {
-                        errorDiv.style.opacity = 1;
+                        errorDiv.style.opacity = 1; // Make the error visible after a short delay
                     }, 100);
                 });
             }
@@ -57,15 +64,15 @@
 
         // Function to display server-side error
         window.onload = function() {
-            const serverError = "<%= error %>";
+            const serverError = "<%= error %>"; // Get the server-side error message
             if (serverError) {
                 const errorContainer = document.getElementById('error-container');
-                const errorDiv = document.createElement('div');
-                errorDiv.className = 'error-message';
-                errorDiv.innerText = serverError;
-                errorContainer.appendChild(errorDiv);
+                const errorDiv = document.createElement('div'); // Create a new div for the server-side error
+                errorDiv.className = 'error-message'; // Set the class for styling
+                errorDiv.innerText = serverError; // Set the error message text
+                errorContainer.appendChild(errorDiv); // Add the error div to the container
                 setTimeout(() => {
-                    errorDiv.style.opacity = 1;
+                    errorDiv.style.opacity = 1; // Make the error visible after a short delay
                 }, 100);
             }
         };
