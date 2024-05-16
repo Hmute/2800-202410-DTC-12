@@ -33,3 +33,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
+// For back button
+document.getElementById("backBtn").addEventListener("click", function () {
+  window.location.href = "/blog";
+});

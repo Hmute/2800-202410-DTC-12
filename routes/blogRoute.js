@@ -8,6 +8,6 @@ router.get('/blog', (req, res) => {
 });
 
 router.get('/blog/create', (req, res) => {
-    res.render('blogCreate', {page: 'Blog'})
+    res.render('blogCreate');
 });
 module.exports = router;

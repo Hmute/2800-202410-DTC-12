@@ -104,4 +104,12 @@ small {
   padding-bottom: 75px;
 }
 
-/* Make some css here for click animation */
+fab-button {
+  transition: transform 0.2s, background-color 0.2s;
+  cursor: pointer;
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+  background-color: #e0e0e0;
+}
