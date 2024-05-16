@@ -20,7 +20,6 @@
 </head>
 
 <body>
-  <!-- Entire upload -->
   <div class="main-content position-relative mt-1">
     <!-- Back button -->
     <div class="back-button-container position-absolute">
@@ -47,81 +46,76 @@
       <h2>Upload Image</h2>
     </div>
 
-    <div class="container mt-5">
-      <h2 class="mb-3" id="section">Tag</h2>
-
-
-      <div class="tag-container">
-        <!-- Start of tag -->
-        <select id="tags">
-          <option value="None">None</option>
-          <option value="Nutrition">Nutrition</option>
-          <option value="Training">Training</option>
-          <option value="Wellness">Wellness</option>
-          <option value="Sports">Sports</option>
-          <option value="Lifestyle">Lifestyle</option>
-        </select>
-
-        <!-- + icon -->
-        <svg id="addTagIcon" width="56" height="51" viewBox="0 0 56 51" fill="none" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g filter="url(#filter0_d_66_15)">
-            <rect x="4" width="48" height="43" fill="url(#pattern0_66_15)" shape-rendering="crispEdges" />
-          </g>
-          <defs>
-            <filter id="filter0_d_66_15" x="0" y="0" width="56" height="51" filterUnits="userSpaceOnUse"
-              color-interpolation-filters="sRGB">
-              <feFlood flood-opacity="0" result="BackgroundImageFix" />
-              <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                result="hardAlpha" />
-              <feOffset dy="4" />
-              <feGaussianBlur stdDeviation="2" />
-              <feComposite in2="hardAlpha" operator="out" />
-              <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-              <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_66_15" />
-              <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_66_15" result="shape" />
-            </filter>
-            <pattern id="pattern0_66_15" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlink:href="#image0_66_15" transform="matrix(0.0099537 0 0 0.0111111 0.0520833 0)" />
-            </pattern>
-            <image id="image0_66_15" width="90" height="90"
-              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD8ElEQVR4nO2dS08UQRDHKxEVo9ErDxM16BdAPYmRGPWqHtTEV8TXBRNEAnj05uNESPwaPg8Y/QAag0Hg4kW9+Ii6gJ6EBPyZCm3cA6uQ7emumelfspfN7GzVf3d6uquqa0QSiUQikUgkEolEIrE8gFXAbuACcAd4AEwAb4FpYM69pt17E+6Y2+4zu/Qcy/y6cgFsBq4Cj4Ef1M934BHQA7RKmQHWAWeAZ8AC2TEPPAVOA41SFoAN7p/2kfB8BW4Am6SoAKuBfmCK+KgNfWqTFAlgLzCJPd4AByTv6JgI3AV+YRe1bRhYK3kE2Aq8ID+8ArZLntDL0dM0LTQ6LdwveQA4Cvwkv8wBJ8QywOWM58ShUB8uiUWAI25xUBQWgONiCR3XgFmKxxxwSCwA7MjpjW8lN8i22CKvddOiojMadZ7tFiMhL+N+oNm9Btx7oRiOJfK+wCu+gSVsGAz4/eprR2iRG4BxwtK8hB1NgW2YDBqIcpdwUKS2LaHpDRlPrpRY6IpqEELokOOiRaGVvhBhz08xPBNbQn/WVFyWQp+N5BjGhFZOZim0JlKjIPaEHslK5NaYQSOxJ/RCJqUMru4iGmJPaOVKFkJrcUs0xKbQ97Io05qJ6ZHYFHrGa/mZq4WLitgUWtnpU+iLsb0Ru0J3+RRaqzqjInaFvulT6IexvRG7Qvu7IUYIieZJ6DGfQr/3kRkRY3jK1LzzaVDFZ2bEGnVGJL/5NKSeX7xZjFNnpmbWitAtYhwXxzEhdD1Dx6AYB7huZeio92Y4aPGfrTY528zcDNP0LtD0Li1YAi1Y0hI80BJcd6RGRWrbFptzPoVOYdLatPsUOgX+QwT+ndi6tzoaUtuu4qSynEO6rTgaYlPo7qwm96nc4C+qRZN3oZ3Y2iUgClLbpmIV0DintO1DFKRkJWGNkdo/UKoix1hF6AaFvpapyM6x9RoaLLHQlSCF6M45bSpSVqF7gohctVnodWAHWzxnRuxvFqrqKhNy+9ug58zISlFf9wQVucpR7dwSirk/mRpPmZGVMhRF5Kotyrp9t+i8BNZEE9qJ3eY2pheVGWCbWADozHnXmVro0HRQLAEcLmBjlGNiEW2PU5BWP/NaEy6WcS1/8jyMzJpr8fOf1j/fc3rj65Q8AWwBnpMfRqO39Klznj2cg5aZQ9HnyT4AOiyUlS3BeLRldcaBqN4YIdYl+OaSzQ1SVFiMZ6uTHyII/MU16t4oZYHFtNgp4EnGCx0994jm+ErVev4fm3auAPfd0yjqZdqdqzuzkoC8w2L5WTtwHril1UBag+weBTJV9XiQKffemDtGj+1yn02PB0kkEolEIpFIJBIJWSa/AV6GBCbKNy/yAAAAAElFTkSuQmCC" />
-          </defs>
-        </svg>
-
-        <!-- - icon (hidden initially) -->
-        <svg id="removeTagIcon" width="47" height="65" viewBox="0 0 47 65" fill="none"
-          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: none;">
-          <rect width="47" height="65" fill="url(#pattern0_472_3)" />
-          <defs>
-            <pattern id="pattern0_472_3" patternContentUnits="objectBoundingBox" width="1" height="1">
-              <use xlink:href="#image0_472_3" transform="matrix(0.01 0 0 0.00723077 0 0.138462)" />
-            </pattern>
-            <image id="image0_472_3" width="100" height="100"
-              xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEAUlEQVR4nO2dyY9NQRSHyxDTRgwtQQwr7G0REkPMQ/AnEMQQw/9ggRgXCAtLCzGsDCtaDAszG7TZBo2NZqE/qfRJDIvW991bt07dOl/yNv1eXlfdX16dqjOVc4ZhGIZhGIZhGIZhGIUAxgALgC3AEeAK8AB4DnQCP+TVKX/z712Wz24G5gNt9thbBBgGLAcOyMPtpjz+O+4D+4FlwFATqHcR+gMzgKPAV8Lj/8cpYCkwwMT5LcQQYCPQQTz8MrcBGJz7srQTeI8e3gPb/dhcTsgy8QK9vAFWu6YDTAYukA7ngImuiQArZFuaGl+Bta4peEMp29fUOZq80QdGATdoDu3ASJciwDg51DWNJ8AElxLANOA1zeUVMNWlADAeeEnzeQtMcgnYDP+TzoXHam2K7KaaZMD7ynWVuy/gMPlywGnCuxliPxEFrHKK3CFfYj8NBXxWYeSB87GfhCLOavBPGX+zNGY8I4fzRlE6ooSHgV2Fh5oP22KcOd7FnrVifORxSJ2C+Bi40Tvr68wOiZmQkArPgH51CDIn9kwTYlYdgpyMPcuEOB5ajKF2Ki8cjw+3BZb0TqMYi0MK0oRkhbrZE1KQJsbIQ3M3ZElAFVnoufETGB1CEF+fYbTG3BCC+GIZozU2hRDEVyMZrXEwhCC+RMxojYshBHlINXyTlMzTyl/tMtYquB9CkCrqOW6mlN4PTAJuVTDvjhCD+1hyUN9SEuMfUbpKzv2DqxopOy7DNZco9CxfZfiuUZB2lyj0ZCeqEyTXJWuy1iWrKqMeP5msmBi3tRr1qra9XQlte7s0b3vtYKjsYGiuE2WuE3MuKnMumvtdmfu9zQJULQeoRlUuiIhiIdzi3Akihgjim38ZipIcfCc2oxiLQgpiiXLF+BK8VgQ4UXBQOXMsqBgiyOzYs0yImXWVI/gehUbvPK2lHEFE8Q0jjd5ZV4sYIoiVtP2/Z2O97TaAHf8ZVM5sqVWMP8qiNXcWjVnKVl/B5z+iLIw27RzrQfooim+lavRwJqoYIshEabySO51qejECSzJ3zXcDK50mMi932+e0IWeTsgllKXIVGOQ0AgwH7pEPj9Q2wcywTeybZDIxfZNhaTbcVF4BU1xKAGPlzqcm9uqd4FLEr68NM/RXgREuZYCBwO7Ezyndsq3XuZsq0Scl1Qtd1rgmIuVhKfm+ziRrL1pwtWjuSvc8ute2biSlaJtc+6DpbLE1WjxDkctlvQR2YiYkrGuU0a4CYLrsZsrWM/Y1ic1fvTq3tuyQxK9jXey9qL7flGSQl8V/xx1gr0/vzHpZKgswGpjnC1+AQ8AlcWJ64/vpj+u7P8nf/HsX5bOb5FcQpiTAMAzDMAzDMAzDMAzXXH4B9/OQfOb7WOQAAAAASUVORK5CYII=" />
-          </defs>
-        </svg>
-      </div>
-
-      <!-- Start of title -->
-      <div class="mt-5">
-        <h2 id="section">Title</h2>
-        <div class="title-container mt-3">
-          <input type="text" placeholder="Enter your title">
+    <form id="blogForm" action="/blog/save" method="post">
+      <div class="container mt-5">
+        <h2 class="mb-3" id="section">Tag</h2>
+        <div class="tag-container">
+          <select id="tags" name="tags">
+            <option value="None">None</option>
+            <option value="Nutrition">Nutrition</option>
+            <option value="Training">Training</option>
+            <option value="Wellness">Wellness</option>
+            <option value="Sports">Sports</option>
+            <option value="Lifestyle">Lifestyle</option>
+          </select>
+          <!-- + icon -->
+          <svg id="addTagIcon" width="56" height="51" viewBox="0 0 56 51" fill="none" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g filter="url(#filter0_d_66_15)">
+              <rect x="4" width="48" height="43" fill="url(#pattern0_66_15)" shape-rendering="crispEdges" />
+            </g>
+            <defs>
+              <filter id="filter0_d_66_15" x="0" y="0" width="56" height="51" filterUnits="userSpaceOnUse"
+                color-interpolation-filters="sRGB">
+                <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                  result="hardAlpha" />
+                <feOffset dy="4" />
+                <feGaussianBlur stdDeviation="2" />
+                <feComposite in2="hardAlpha" operator="out" />
+                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_66_15" />
+                <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_66_15" result="shape" />
+              </filter>
+              <pattern id="pattern0_66_15" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_66_15" transform="matrix(0.0099537 0 0 0.0111111 0.0520833 0)" />
+              </pattern>
+              <image id="image0_66_15" width="90" height="90"
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAACXBIWXMAAAsTAAALEwEAmpwYAAAD8ElEQVR4nO2dS08UQRDHKxEVo9ErDxM16BdAPYmRGPWqHtTEV8TXBRNEAnj05uNESPwaPg8Y/QAag0Hg4kW9+Ii6gJ6EBPyZCm3cA6uQ7emumelfspfN7GzVf3d6uquqa0QSiUQikUgkEolEIrE8gFXAbuACcAd4AEwAb4FpYM69pt17E+6Y2+4zu/Qcy/y6cgFsBq4Cj4Ef1M934BHQA7RKmQHWAWeAZ8AC2TEPPAVOA41SFoAN7p/2kfB8BW4Am6SoAKuBfmCK+KgNfWqTFAlgLzCJPd4AByTv6JgI3AV+YRe1bRhYK3kE2Aq8ID+8ArZLntDL0dM0LTQ6LdwveQA4Cvwkv8wBJ8QywOWM58ShUB8uiUWAI25xUBQWgONiCR3XgFmKxxxwSCwA7MjpjW8lN8i22CKvddOiojMadZ7tFiMhL+N+oNm9Btx7oRiOJfK+wCu+gSVsGAz4/eprR2iRG4BxwtK8hB1NgW2YDBqIcpdwUKS2LaHpDRlPrpRY6IpqEELokOOiRaGVvhBhz08xPBNbQn/WVFyWQp+N5BjGhFZOZim0JlKjIPaEHslK5NaYQSOxJ/RCJqUMru4iGmJPaOVKFkJrcUs0xKbQ97Io05qJ6ZHYFHrGa/mZq4WLitgUWtnpU+iLsb0Ru0J3+RRaqzqjInaFvulT6IexvRG7Qvu7IUYIieZJ6DGfQr/3kRkRY3jK1LzzaVDFZ2bEGnVGJL/5NKSeX7xZjFNnpmbWitAtYhwXxzEhdD1Dx6AYB7huZeio92Y4aPGfrTY528zcDNP0LtD0Li1YAi1Y0hI80BJcd6RGRWrbFptzPoVOYdLatPsUOgX+QwT+ndi6tzoaUtuu4qSynEO6rTgaYlPo7qwm96nc4C+qRZN3oZ3Y2iUgClLbpmIV0DintO1DFKRkJWGNkdo/UKoix1hF6AaFvpapyM6x9RoaLLHQlSCF6M45bSpSVqF7gohctVnodWAHWzxnRuxvFqrqKhNy+9ug58zISlFf9wQVucpR7dwSirk/mRpPmZGVMhRF5Kotyrp9t+i8BNZEE9qJ3eY2pheVGWCbWADozHnXmVro0HRQLAEcLmBjlGNiEW2PU5BWP/NaEy6WcS1/8jyMzJpr8fOf1j/fc3rj65Q8AWwBnpMfRqO39Klznj2cg5aZQ9HnyT4AOiyUlS3BeLRldcaBqN4YIdYl+OaSzQ1SVFiMZ6uTHyII/MU16t4oZYHFtNgp4EnGCx0994jm+ErVev4fm3auAPfd0yjqZdqdqzuzkoC8w2L5WTtwHril1UBag+weBTJV9XiQKffemDtGj+1yn02PB0kkEolEIpFIJBIJWSa/AV6GBCbKNy/yAAAAAElFTkSuQmCC" />
+            </defs>
+          </svg>
+          <!-- - icon (hidden initially) -->
+          <svg id="removeTagIcon" width="47" height="65" viewBox="0 0 47 65" fill="none"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display: none;">
+            <rect width="47" height="65" fill="url(#pattern0_472_3)" />
+            <defs>
+              <pattern id="pattern0_472_3" patternContentUnits="objectBoundingBox" width="1" height="1">
+                <use xlink:href="#image0_472_3" transform="matrix(0.01 0 0 0.00723077 0 0.138462)" />
+              </pattern>
+              <image id="image0_472_3" width="100" height="100"
+                xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAYAAABw4pVUAAAACXBIWXMAAAsTAAALEwEAmpwYAAAEAUlEQVR4nO2dyY9NQRSHyxDTRgwtQQwr7G0REkPMQ/AnEMQQw/9ggRgXCAtLCzGsDCtaDAszG7TZBo2NZqE/qfRJDIvW991bt07dOl/yNv1eXlfdX16dqjOVc4ZhGIZhGIZhGIZhGIUAxgALgC3AEeAK8AB4DnQCP+TVKX/z712Wz24G5gNt9thbBBgGLAcOyMPtpjz+O+4D+4FlwFATqHcR+gMzgKPAV8Lj/8cpYCkwwMT5LcQQYCPQQTz8MrcBGJz7srQTeI8e3gPb/dhcTsgy8QK9vAFWu6YDTAYukA7ngImuiQArZFuaGl+Bta4peEMp29fUOZq80QdGATdoDu3ASJciwDg51DWNJ8AElxLANOA1zeUVMNWlADAeeEnzeQtMcgnYDP+TzoXHam2K7KaaZMD7ynWVuy/gMPlywGnCuxliPxEFrHKK3CFfYj8NBXxWYeSB87GfhCLOavBPGX+zNGY8I4fzRlE6ooSHgV2Fh5oP22KcOd7FnrVifORxSJ2C+Bi40Tvr68wOiZmQkArPgH51CDIn9kwTYlYdgpyMPcuEOB5ajKF2Ki8cjw+3BZb0TqMYi0MK0oRkhbrZE1KQJsbIQ3M3ZElAFVnoufETGB1CEF+fYbTG3BCC+GIZozU2hRDEVyMZrXEwhCC+RMxojYshBHlINXyTlMzTyl/tMtYquB9CkCrqOW6mlN4PTAJuVTDvjhCD+1hyUN9SEuMfUbpKzv2DqxopOy7DNZco9CxfZfiuUZB2lyj0ZCeqEyTXJWuy1iWrKqMeP5msmBi3tRr1qra9XQlte7s0b3vtYKjsYGiuE2WuE3MuKnMumvtdmfu9zQJULQeoRlUuiIhiIdzi3Akihgjim38ZipIcfCc2oxiLQgpiiXLF+BK8VgQ4UXBQOXMsqBgiyOzYs0yImXWVI/gehUbvPK2lHEFE8Q0jjd5ZV4sYIoiVtP2/Z2O97TaAHf8ZVM5sqVWMP8qiNXcWjVnKVl/B5z+iLIw27RzrQfooim+lavRwJqoYIshEabySO51qejECSzJ3zXcDK50mMi932+e0IWeTsgllKXIVGOQ0AgwH7pEPj9Q2wcywTeybZDIxfZNhaTbcVF4BU1xKAGPlzqcm9uqd4FLEr68NM/RXgREuZYCBwO7Ezyndsq3XuZsq0Scl1Qtd1rgmIuVhKfm+ziRrL1pwtWjuSvc8ute2biSlaJtc+6DpbLE1WjxDkctlvQR2YiYkrGuU0a4CYLrsZsrWM/Y1ic1fvTq3tuyQxK9jXey9qL7flGSQl8V/xx1gr0/vzHpZKgswGpjnC1+AQ8AlcWJ64/vpj+u7P8nf/HsX5bOb5FcQpiTAMAzDMAzDMAzDMAzXXH4B9/OQfOb7WOQAAAAASUVORK5CYII=" />
+            </defs>
+          </svg>
         </div>
-      </div>
 
-      <!-- Start of content -->
-      <div class="mt-5">
-        <h2 id="section">Content</h2>
-        <div class="mt-3">
-          <textarea class="content-textarea" id="contentTextArea" placeholder="Write your content"></textarea>
+        <div class="mt-5">
+          <h2 id="section">Title</h2>
+          <div class="title-container mt-3">
+            <input type="text" id="title" name="title" placeholder="Enter your title">
+          </div>
         </div>
+
+        <div class="mt-5">
+          <h2 id="section">Content</h2>
+          <div class="mt-3">
+            <textarea class="content-textarea" id="contentTextArea" name="content"
+              placeholder="Write your content"></textarea>
+          </div>
+        </div>
+
+        <button id="postBtn" type="submit" class="button ml-3 mt-4">Post</button>
       </div>
-    </div>
-
-    <button class="button ml-3 mt-4">Post</button>
-
+    </form>
   </div>
   <script src="/script/blogCreateContent.js"></script>
   <script src="/script/blogCreateTags.js"></script>
