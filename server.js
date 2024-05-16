@@ -45,7 +45,7 @@ app.use('/forgotPasswordReset', forgotPasswordResetRoute);
 app.use('/', launchRoute);
 app.use('/login', loginRoute);
 app.use('/signup', signupRoute);
-app.use(blogRoute);
+app.use('/blog', blogRoute);
 
 // Richard's script for collapsing meals and exercises button on homepage (Change this soon richard)
 app.get('/home', (req, res) => {
