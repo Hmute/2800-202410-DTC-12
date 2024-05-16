@@ -1,0 +1,39 @@
+<%- include('templates/header') %>
+    <link href="/css/homeTop.css" rel="stylesheet">
+
+    <!-- Calender bar and user greeting -->
+    <div class="calender-body">
+        <div class="calendar-bar">
+            <div class="calendar-header">
+                <h5>Hello, User!</h5>
+                <button class="btn month-button" data-toggle="modal" data-target="#dateModal" id="monthButton">May 2024</button>
+            </div>
+            <div class="calendar-container">
+                <div class="calendar d-flex" id="calendar"></div>
+            </div>
+        </div>
+        <div id="history"></div>
+        <!-- Calender modal -->
+        <div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="dateModalLabel">Select a Date</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-calendar-container">
+                            <input type="text" id="datepicker" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="confirmDate">Confirm Date</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/script/calender.js"></script>
