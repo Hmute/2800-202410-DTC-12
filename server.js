@@ -1,4 +1,3 @@
-// Dependencies
 require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
@@ -9,10 +8,10 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
-// Define rate limit for API requests
+// Define rate limit for API requests (adjust settings as needed)
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  max: 100,
   message: 'Too many requests, please try again later.'
 });
 
@@ -33,52 +32,54 @@ const loginRoute = require('./routes/loginRoute');
 const signupRoute = require('./routes/signupRoute');
 const blogRoute = require('./routes/blogRoute');
 const botRoute = require('./routes/botRoute');
+const userProfileRoute = require('./routes/userProfileRoute');
 
-
-// Database
+// Database Connection
 const mongoUser = process.env.MONGODB_USER;
 const mongoPassword = process.env.MONGODB_PASSWORD;
 const mongoHost = process.env.MONGODB_HOST;
 const mongoOptions = process.env.MONGODB_OPTIONS;
 const mongoUri = `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoHost}/?${mongoOptions}`;
 
-app.use(
-  session({
+mongoose.connect(mongoUri, {
+}).then(() => {
+  console.log('Connected to MongoDB');
+
+  // Session configuration (after successful MongoDB connection)
+  app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: mongoUri }),
+    saveUninitialized: false,
+    store: MongoStore.create({ client: mongoose.connection.getClient() }),
     cookie: { maxAge: 60 * 60 * 1000 },
-  })
-);
+  }));
 
-// Use routes here
-app.use('/forgotPasswordReset', forgotPasswordResetRoute);
-app.use('/', launchRoute);
-app.use('/login', loginRoute);
-app.use('/signup', signupRoute);
-app.use('/blog', blogRoute);
-app.use('/bot', botRoute);
+  // Use routes (after session middleware)
+  app.use('/forgotPasswordReset', forgotPasswordResetRoute);
+  app.use('/', launchRoute);
+  app.use('/login', loginRoute);
+  app.use('/signup', signupRoute);
+  app.use('/blog', blogRoute);
+  app.use('/bot', botRoute);
+  app.use('/user', userProfileRoute);
 
-// Richard's script for collapsing meals and exercises button on homepage (Change this soon richard)
-app.get('/home', (req, res) => {
-  res.render('home', { page: 'dashboard' });
-});
+  app.get('/home', (req, res) => {
+    const user = req.session.user;
+    res.render('home', { user, page: 'Home' });
+  });
 
-async function main() {
-  await mongoose
-    .connect(mongoUri)
-    .then(() => {
-      console.log('Connected to MongoDB');
-    })
-    .catch((err) => {
-      console.error('MongoDB connection error:', err);
-    });
+  // Error Handling Middleware (catch-all)
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Internal Server Error');
+  });
 
+  // Start Server
   const port = process.env.PORT || 3000;
   app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+    console.log(`Server running on port ${port}`);
   });
-}
 
-main();
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
+});

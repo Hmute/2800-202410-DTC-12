@@ -1,0 +1,238 @@
+body {
+    font-family: "Montserrat", sans-serif;
+    background: linear-gradient(135deg, #1f2327, #30353a);
+    color: #eeeeee;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.profile-container {
+    width: 100%;
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 800px;
+    border-bottom: 1px solid #444;
+}
+
+.profile-picture-wrap {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #2cb8c4;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.profile-picture-wrap:hover {
+    transform: scale(1.05);
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    padding-left: 20px;
+    color: #eeeeee;
+    text-align: left;
+}
+
+.profile-info h2 {
+    margin: 0;
+    font-size: 2.5rem;
+    color: #2cb8c4;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.username {
+    color: #bbbbbb;
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icons a {
+    color: #2cb8c4;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #116c71;
+}
+
+.edit-profile-btn {
+    background-color: #2cb8c4;
+    color: #eeeeee;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+}
+
+.edit-profile-btn:hover {
+    background-color: #116c71;
+    transform: translateY(-3px);
+}
+
+#edit-profile-form {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #eeeeee;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #393e46;
+    color: #eeeeee;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus {
+    outline: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.details, .photos {
+    padding: 20px;
+    text-align: left;
+    width: 100%;
+    max-width: 800px;
+}
+
+.details h3, .photos h3 {
+    margin-top: 0;
+    color: #2cb8c4;
+    font-size: 1.8rem;
+}
+
+.details p {
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+.photo-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 2px solid #2cb8c4;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.photo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.sign-out-btn {
+    background-color: #2cb8c4;
+    color: #eeeeee;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+}
+
+.sign-out-btn:hover {
+    background-color: #116c71;
+    transform: translateY(-3px);
+}
+
+.footer {
+    background-color: #2e343a;
+    padding: 10px 0;
+    color: white;
+    text-align: center;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #2e343a;
+}
+
+.bottom-nav .nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.bottom-nav .nav-link {
+    color: #eeeeee;
+    font-size: 1.5rem;
+    padding: 10px;
+}
+
+.bottom-nav .nav-link:hover {
+    color: #2cb8c4;
+}
+
+.bottom-nav .nav-icon {
+    font-size: 1.5rem;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/userProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <%- include('templates/header', { page: 'Profile' }) %>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-picture-wrap">
+                <img src="/images/<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                <input type="file" id="profile-picture-input" name="profilePicture" accept="image/*" style="display: none;">
+            </div>
+            <div class="profile-info">
+                <h2 id="fullName-display"><%= user.fullName %></h2>
+                <p class="username">@<%= user.username %></p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+                <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+            </div>
+        </div>
+        <form id="edit-profile-form" action="/user/<%= user.username %>/edit" method="POST" enctype="multipart/form-data" style="display: none;">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <input type="text" id="gender" name="gender" value="<%= user.gender %>">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" value="<%= user.age %>">
+            </div>
+            <div class="form-group">
+                <label for="height">Height:</label>
+                <input type="text" id="height" name="height" value="<%= user.height %>">
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight:</label>
+                <input type="text" id="weight" name="weight" value="<%= user.weight %>">
+            </div>
+            <div class="form-group">
+                <label for="photos">Upload Photos:</label>
+                <input type="file" id="photos" name="photos" multiple accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        <div class="details">
+            <h3>Details</h3>
+            <p><strong>Gender:</strong> <span id="gender-display"><%= user.gender %></span></p>
+            <p><strong>Age:</strong> <span id="age-display"><%= user.age %></span></p>
+            <p><strong>Height:</strong> <span id="height-display"><%= user.height %></span></p>
+            <p><strong>Weight:</strong> <span id="weight-display"><%= user.weight %></span></p>
+        </div>
+        <div class="photos">
+            <h3>Photos</h3>
+            <% if (user.photos && user.photos.length > 0) { %>
+                <div class="photo-grid" id="photo-grid">
+                    <% user.photos.forEach(photo => { %>
+                        <img src="/images/<%= photo %>" alt="Photo" class="photo">
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p id="no-photos">No photos available</p>
+            <% } %>
+        </div>
+        <button class="sign-out-btn" id="sign-out-btn">Sign Out</button>
+    </div>
+    <%- include('templates/footer') %>
+    <script src="/script/userProfile.js"></script>
+</body>
+</html>
