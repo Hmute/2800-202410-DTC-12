@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./User');
+const User = require('./User'); // Ensure the correct path to the User model
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
@@ -109,7 +109,11 @@ router.post('/:token', async (req, res) => {
 
         // Hash the new password before saving
         const salt = await bcrypt.genSalt(10);
-        user.password = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Set the new password and skip hashing on save
+        user.password = hashedPassword;
+        user.skipHashing = true;
         user.resetPasswordToken = undefined; // Clear token and expiration after reset
         user.resetPasswordExpires = undefined;
 
