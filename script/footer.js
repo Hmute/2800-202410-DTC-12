@@ -5,23 +5,23 @@ document.addEventListener("DOMContentLoaded", function () {
   const profileLink = document.getElementById("profilepage");
 
   homeLink.addEventListener("click", function (event) {
-    event.preventDefault();
-    handleHomeClick();
+      event.preventDefault();
+      handleHomeClick();
   });
 
   generateLink.addEventListener("click", function (event) {
-    event.preventDefault();
-    handleGenerateClick();
+      event.preventDefault();
+      handleGenerateClick();
   });
 
   messagesLink.addEventListener("click", function (event) {
-    event.preventDefault();
-    handleMessagesClick();
+      event.preventDefault();
+      handleMessagesClick();
   });
 
   profileLink.addEventListener("click", function (event) {
-    event.preventDefault();
-    handleProfileClick();
+      event.preventDefault();
+      handleProfileClick();
   });
 });
 
@@ -41,7 +41,7 @@ function handleMessagesClick() {
 }
 
 function handleProfileClick() {
+  const username = document.querySelector('#profilepage').getAttribute('href').split('/').pop();
   console.log("Profile link clicked");
-  //Put the profile page here
-  window.location.href = "";
+  window.location.href = `/user/${username}`;
 }

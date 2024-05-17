@@ -5,8 +5,11 @@ const session = require('express-session');
 const path = require('path');
 const MongoStore = require('connect-mongo');
 const rateLimit = require('express-rate-limit');
-
 const app = express();
+
+// Set view engine
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Define rate limit for API requests (adjust settings as needed)
 const apiLimiter = rateLimit({
@@ -17,22 +20,13 @@ const apiLimiter = rateLimit({
 
 app.use('/bot/generate', apiLimiter);
 
-// Global Middlewares
+// Middleware to make user available in all templates
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static('public'));
 app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/script', express.static(path.join(__dirname, 'script')));
-app.set('view engine', 'ejs');
-
-// Routes
-const forgotPasswordResetRoute = require('./routes/forgotPasswordResetRoute');
-const launchRoute = require('./routes/launchRoute');
-const loginRoute = require('./routes/loginRoute');
-const signupRoute = require('./routes/signupRoute');
-const blogRoute = require('./routes/blogRoute');
-const botRoute = require('./routes/botRoute');
-const userProfileRoute = require('./routes/userProfileRoute');
 
 // Database Connection
 const mongoUser = process.env.MONGODB_USER;
@@ -50,11 +44,25 @@ mongoose.connect(mongoUri, {
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ client: mongoose.connection.getClient() }),
+    store: MongoStore.create({ mongoUrl: mongoUri }),
     cookie: { maxAge: 60 * 60 * 1000 },
   }));
 
-  // Use routes (after session middleware)
+  // Middleware to make user available in all templates (must be after session middleware)
+  app.use((req, res, next) => {
+      res.locals.user = req.session.user || null;
+      next();
+  });
+
+  // Routes
+  const forgotPasswordResetRoute = require('./routes/forgotPasswordResetRoute');
+  const launchRoute = require('./routes/launchRoute');
+  const loginRoute = require('./routes/loginRoute');
+  const signupRoute = require('./routes/signupRoute');
+  const blogRoute = require('./routes/blogRoute');
+  const botRoute = require('./routes/botRoute');
+  const userProfileRoute = require('./routes/userProfileRoute');
+
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
   app.use('/', launchRoute);
   app.use('/login', loginRoute);
@@ -66,6 +74,17 @@ mongoose.connect(mongoUri, {
   app.get('/home', (req, res) => {
     const user = req.session.user;
     res.render('home', { user, page: 'Home' });
+  });
+
+  // Sign-out route
+  app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error('Error destroying session:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      res.redirect('/login'); // Redirect to the login page after logging out
+    });
   });
 
   // Error Handling Middleware (catch-all)

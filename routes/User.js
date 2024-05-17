@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-// Define the user schema
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -22,7 +21,7 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         validate: {
             validator: function(v) {
-                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
+                return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i.test(v);
             },
             message: 'Please enter a valid email address'
         }
