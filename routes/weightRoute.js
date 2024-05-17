@@ -10,7 +10,7 @@ const weightSchema = new mongoose.Schema({
   weightLbs: { type: Number, required: true }
 });
 
-weightSchema.index({ userId: 1, date: 1 }, { unique: true }); // Compound index
+weightSchema.index({ userId: 1, date: 1 }, { unique: true }); 
 
 const Weight = mongoose.model('Weight', weightSchema);
 
