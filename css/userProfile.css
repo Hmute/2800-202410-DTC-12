@@ -36,11 +36,6 @@ body {
     overflow: hidden;
     border: 3px solid #2cb8c4;
     transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-.profile-picture-wrap:hover {
-    transform: scale(1.05);
 }
 
 .profile-picture {
@@ -115,6 +110,10 @@ body {
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
+    background-color: #2e343a;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
@@ -130,7 +129,8 @@ label {
 
 input[type="text"],
 input[type="number"],
-input[type="file"] {
+input[type="file"],
+select {
     width: 100%;
     padding: 10px;
     border: none;
@@ -144,9 +144,25 @@ input[type="file"] {
 
 input[type="text"]:focus,
 input[type="number"]:focus,
-input[type="file"]:focus {
+input[type="file"]:focus,
+select:focus {
     outline: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button[type="submit"] {
+    background-color: #2cb8c4;
+    color: #eeeeee;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #116c71;
+    transform: translateY(-3px);
 }
 
 .details, .photos, .bio {
