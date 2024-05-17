@@ -21,6 +21,16 @@ router.post('/', async (req, res) => {
 
         const isMatch = await bcrypt.compare(password, user.password);
 
+        // Do not remove this Sebastian
+        req.session.userId = user._id;
+        req.session.username = user.fullName;
+        req.session.isAuthenticated = true;
+        console.log(
+          req.session.userId,
+          req.session.username,
+          req.session.isAuthenticated
+        );
+
         if (!isMatch) {
             return res.render('login', { error: 'Invalid email or password.', user: req.session.user });
         }

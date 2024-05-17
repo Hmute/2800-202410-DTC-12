@@ -1,3 +1,6 @@
+// Add another tag when user click the + icon 
+// Add - icon once there are 2 tags
+// Delete the generated tag when - icon is clicked 
 document.addEventListener("DOMContentLoaded", function () {
   const addTagIcon = document.getElementById("addTagIcon");
   const removeTagIcon = document.getElementById("removeTagIcon");
@@ -8,14 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
     if (tagCount < 2) {
       const newTag = tagContainer.querySelector("select").cloneNode(true);
       newTag.id = "tag2";
-      newTag.name = "tags"; // Ensure new tag has the correct name attribute
+      newTag.name = "tags";
       tagContainer.insertBefore(newTag, addTagIcon);
       tagCount++;
-
-      if (tagCount === 2) {
-        addTagIcon.style.display = "none";
-        removeTagIcon.style.display = "inline";
-      }
+    }
+    if (tagCount === 2) {
+      addTagIcon.style.display = "none";
+      removeTagIcon.style.display = "inline";
     }
   });
 
@@ -32,23 +34,30 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  submitForm();
+});
+
+// Submit the form and properly handle the image file submission.
+const submitForm = () => {
   document
     .getElementById("blogForm")
     .addEventListener("submit", function (event) {
       event.preventDefault();
 
-      const title = document.getElementById("title").value;
-      const content = document.getElementById("contentTextArea").value;
+      const form = event.target;
+      const formData = new FormData(form);
+
       const tags = Array.from(document.querySelectorAll("select[name='tags']"))
         .map((select) => select.value)
         .filter((value) => value !== "None");
 
+      formData.delete("tags");
+
+      tags.forEach((tag) => formData.append("tags", tag));
+
       fetch("/blog/save", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, content, tags }),
+        body: formData,
       })
         .then((response) => {
           if (response.ok) {
@@ -61,8 +70,8 @@ document.addEventListener("DOMContentLoaded", function () {
           console.error("Error:", error);
         });
     });
-});
+};
 
-document.getElementById('backBtn').addEventListener('click', () => {
-  window.location.href = '/blog'
+document.getElementById("backBtn").addEventListener("click", () => {
+  window.location.href = "/blog";
 });
