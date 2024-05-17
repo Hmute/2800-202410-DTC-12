@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./User'); 
+const User = require('./User'); // Adjust the path as needed
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -89,7 +90,13 @@ router.post('/:username/edit', (req, res) => {
             user.height = height || user.height;
             user.weight = weight || user.weight;
             user.bodyFat = bodyFat || user.bodyFat;
-            if (profilePicture) user.profilePicture = profilePicture;
+            if (profilePicture) {
+                // Delete the old profile picture if it exists
+                if (user.profilePicture) {
+                    fs.unlinkSync(path.join(__dirname, '../public/images/profile', user.profilePicture));
+                }
+                user.profilePicture = profilePicture;
+            }
             if (photos.length) user.photos.push(...photos);
 
             await user.save();
@@ -99,6 +106,32 @@ router.post('/:username/edit', (req, res) => {
             res.status(500).send('Server error');
         }
     });
+});
+
+// Delete photo
+router.post('/:username/deletePhoto', async (req, res) => {
+    const username = req.params.username;
+    const { photo } = req.body;
+
+    try {
+        const user = await User.findOne({ username });
+        if (!user) {
+            console.log('User not found:', username);
+            return res.status(404).send('User not found');
+        }
+
+        // Remove photo from user photos array
+        user.photos = user.photos.filter(p => p !== photo);
+        await user.save();
+
+        // Delete the photo file
+        fs.unlinkSync(path.join(__dirname, '../public/images', photo));
+
+        res.redirect(`/user/${username}`);
+    } catch (err) {
+        console.error('Server error:', err);
+        res.status(500).send('Server error');
+    }
 });
 
 module.exports = router;

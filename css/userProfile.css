@@ -11,7 +11,7 @@ body {
 
 .profile-container {
     width: 100%;
-    padding: 20px;
+    padding: 15px; /* Reduced padding */
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -23,15 +23,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 15px; /* Reduced padding */
     width: 100%;
-    max-width: 800px;
+    max-width: 700px; /* Reduced max-width */
     border-bottom: 1px solid #444;
 }
 
 .profile-picture-wrap {
-    width: 150px;
-    height: 150px;
+    width: 130px; /* Reduced size */
+    height: 130px; /* Reduced size */
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #2cb8c4;
@@ -45,32 +45,35 @@ body {
 }
 
 .profile-info {
-    padding-left: 20px;
+    padding-left: 15px; /* Reduced padding */
     color: #eeeeee;
     text-align: left;
+    margin-top: -10px; /* Move the name up */
 }
 
-.profile-info h2 {
+.profile-name {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 1.8rem; /* Reduced font size */
     color: #2cb8c4;
     animation: fadeIn 1s ease-in-out;
+    line-height: 1.2; /* Adjust line height */
+    width: 100%; /* Make the name take full width */
 }
 
 .username {
     color: #bbbbbb;
     margin: 5px 0;
-    font-size: 1.2rem;
+    font-size: 1rem; /* Reduced font size */
 }
 
 .social-icons {
-    margin-top: 10px;
+    margin-top: 20px; /* Add margin to shift down */
 }
 
 .social-icons a {
     color: #2cb8c4;
-    margin-right: 10px;
-    font-size: 1.5rem;
+    margin-right: 8px; /* Reduced margin */
+    font-size: 1.2rem; /* Reduced font size */
     transition: color 0.3s ease;
 }
 
@@ -80,44 +83,67 @@ body {
 
 .profile-actions {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 20px; /* Add margin to shift down */
+}
+
+.button-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .edit-profile-btn {
-    background-color: #2cb8c4;
+    background-color: #007bff; /* Blue color for the button */
     color: #eeeeee;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px; /* Reduced padding */
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-right: 8px; /* Reduced space between buttons */
 }
 
 .edit-profile-btn:hover {
-    background-color: #116c71;
+    background-color: #0056b3;
     transform: translateY(-3px);
 }
 
 .settings-icon {
     cursor: pointer;
-    color: #2cb8c4;
-    font-size: 1.5rem;
-    margin-left: 15px;
+    color: #007bff;
+    font-size: 1.3rem; /* Reduced font size */
+    margin-bottom: 8px; /* Reduced space above the sign out button */
+}
+
+.sign-out-btn {
+    background-color: #2cb8c4;
+    color: #eeeeee;
+    border: none;
+    padding: 8px 16px; /* Reduced padding */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.sign-out-btn:hover {
+    background-color: #116c71;
+    transform: translateY(-3px);
 }
 
 #edit-profile-form {
     width: 100%;
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 700px; /* Reduced max-width */
+    margin: 15px auto; /* Reduced margin */
     background-color: #2e343a;
-    padding: 20px;
+    padding: 15px; /* Reduced padding */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px; /* Reduced margin */
     text-align: left;
 }
 
@@ -132,12 +158,12 @@ input[type="number"],
 input[type="file"],
 select {
     width: 100%;
-    padding: 10px;
+    padding: 8px; /* Reduced padding */
     border: none;
     border-radius: 5px;
     background-color: #393e46;
     color: #eeeeee;
-    font-size: 1rem;
+    font-size: 0.9rem; /* Reduced font size */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease;
 }
@@ -154,7 +180,7 @@ button[type="submit"] {
     background-color: #2cb8c4;
     color: #eeeeee;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 16px; /* Reduced padding */
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
@@ -166,21 +192,25 @@ button[type="submit"]:hover {
 }
 
 .details, .photos, .bio {
-    padding: 20px;
-    text-align: left;
+    padding: 15px; /* Reduced padding */
     width: 100%;
-    max-width: 800px;
+    max-width: 700px; /* Reduced max-width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-top: 20px; /* Add margin to shift down */
 }
 
 .details h3, .photos h3, .bio h3 {
     margin-top: 0;
     color: #2cb8c4;
-    font-size: 1.8rem;
+    font-size: 1.5rem; /* Reduced font size */
 }
 
 .details p {
     margin: 5px 0;
-    font-size: 1.2rem;
+    font-size: 1rem; /* Reduced font size */
 }
 
 .photo-grid {
@@ -190,9 +220,13 @@ button[type="submit"]:hover {
     justify-content: center;
 }
 
+.photo-wrap {
+    position: relative;
+}
+
 .photo {
-    width: 120px;
-    height: 120px;
+    width: 100px; /* Reduced size */
+    height: 100px; /* Reduced size */
     object-fit: cover;
     border-radius: 5px;
     border: 2px solid #2cb8c4;
@@ -204,20 +238,21 @@ button[type="submit"]:hover {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.sign-out-btn {
-    background-color: #2cb8c4;
-    color: #eeeeee;
+.delete-photo-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: #ffffff;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 3px;
+    padding: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-top: 20px;
+    transition: background-color 0.3s ease;
 }
 
-.sign-out-btn:hover {
-    background-color: #116c71;
-    transform: translateY(-3px);
+.delete-photo-btn:hover {
+    background-color: rgba(255, 0, 0, 1);
 }
 
 .footer {
@@ -242,8 +277,8 @@ button[type="submit"]:hover {
 
 .bottom-nav .nav-link {
     color: #eeeeee;
-    font-size: 1.5rem;
-    padding: 10px;
+    font-size: 1.2rem; /* Reduced font size */
+    padding: 8px; /* Reduced padding */
 }
 
 .bottom-nav .nav-link:hover {
@@ -251,7 +286,7 @@ button[type="submit"]:hover {
 }
 
 .bottom-nav .nav-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem; /* Reduced font size */
 }
 
 .popup {
@@ -269,7 +304,7 @@ button[type="submit"]:hover {
 .popup-content {
     background-color: #fefefe;
     margin: 15% auto;
-    padding: 20px;
+    padding: 15px; /* Reduced padding */
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
@@ -280,7 +315,7 @@ button[type="submit"]:hover {
 .close {
     color: #aaaaaa;
     float: right;
-    font-size: 28px;
+    font-size: 25px; /* Reduced font size */
     font-weight: bold;
 }
 
@@ -297,13 +332,13 @@ button[type="submit"]:hover {
 }
 
 .settings ul li {
-    margin: 10px 0;
+    margin: 8px 0; /* Reduced margin */
 }
 
 .settings ul li a {
     color: #eeeeee;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1rem; /* Reduced font size */
     transition: color 0.3s ease;
 }
 
