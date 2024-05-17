@@ -19,16 +19,21 @@
                 <% } %>
             </div>
             <div class="profile-info">
-                <h2 id="fullName-display"><%= user.fullName %></h2>
+                <h2 class="profile-name" id="fullName-display"><%= user.fullName %></h2>
                 <p class="username">@<%= user.username %></p>
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
+                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
                 </div>
                 <div class="profile-actions">
-                    <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
-                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
+                    <div class="button-group">
+                        <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+                        <form id="signout-form" action="/logout" method="POST">
+                            <button type="submit" class="sign-out-btn" id="sign-out-btn">Sign Out</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,16 +108,19 @@
             <% if (user.photos && user.photos.length > 0) { %>
                 <div class="photo-grid" id="photo-grid">
                     <% user.photos.forEach(photo => { %>
-                        <img src="/images/<%= photo %>" alt="Photo" class="photo">
+                        <div class="photo-wrap">
+                            <img src="/images/<%= photo %>" alt="Photo" class="photo">
+                            <form action="/user/<%= user.username %>/deletePhoto" method="POST" class="delete-photo-form" style="display: none;">
+                                <input type="hidden" name="photo" value="<%= photo %>">
+                                <button type="submit" class="delete-photo-btn">Delete</button>
+                            </form>
+                        </div>
                     <% }) %>
                 </div>
             <% } else { %>
                 <p id="no-photos">No photos available</p>
             <% } %>
         </div>
-        <form id="signout-form" action="/logout" method="POST">
-            <button type="submit" class="sign-out-btn" id="sign-out-btn">Sign Out</button>
-        </form>
     </div>
 
     <!-- Settings Popup -->
@@ -129,7 +137,7 @@
                 <li><a href="/account/notification">Notification</a></li>
                 <li><a href="/account/view-options">View Options</a></li>
             </ul>
-            <button class="sign-out-btn" onclick="location.href='/logout'">Sign Out</button>
+            <button class="sign-out-popup-btn" onclick="location.href='/logout'">Sign Out</button>
         </div>
     </div>
 
@@ -137,6 +145,9 @@
     <script>
         document.getElementById('edit-profile-btn').addEventListener('click', function() {
             document.getElementById('edit-profile-form').style.display = 'block';
+            document.querySelectorAll('.delete-photo-form').forEach(function(form) {
+                form.style.display = 'block';
+            });
         });
 
         // Settings Popup
