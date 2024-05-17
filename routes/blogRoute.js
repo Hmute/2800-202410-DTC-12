@@ -93,4 +93,12 @@ router.get("/view", async (req, res) => {
   }
 });
 
+router.get("/posts", (req, res) => {
+  res.render('blogUserPost', { page: 'Your Posts' });
+});
+
+router.post("/posts/delete", (req, res) => {
+  res.redirect('/posts/delete');
+});
+
 module.exports = router;
