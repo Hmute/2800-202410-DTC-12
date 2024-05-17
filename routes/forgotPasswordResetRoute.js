@@ -11,14 +11,14 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 // Rate Limiting (adjust as needed)
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // Limit each IP to 5 requests per windowMs
+    max: 40, // Limit each IP to 5 requests per windowMs
     message: 'Too many requests from this IP, please try again later.'
 });
 router.use(limiter);
 
 // GET: Display forgot password form
 router.get('/', (req, res) => {
-    res.render('forgotPasswordReset', { error: null, message: null, showResetForm: false });
+    res.render('forgotPasswordReset', { user: req.session.user, page: 'Forgot Password', error: null, message: null, showResetForm: false });
 });
 
 // POST: Handle email submission for password reset
@@ -27,7 +27,8 @@ router.post('/', async (req, res) => {
         const user = await User.findOne({ email: req.body.email });
 
         if (!user) {
-            return res.render('forgotPasswordReset', { error: 'No account with that email address exists.', message: null, showResetForm: false });
+            console.log(`No account with email: ${req.body.email}`);
+            return res.render('forgotPasswordReset', { error: 'No account with that email address exists.', user: req.session.user, page: 'Forgot Password', message: null, showResetForm: false });
         }
 
         const token = crypto.randomBytes(20).toString('hex');
@@ -36,7 +37,11 @@ router.post('/', async (req, res) => {
 
         await user.save(); // Save user with reset token
 
+        console.log(`Generated token: ${token} for user: ${user.email}`);
+
         const resetLink = `http://${req.headers.host}/forgotPasswordReset/${token}`;
+        console.log(`Reset link: ${resetLink}`);
+
         const msg = {
             to: user.email,
             from: 'wellbotbcit@outlook.com', // Replace with your verified email address
@@ -51,26 +56,28 @@ router.post('/', async (req, res) => {
         };
 
         await sgMail.send(msg);
-        res.render('forgotPasswordReset', { message: 'A password reset email has been sent to your email address.', error: null, showResetForm: false });
+        res.render('forgotPasswordReset', { message: 'A password reset email has been sent to your email address.', user: req.session.user, page: 'Forgot Password', error: null, showResetForm: false });
     } catch (err) {
         console.error('Error sending password reset email:', err);
-        res.render('forgotPasswordReset', { error: 'An error occurred while sending the reset email. Please try again later.', message: null, showResetForm: false });
+        res.render('forgotPasswordReset', { error: 'An error occurred while sending the reset email. Please try again later.', user: req.session.user, page: 'Forgot Password', message: null, showResetForm: false });
     }
 });
 
 // GET: Display reset password form (if token is valid)
 router.get('/:token', async (req, res) => {
     try {
+        console.log(`Received token: ${req.params.token}`);
         const user = await User.findOne({
             resetPasswordToken: req.params.token,
             resetPasswordExpires: { $gt: Date.now() },
         });
 
         if (!user) {
-            return res.render('forgotPasswordReset', { error: 'Invalid or expired token.', message: null, showResetForm: false });
+            console.log('Token is invalid or expired');
+            return res.render('forgotPasswordReset', { error: 'Invalid or expired token.', user: req.session.user, page: 'Forgot Password', message: null, showResetForm: false });
         }
 
-        res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: null, message: null });
+        res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, user: req.session.user, page: 'Reset Password', error: null, message: null });
     } catch (err) {
         console.error('Error finding user for password reset:', err);
         res.status(500).send('An error occurred.');
@@ -86,20 +93,23 @@ router.post('/:token', async (req, res) => {
         });
 
         if (!user) {
-            return res.render('forgotPasswordReset', { error: 'Invalid or expired token.', message: null, showResetForm: false });
+            console.log('Token is invalid or expired');
+            return res.render('forgotPasswordReset', { error: 'Invalid or expired token.', user: req.session.user, page: 'Forgot Password', message: null, showResetForm: false });
         }
 
         const { password, confirmPassword } = req.body;
 
         if (password.length < 8) {
-            return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'Password must be at least 8 characters long.', message: null });
+            return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, user: req.session.user, page: 'Reset Password', error: 'Password must be at least 8 characters long.', message: null });
         }
 
         if (password !== confirmPassword) {
-            return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'Passwords do not match.', message: null });
+            return res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, user: req.session.user, page: 'Reset Password', error: 'Passwords do not match.', message: null });
         }
 
-        user.password = password; // Set the new password (pre-save hook will hash it)
+        // Hash the new password before saving
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
         user.resetPasswordToken = undefined; // Clear token and expiration after reset
         user.resetPasswordExpires = undefined;
 
@@ -108,7 +118,7 @@ router.post('/:token', async (req, res) => {
         res.redirect('/login');
     } catch (err) {
         console.error('Error resetting password:', err);
-        res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, error: 'An error occurred while resetting the password. Please try again.', message: null });
+        res.render('forgotPasswordReset', { token: req.params.token, showResetForm: true, user: req.session.user, page: 'Reset Password', error: 'An error occurred while resetting the password. Please try again.', message: null });
     }
 });
 

@@ -1,5 +1,5 @@
-<%- include('templates/header') %>
-<%- include("homeTop") %>
-<%- include("homeBot") %>
+<%- include('templates/header', { user: user }) %>
+<%- include("homeTop", { user: user }) %>
+<%- include("homeBot", { user: user }) %>
 <script src="/script/calendar.js"></script>
-<%- include('templates/footer') %>
+<%- include('templates/footer', { user: user }) %>

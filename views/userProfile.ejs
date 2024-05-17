@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
-    <%- include('templates/header', { page: 'Profile' }) %>
+    <%- include('templates/header', { user: user }) %>
     <div class="profile-container">
         <div class="profile-header">
             <div class="profile-picture-wrap">
@@ -72,9 +72,29 @@
                 <p id="no-photos">No photos available</p>
             <% } %>
         </div>
-        <button class="sign-out-btn" id="sign-out-btn">Sign Out</button>
+        <<form id="signout-form" action="/logout" method="POST">
+            <button type="submit" class="sign-out-btn" id="sign-out-btn">Sign Out</button>
+        </form>
+        
     </div>
-    <%- include('templates/footer') %>
+    <%- include('templates/footer', { user: user }) %>
+    <script>
+        document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            document.getElementById('edit-profile-form').style.display = 'block';
+        });
+
+        document.getElementById('profile-picture').addEventListener('click', function() {
+            document.getElementById('profile-picture-input').click();
+        });
+
+        document.getElementById('profile-picture-input').addEventListener('change', function(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById('profile-picture').src = reader.result;
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        });
+    </script>
     <script src="/script/userProfile.js"></script>
 </body>
 </html>

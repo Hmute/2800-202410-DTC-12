@@ -1,7 +1,9 @@
+// routes/loginRoute.js
+
 const express = require('express');
 const router = express.Router();
-const User = require('./User'); // Import the User model
-const bcrypt = require('bcrypt'); // Import bcrypt for password hashing
+const User = require('./User'); // Corrected path to User model
+const bcrypt = require('bcrypt');
 
 // Route to display the login form
 router.get('/', (req, res) => {

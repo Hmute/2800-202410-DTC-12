@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./User');
+const User = require('./User'); // Adjust the path as needed
 const multer = require('multer');
 const path = require('path');
 
