@@ -1,9 +1,9 @@
 <%- include('templates/header') %>
     <ul>
-        <% recommendations.forEach(function(rec) { %>
+        <% recommendations.forEach(function(recommendation) { %>
             <li>
-                <%= rec %>
+                <%= recommendation.name %>: <%= recommendation.repetitions %> reps
             </li>
-            <% }); %>
+            <% }) %>
     </ul>
     <%- include('templates/footer') %>
