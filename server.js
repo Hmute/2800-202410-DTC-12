@@ -63,6 +63,7 @@ mongoose.connect(mongoUri, {
   const blogRoute = require('./routes/blogRoute');
   const botRoute = require('./routes/botRoute');
   const userProfileRoute = require('./routes/userProfileRoute');
+  const weightRoute = require('./routes/weightRoute');
 
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
   app.use('/', launchRoute);
@@ -71,6 +72,7 @@ mongoose.connect(mongoUri, {
   app.use('/blog', blogRoute);
   app.use('/bot', botRoute);
   app.use('/user', userProfileRoute);
+  app.use('/weight', weightRoute);
 
   app.get('/home', (req, res) => {
     const user = req.session.user;
