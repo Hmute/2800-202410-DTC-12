@@ -1,39 +1,36 @@
-// routes/loginRoute.js
-
 const express = require('express');
 const router = express.Router();
-const User = require('./User'); // Corrected path to User model
+const User = require('./User');  // Ensure the correct path to the User model
 const bcrypt = require('bcrypt');
 
-// Route to display the login form
+// GET: Display login form
 router.get('/', (req, res) => {
-    res.render('login', { error: null }); // Render the login form with no error message
+    res.render('login', { error: null, user: req.session.user });
 });
 
-// Route to handle login form submissions
+// POST: Handle login
 router.post('/', async (req, res) => {
-    try {
-        const { email, password } = req.body; // Extract email and password from the request body
+    const { email, password } = req.body;
 
-        // Find the user by email
+    try {
         const user = await User.findOne({ email });
+
         if (!user) {
-            return res.render('login', { error: 'Invalid email or password' }); // If user is not found, display an error
+            return res.render('login', { error: 'Invalid email or password.', user: req.session.user });
         }
 
-        // Compare the entered password with the hashed password
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.render('login', { error: 'Invalid email or password' }); // If passwords do not match, display an error
+            return res.render('login', { error: 'Invalid email or password.', user: req.session.user });
         }
 
-        req.session.user = user; // Set the user in the session
-        res.redirect('/home'); // Redirect to the home page on successful login
+        req.session.user = user;
+        res.redirect('/home');
     } catch (err) {
-        console.error('Error logging in:', err); // Log any errors that occur
-        res.render('login', { error: 'An error occurred during login' }); // Display a general error message
+        console.error('Error logging in:', err);
+        res.render('login', { error: 'An error occurred during login. Please try again.', user: req.session.user });
     }
 });
 
-module.exports = router; // Export the router for use in other parts of the application
+module.exports = router;
