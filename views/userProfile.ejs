@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="/css/userProfile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+<body>
+    <%- include('templates/header', { user: user }) %>
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-picture-wrap">
+                <% if (user.profilePicture) { %>
+                    <img src="/images/profile/<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                <% } else { %>
+                    <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture" id="profile-picture">
+                <% } %>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name" id="fullName-display"><%= user.fullName %></h2>
+                <p class="username">@<%= user.username %></p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
+                </div>
+                <div class="profile-actions">
+                    <div class="button-group">
+                        <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+                        <form id="signout-form" action="/logout" method="POST">
+                            <button type="submit" class="sign-out-btn" id="sign-out-btn">Sign Out</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form id="edit-profile-form" action="/user/<%= user.username %>/edit" method="POST" enctype="multipart/form-data" style="display: none;">
+            <div class="form-group">
+                <label for="fullName">Full Name:</label>
+                <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" placeholder="Enter your full name">
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender">
+                    <option value="" disabled selected>Select your gender</option>
+                    <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                    <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                    <option value="Other" <%= user.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" value="<%= user.age %>" placeholder="Enter your age">
+            </div>
+            <div class="form-group">
+                <label for="height">Height (cm/in):</label>
+                <input type="number" id="height" name="height" value="<%= user.height %>" placeholder="Enter your height">
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (kg/lbs):</label>
+                <input type="number" id="weight" name="weight" value="<%= user.weight %>" placeholder="Enter your weight">
+            </div>
+            <div class="form-group">
+                <label for="bodyFat">Body Fat (%):</label>
+                <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>" placeholder="Enter your body fat percentage">
+            </div>
+            <div class="form-group">
+                <label for="profilePicture">Change Profile Photo:</label>
+                <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label for="photos">Upload Photos:</label>
+                <input type="file" id="photos" name="photos" multiple accept="image/*">
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+        <div class="details">
+            <h3>Health Details</h3>
+            <% if (user.gender) { %>
+                <p><strong>Gender:</strong> <span id="gender-display"><%= user.gender %></span></p>
+            <% } %>
+            <% if (user.age) { %>
+                <p><strong>Age:</strong> <span id="age-display"><%= user.age %></span></p>
+            <% } %>
+            <% if (user.height) { %>
+                <p><strong>Height:</strong> <span id="height-display"><%= user.height %></span></p>
+            <% } %>
+            <% if (user.weight) { %>
+                <p><strong>Weight:</strong> <span id="weight-display"><%= user.weight %></span></p>
+            <% } %>
+            <% if (user.bodyFat) { %>
+                <p><strong>Body Fat:</strong> <span id="bodyFat-display"><%= user.bodyFat %></span></p>
+            <% } %>
+        </div>
+        <div class="bio">
+            <h3>Bio</h3>
+            <% if (user.bio) { %>
+                <p><%= user.bio %></p>
+            <% } else { %>
+                <p>No bio available</p>
+            <% } %>
+        </div>
+        <div class="photos">
+            <h3>Photos</h3>
+            <% if (user.photos && user.photos.length > 0) { %>
+                <div class="photo-grid" id="photo-grid">
+                    <% user.photos.forEach(photo => { %>
+                        <div class="photo-wrap">
+                            <img src="/images/<%= photo %>" alt="Photo" class="photo">
+                            <form action="/user/<%= user.username %>/deletePhoto" method="POST" class="delete-photo-form" style="display: none;">
+                                <input type="hidden" name="photo" value="<%= photo %>">
+                                <button type="submit" class="delete-photo-btn">Delete</button>
+                            </form>
+                        </div>
+                    <% }) %>
+                </div>
+            <% } else { %>
+                <p id="no-photos">No photos available</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Settings Popup -->
+    <div id="settings-popup" class="popup">
+        <div class="popup-content">
+            <span class="close" id="close-settings">&times;</span>
+            <h3>Settings</h3>
+            <ul>
+                <li><a href="/account/reset">Reset account</a></li>
+                <li><a href="/account/connected">Connected accounts</a></li>
+                <li><a href="/account/blocking">Blocking and permission</a></li>
+                <li><a href="/account/privacy">Privacy</a></li>
+                <li><a href="/account/security">Security</a></li>
+                <li><a href="/account/notification">Notification</a></li>
+                <li><a href="/account/view-options">View Options</a></li>
+            </ul>
+            <button class="sign-out-popup-btn" onclick="location.href='/logout'">Sign Out</button>
+        </div>
+    </div>
+
+    <%- include('templates/footer', { user: user }) %>
+    <script>
+        document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            document.getElementById('edit-profile-form').style.display = 'block';
+            document.querySelectorAll('.delete-photo-form').forEach(function(form) {
+                form.style.display = 'block';
+            });
+        });
+
+        // Settings Popup
+        const settingsIcon = document.getElementById('settings-icon');
+        const settingsPopup = document.getElementById('settings-popup');
+        const closeSettings = document.getElementById('close-settings');
+
+        settingsIcon.addEventListener('click', function() {
+            settingsPopup.style.display = 'block';
+        });
+
+        closeSettings.addEventListener('click', function() {
+            settingsPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target == settingsPopup) {
+                settingsPopup.style.display = 'none';
+            }
+        });
+    </script>
+    <script src="/script/userProfile.js"></script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+/* General Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #f1f1f1;
+}
+
+.main-content {
+  padding: 20px;
+  padding-bottom: 100px;
+  position: relative;
+}
+
+/* Back Button */
+.back-button-container {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#backBtn {
+  transition: transform 0.1s ease, opacity 0.1s ease;
+  cursor: pointer;
+  position: sticky;
+}
+
+#backBtn path {
+  stroke: #f1f1f1;
+  /* Stroke color for the back button */
+}
+
+#backBtn:active {
+  transform: scale(0.95);
+  opacity: 0.7;
+}
+
+/* Icon Container */
+.icon-container {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 2px dashed #555;
+  position: relative;
+  color: #f1f1f1;
+}
+
+.icon-container:hover {
+  border-color: #007bff;
+  color: #007bff;
+}
+
+.icon-container svg {
+  width: 60px;
+  height: 60px;
+}
+
+.icon-container h2 {
+  position: absolute;
+  bottom: 10px;
+  font-size: 18px;
+}
+
+/* Clickable Div */
+.clickable-div {
+  cursor: pointer;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.clickable-div:active {
+  transform: scale(0.98);
+  /* Slightly scale down when clicked */
+  opacity: 0.7;
+  /* Optionally reduce opacity when clicked */
+}
+
+/* Select Dropdown */
+select {
+  width: 50%;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 4px;
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  font-size: large;
+  appearance: none;
+  /* Remove default arrow */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="#f1f1f1" d="M2 0L0 2h4zM2 5L0 3h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px top 50%;
+}
+
+select:focus {
+  border-color: #007bff;
+  /* Change border color when the element is focused */
+  outline: none;
+  /* Remove default focus outline */
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 10px;
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  box-sizing: border-box;
+  font-size: large;
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: #007bff;
+}
+
+/* Button */
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  text-decoration: none;
+  display: inline-block;
+  width: 100px;
+  margin-top: 40px;
+}
+
+.button:hover,
+.button:focus {
+  background-color: #0056b3;
+  transform: scale(1.05);
+  outline: none;
+}
+
+/* Content Textarea */
+.content-textarea {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+  border: 2px solid #555;
+  border-radius: 10px;
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+  font-size: large;
+}
+
+.content-textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Tag Container */
+.tag-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#addTagIcon {
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+#addTagIcon:hover {
+  transform: scale(1.2);
+}
+
+#removeTagIcon {
+  margin-left: 10px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: none;
+}
+
+#removeTagIcon:hover {
+  transform: scale(1.2);
+}
+
+/* Floating Action Buttons */
+.fab-container,
+.fab-container-view {
+  position: fixed;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-container {
+  bottom: 70px;
+}
+
+.fab-container-view {
+  bottom: 140px;
+}
+
+.fab-button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.fab-button .fas {
+  font-size: 24px;
+}
+
+.fab-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+}
+
+.fullscreen-textarea {
+  margin-top: auto;
+  margin-bottom: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 95%;
+  height: 99%;
+  z-index: 999;
+  border: none;
+  padding-top: 50px;
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  font-size: large;
+  box-sizing: border-box;
+  transition: box-shadow 0.3s ease;
+}
+
+.fullscreen-textarea:focus {
+  box-shadow: 0 0 15px 5px rgba(12, 15, 202, 0.5);
+  outline: none;
+}
+

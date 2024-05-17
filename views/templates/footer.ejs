@@ -1,0 +1,26 @@
+<footer class="bottom-nav fixed-bottom">
+    <nav class="nav justify-content-around w-100 h-100">
+        <a id="homepage" class="nav-link text-white flex-fill text-center" href="/home">
+            <i class="bi bi-house nav-icon"></i></a>
+        <a id="botpage" class="nav-link text-white flex-fill text-center" href="/bot">
+            <i class="bi bi-robot nav-icon"></i></a>
+        <a id="blogpage" class="nav-link text-white flex-fill text-center" href="/blog">
+            <i class="bi bi-chat-left-text nav-icon"></i></a>
+        <a id="profilepage" class="nav-link text-white flex-fill text-center" href="/user/<%= user ? user.username : 'default' %>">
+            <i class="bi bi-person-circle nav-icon"></i></a>
+    </nav>
+</footer>
+
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Richard added this instead -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script> -->
+<script src="/script/blogPage.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="/script/footer.js"></script>
+<script src="/script/blogDeletePost.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+.main-content {
+  padding: 20px;
+  padding-bottom: 60px;
+  /* Adjust for floating action buttons */
+}
+
+/* Section Headers */
+h2 {
+  font-family: 'Lora', sans-serif;
+  font-weight: 700;
+  margin: 0;
+  padding: 10px 0;
+}
+
+#section {
+  border-bottom: 2px solid #292626;
+  margin-bottom: 20px;
+  padding-left: 10px;
+}
+
+/* Cards */
+.card {
+  background-color: #fff;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  min-width: 300px;
+  max-width: 300px;
+  /* Ensure cards are of uniform width */
+  flex: 0 0 auto;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.custom-card-height {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.custom-image-height {
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.width-98 {
+  padding: 10px;
+}
+
+.d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+/* Tags */
+small#tag {
+  background-color: #b5c7d8;
+  border-radius: 4px;
+  padding: 2px 8px;
+  margin-right: 5px;
+}
+
+/* Scrollable Container */
+.scrollable-x {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  gap: 10px;
+}
+
+.scrollable-x::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollable-x {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Floating Action Buttons */
+.fab-container,
+.fab-container-view {
+  position: fixed;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-container {
+  bottom: 70px;
+}
+
+.fab-container-view {
+  bottom: 140px;
+}
+
+.fab-button {
+  background-color: #007bff;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  color: white;
+  transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.fab-button .fas {
+  font-size: 24px;
+}
+
+.fab-button:hover {
+  background-color: #0056b3;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fab-button:active {
+  transform: scale(0.95);
+}
+
+/* Small Text Styles */
+small {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  color: grey;
+}
+
+/* Custom Text Alignment */
+.text-left-custom {
+  text-align: left;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .card {
+    min-width: 100%;
+  }
+
+  .fab-container,
+  .fab-container-view {
+    right: 10px;
+  }
+
+  .fab-container {
+    bottom: 60px;
+  }
+
+  .fab-container-view {
+    bottom: 120px;
+  }
+}

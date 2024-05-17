@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WellBot</title>
+  <!-- Bootstrap cdn -->
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"
+    rel="stylesheet">
+  <!-- Roboto font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Lora font -->
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  <!-- Css -->
+  <link href="/css/style.css" rel="stylesheet">
+  <link href="/css/blogCreate.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Back button -->
+  <div class="back-button-container position-absolute fixed-top">
+    <svg id="backBtn" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+    </svg> 
+    <small id="backBtn">Back</small>
+  </div>
+  <div class="main-content position-relative mt-5">
+
+    <!-- Blog form -->
+    <form id="blogForm" action="/blog/save" method="post" enctype="multipart/form-data">
+      <!-- Camera icon -->
+      <div class="icon icon-container d-flex flex-column clickable-div" onclick="document.getElementById('fileInput3').click();">
+        <input type="file" id="fileInput3" name="image" style="display: none;" />
+        <input type="file" id="fileInput3" name="image" style="display: none;" />
+        <svg width="90" height="90" viewBox="0 0 64 64" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <polygon fill="none" stroke="#010101" stroke-miterlimit="10" stroke-width="4"
+            points="47 12 42.88 8 21.12 8 17 12 2 12 2 56 62 56 62 12 47 12"></polygon>
+          <circle cx="32" cy="34" r="14" fill="none" stroke="#010101" stroke-miterlimit="10" stroke-width="4"></circle>
+          <path fill="none" stroke="#010101" stroke-miterlimit="10" stroke-width="2"
+            d="M10,21h0a1,1,0,0,1-1-1H9a1,1,0,0,1,1-1h0a1,1,0,0,1,1,1h0A1,1,0,0,1,10,21Z"></path>
+        </svg>
+        <h2>Upload Image</h2>
+      </div>
+
+      <div class="container mt-5">
+        <h2 class="mb-3" id="section">Tag</h2>
+        <div class="tag-container">
+          <select id="tags" name="tags">
+            <option value="None">None</option>
+            <option value="Nutrition">Nutrition</option>
+            <option value="Training">Training</option>
+            <option value="Wellness">Wellness</option>
+            <option value="Sports">Sports</option>
+            <option value="Lifestyle">Lifestyle</option>
+            <option value="Warning">Warning</option>
+          </select>
+          <!-- + icon -->
+          <svg id="addTagIcon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#f1f1f1" stroke-width="2" />
+            <line x1="12" y1="7" x2="12" y2="17" stroke="#f1f1f1" stroke-width="2" />
+            <line x1="7" y1="12" x2="17" y2="12" stroke="#f1f1f1" stroke-width="2" />
+          </svg>
+          <!-- - icon (hidden initially) -->
+          <svg id="removeTagIcon" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <circle cx="12" cy="12" r="10" stroke="#f1f1f1" stroke-width="2" />
+            <line x1="7" y1="12" x2="17" y2="12" stroke="#f1f1f1" stroke-width="2" />
+          </svg>
+        </div>
+
+        <div class="mt-5">
+          <h2 id="section">Title</h2>
+          <div class="title-container mt-3">
+            <input type="text" id="title" name="title" placeholder="Enter your title">
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <h2 id="section">Content</h2>
+          <div class="mt-3">
+            <textarea class="content-textarea mx-auto" id="contentTextArea" name="content"
+              placeholder="Write your content"></textarea>
+          </div>
+        </div>
+
+        <button class="button" id="postBtn" type="submit" class="button ml-4">Post</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="/script/blogCreateContent.js"></script>
+  <script src="/script/blogCreateTags.js"></script>
+  <script src="/script/blogCreateImage.js"></script>
+</body>
+
+</html>
