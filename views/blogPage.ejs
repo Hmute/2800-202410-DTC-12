@@ -1,67 +1,69 @@
 <%- include('templates/header') %>
   <div class="main-content">
-    <div class="mx-auto width-98 my-3 border-bottom-custom">
-      <h2 id="section" style="padding-left: 10px;">Popular</h2>
-    </div>
-    <!-- Cards scrollable in x-axis -->
-    <div class="scrollable-x">
-      <div class="card bg-white mx-auto shadow custom-card-height mb-2">
-        <img src="/images/dog.jpg" alt="" class="img-fluid w-100 accordion custom-image-height">
-        <div class="width-98">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex">
-              <small id="tag" class="mr-1">Nutrition</small>
+    <div id="popular-section">
+      <h2 id="section">Popular</h2>
+      <div class="scrollable-x">
+        <% popularBlogs.forEach(function(blog) { %>
+          <div class="card custom-card-height">
+            <img src="<%= blog.cloudinary %>" alt="Blog Image" class="custom-image-height">
+            <div class="width-98">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex">
+                  <% blog.tags.forEach(function(tag) { %>
+                    <small id="tag">
+                      <%= tag %>
+                    </small>
+                    <% }); %>
+                </div>
+                <small id="date">
+                  <%= new Date(blog.createdAt).toLocaleDateString() %>
+                </small>
+              </div>
+              <h2 class="text-left-custom" style="color: black;">
+                <%= blog.title %>
+              </h2>
             </div>
-            <small id="author">Marc Angelo Arnaldo</small>
-            <small id="date">2024/05/14</small>
           </div>
-          <h2 class="text-left-custom" style="color: black;">Title of the blog here.</h2>
-        </div>
+          <% }); %>
       </div>
-      <div class="card bg-white mx-auto shadow custom-card-height mb-2">
-        <img src="/images/dog.jpg" alt="" class="img-fluid w-100 accordion custom-image-height">
-        <div class="width-98">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex">
-              <small id="tag" class="mr-1">Nutrition</small>
+    </div>
+
+    <div id="latest-section" class="my-3">
+      <h2 id="section">Latest</h2>
+      <% blogs.forEach(function(blog) { %>
+        <div id="<%= blog._id %>" class="card custom-card-height">
+          <img src="<%= blog.cloudinary %>" alt="Blog Image" class="custom-image-height">
+          <div class="width-98">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex">
+                <% blog.tags.forEach(function(tag) { %>
+                  <small id="tag">
+                    <%= tag %>
+                  </small>
+                  <% }); %>
+              </div>
+              <small id="date">
+                <%= new Date(blog.createdAt).toLocaleDateString() %>
+              </small>
             </div>
-            <small id="author">Marc Angelo Arnaldo</small>
-            <small id="date">2024/05/14</small>
+            <h2 class="text-left-custom" style="color: black; padding-left: 5px; padding-right: 5px;">
+              <%= blog.title %>
+            </h2>
           </div>
-          <h2 class="text-left-custom" style="color: black;">Title of the blog here.</h2>
         </div>
-      </div>
+        <% }); %>
     </div>
-    <!-- Latest Section -->
-    <div class="mx-auto width-98 my-3 border-bottom-custom">
-      <h2 id="section" style="padding-left: 10px;">Latest</h2>
-    </div>
-    <!-- Cards Scrollable in y-axis -->
-    <div class="card bg-white mx-auto shadow custom-card-height width-98 mb-2">
-      <img src="/images/dog.jpg" alt="" class="img-fluid w-100 accordion custom-image-height">
-      <div class="width-98">
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="d-flex">
-            <small id="tag" class="mr-1">Nutrition</small>
-          </div>
-          <small id="author">Marc Angelo Arnaldo</small>
-          <small id="date">2024/05/14</small>
-        </div>
-        <h2 class="text-left-custom" style="color: black;">Title of the blog here.</h2>
-      </div>
-    </div>
-    <!-- This is for creating a post -->
+
+    <!-- Floating Action Buttons -->
     <div class="fab-container">
       <button class="fab-button" id="createPostButton">
         <i class="fas fa-plus"></i>
       </button>
     </div>
-    <!-- This is for viewing your own post -->
     <div class="fab-container-view">
       <button class="fab-button">
         <i class="fas fa-list"></i>
       </button>
     </div>
   </div>
-  
-<%- include('templates/footer') %>
+  <%- include('templates/footer') %>

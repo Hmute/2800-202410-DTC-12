@@ -6,3 +6,4 @@ document.addEventListener("DOMContentLoaded", function () {
     window.location.href = "/blog/create";
   });
 });
+

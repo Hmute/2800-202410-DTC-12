@@ -13,21 +13,22 @@ textArea.addEventListener("blur", function () {
 const createDoneButton = () => {
   // Check if the 'doneBtn' does NOT exist before creating it
   if (!document.getElementById("doneBtn")) {
-    const doneBtn = document.createElement("button");
+    const doneBtn = document.createElement("small");
     doneBtn.textContent = "Done";
     doneBtn.id = "doneBtn";
-    doneBtn.style.position = "absolute";
+    doneBtn.style.position = "fixed";
     doneBtn.style.top = "10px";
     doneBtn.style.right = "10px";
     doneBtn.style.zIndex = "1000";
-    doneBtn.style.padding = "10px 15px";
-    doneBtn.style.color = "blue";
-    doneBtn.style.border = "none";
-    doneBtn.style.borderRadius = "5px";
+    doneBtn.style.padding = "10px 20px";
     doneBtn.style.cursor = "pointer";
-    
+
     doneBtn.onclick = function () {
-      textArea.blur();
+      const textArea = document.querySelector("textarea");
+      if (textArea) {
+        textArea.blur();
+      }
+      removeDoneButton();
     };
 
     document.body.appendChild(doneBtn);
@@ -40,3 +41,4 @@ function removeDoneButton() {
     doneBtn.parentNode.removeChild(doneBtn);
   }
 }
+
