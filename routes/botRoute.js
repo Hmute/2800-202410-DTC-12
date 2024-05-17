@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
+const mongoose = require('mongoose');
 const router = express.Router();
+const Workout = require('../routes/Workout');
 
 const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .env file
 
@@ -12,10 +14,11 @@ router.get('/', (req, res) => {
 // Handle form submission and generate workout recommendations
 router.post('/generate', async (req, res) => {
   const userInput = req.body;
+  const generatedAt = new Date(); // Save the current date and time
 
   try {
     const recommendations = await getWorkoutRecommendations(userInput);
-    res.render('botResults', { page: 'Recommendations', data: userInput, recommendations });
+    res.render('botResults', { page: 'Recommended Exercises', data: userInput, recommendations, generatedAt });
   } catch (error) {
     console.error('Error generating workout recommendations:', error);
     res.status(500).send('Error generating workout recommendations');
@@ -133,5 +136,28 @@ function calculateRepetitions(level, days, time) {
   const repetitions = Math.round(baseReps * dayFactor * timeFactor);
   return repetitions;
 }
+
+// Handle form submission for saving selected exercises
+router.post('/save', async (req, res) => {
+  const { selectedExercises } = req.body;
+  const userId = req.session.userId; // Assuming you have user sessions
+
+  try {
+    const exercises = JSON.parse(selectedExercises);
+
+    for (const exercise of exercises) {
+      await Workout.create({
+        name: exercise.name,
+        repetitions: exercise.repetitions,
+        user: userId
+      });
+    }
+
+    res.send('Workout saved successfully!');
+  } catch (error) {
+    console.error('Error saving workout:', error);
+    res.status(500).send('Error saving workout');
+  }
+});
 
 module.exports = router;
