@@ -1,1 +1,8 @@
-// This is the middleware for blog page only. Do not access if you're not Marc. Create your own.
+const isAuthenticated = (req, res, next) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect("/");
+  }
+  next();
+};
+
+module.exports = isAuthenticated;

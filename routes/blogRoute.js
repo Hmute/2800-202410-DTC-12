@@ -3,11 +3,13 @@ const router = express.Router();
 const Blog = require("./blogSchema");
 const multer = require("multer");
 const cloudinary = require("../setup/cloudinary");
+const isAuthenticated = require("../middlewares/blogMiddlewares");
+
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-router.get("/", async (req, res) => {
+router.get("/", isAuthenticated, async (req, res) => {
   try {
     // Fetch the latest blogs
     const blogs = await Blog.find().sort({ fullDate: -1 });
@@ -26,7 +28,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/create", (req, res) => {
+router.get("/create", isAuthenticated, (req, res) => {
   res.render("blogCreate");
 });
 
@@ -58,11 +60,13 @@ router.post("/save", upload.single("image"), async (req, res) => {
 
           newBlog
             .save()
-            .then(() => res.redirect("/blog"))
+            .then(() => res.redirect("/blog")) // Maybe redirect them to another post route
+            // The post route is where I will save the id of the posted blog to the user.
+            // The user will get an array of id of their posts
             .catch((err) => {
               console.error("Database Error:", err);
               res.status(500).send("Error saving blog post");
-            });
+            }); 
         }
       }
     );
@@ -78,26 +82,29 @@ router.post("/save", upload.single("image"), async (req, res) => {
   }
 });
 
-router.get("/view", async (req, res) => {
+router.get("/view", isAuthenticated, async (req, res) => {
   const blogId = req.query.id;
   try {
     const blog = await Blog.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
 
     if (!blog) {
-      res.status(404).send('Blog not found');
+      res.status(404).send("Blog not found");
     }
 
-    res.render('blogView', { blog });
+    res.render("blogView", { blog });
   } catch (err) {
-    res.status(500).send('Error loading blog post.');
+    res.status(500).send("Error loading blog post.");
   }
 });
 
-router.get("/posts", (req, res) => {
-  res.render('blogUserPost', { page: 'Your Posts' });
+router.get("/posts", isAuthenticated, (req, res) => {
+  // Get the array of posts id from the current user
+  // Access the blog collection and post the blogs on this route 
+  res.render("blogUserPost", { page: "Your Blogs" });
 });
 
 router.post("/posts/delete", (req, res) => {
+  // Delete the id from the user's collection and also the blog collection and then redirect to blog/posts route.
   res.redirect('/posts/delete');
 });
 
