@@ -1,0 +1,59 @@
+.image-container {
+  height: 400px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-container img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  padding: 5px;
+  transition: transform 0.1s, box-shadow 0.2s;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+.close-btn:active {
+  opacity: 0.5;
+  transform: scale(1.1);
+}
+
+.width-98 {
+  max-width: 90%;
+  margin: 20px auto;
+}
+
+.author small {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+h1 {
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  margin: 20px 0 10px;
+  padding-bottom: 10px;
+  color: cyan;
+}
+
+p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  line-height: 2.0;
+}
+
+.content {
+  white-space: pre-wrap;
+}

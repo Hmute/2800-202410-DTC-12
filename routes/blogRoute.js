@@ -51,7 +51,9 @@ router.post("/save", upload.single("image"), async (req, res) => {
             tags: Array.isArray(tags) ? tags : [tags],
             createdAt: formattedDate,
             fullDate: currentDate,
+            views: 0,
             cloudinary: result.secure_url,
+            author: req.session.username,
           });
 
           newBlog
@@ -73,6 +75,21 @@ router.post("/save", upload.single("image"), async (req, res) => {
   } catch (err) {
     console.error("Error:", err);
     res.status(500).send("Error saving blog post");
+  }
+});
+
+router.get("/view", async (req, res) => {
+  const blogId = req.query.id;
+  try {
+    const blog = await Blog.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
+
+    if (!blog) {
+      res.status(404).send('Blog not found');
+    }
+
+    res.render('blogView', { blog });
+  } catch (err) {
+    res.status(500).send('Error loading blog post.');
   }
 });
 

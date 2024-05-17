@@ -8,11 +8,7 @@ const blogSchema = new mongoose.Schema({
   tags: [String],
   views: Number,
   cloudinary: String,
-  //   author: {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "User",
-  //     required: [true, "Author is required"],
-  //   },
+  author: String,
 });
 
 const Blog = mongoose.model("Blog", blogSchema);
