@@ -5,45 +5,55 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: [true, 'Full Name is required'], // Full name is required
-        trim: true, // Remove whitespace around the value
+        required: [true, 'Full Name is required'],
+        trim: true,
+    },
+    username: {
+        type: String,
+        required: [true, 'Username is required'],
+        unique: true,
+        trim: true,
     },
     email: {
         type: String,
-        required: [true, 'Email is required'], // Email is required
-        unique: true, // Email must be unique
-        trim: true, // Remove whitespace around the value
-        lowercase: true, // Convert the email to lowercase
+        required: [true, 'Email is required'],
+        unique: true,
+        trim: true,
+        lowercase: true,
         validate: {
             validator: function(v) {
-                // Regular expression to validate email format
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
             },
-            message: 'Please enter a valid email address' // Custom error message for invalid email
+            message: 'Please enter a valid email address'
         }
     },
     password: {
         type: String,
-        required: [true, 'Password is required'], // Password is required
-        minlength: [8, 'Password must be at least 8 characters long'] // Minimum length for password
+        required: [true, 'Password is required'],
+        minlength: [8, 'Password must be at least 8 characters long']
     },
-    resetPasswordToken: String, // Token for password reset functionality
-    resetPasswordExpires: Date // Expiration date for the password reset token
+    gender: String,
+    age: Number,
+    height: String,
+    weight: String,
+    profilePicture: String,
+    photos: [String],
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 });
 
 // Pre-save middleware to hash passwords before saving
 userSchema.pre('save', async function(next) {
-    if (!this.isModified('password')) return next(); // If password hasn't changed, skip hashing
+    if (!this.isModified('password')) return next();
     try {
-        const salt = await bcrypt.genSalt(10); // Generate a salt
-        this.password = await bcrypt.hash(this.password, salt); // Hash the password using the salt
-        next(); // Proceed to save the user
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
     } catch (err) {
-        return next(err); // Handle any errors that occur during hashing
+        return next(err);
     }
 });
 
-// Create the User model from the schema
 const User = mongoose.model('User', userSchema);
 
-module.exports = User; // Export the User model for use in other parts of the application
+module.exports = User;
