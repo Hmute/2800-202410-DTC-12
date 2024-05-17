@@ -6,7 +6,13 @@ const path = require('path');
 
 // Set storage engine
 const storage = multer.diskStorage({
-    destination: './public/images',
+    destination: function (req, file, cb) {
+        if (file.fieldname === 'profilePicture') {
+            cb(null, './/images/profile');
+        } else {
+            cb(null, './/images');
+        }
+    },
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
