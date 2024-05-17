@@ -29,3 +29,11 @@ body {
     justify-content: center;
     padding: auto;
 }
+
+.card {
+    background-color: transparent;
+    /* or set to match your background color */
+    border: none;
+    /* Remove border if needed */
+    color: #FFFFFF;
+}

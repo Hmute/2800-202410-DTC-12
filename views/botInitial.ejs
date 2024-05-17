@@ -1,4 +1,5 @@
 <%- include('templates/header') %>
+<<<<<<< HEAD
     <form action="/bot/generate" method="POST" style="min-height: 100vh;">
         <label>Primary Goal</label>
         <select name="goal">
@@ -6,51 +7,91 @@
             <option value="Build muscle">Build muscle</option>
             <option value="Maintain">Maintain</option>
         </select><br>
+=======
+    <div class="container mt-5">
+        <h1 class="mb-4">Workout Settings</h1>
+        <form action="/bot/generate" method="POST" class="form">
+            <div class="form-group">
+                <label>Primary Goal</label>
+                <select name="goal" class="form-control">
+                    <option value="Lose fat">Lose fat</option>
+                    <option value="Build muscle">Build muscle</option>
+                    <option value="Maintain">Maintain</option>
+                </select>
+            </div>
+>>>>>>> heraldo_abreu_botFeature
 
-        <label>Training Method</label>
-        <select name="method">
-            <option value="Resistance + cardio">Resistance + cardio</option>
-            <option value="Resistance only">Resistance only</option>
-        </select><br>
+            <div class="form-group">
+                <label>Training Method</label>
+                <select name="method" class="form-control">
+                    <option value="Resistance + cardio">Resistance + cardio</option>
+                    <option value="Resistance only">Resistance only</option>
+                </select>
+            </div>
 
-        <label>Workout Type</label>
-        <select name="type">
-            <option value="No equipment">No equipment</option>
-            <option value="Weighted">Weighted</option>
-            <option value="Body Weighted">Body Weighted</option>
-        </select><br>
+            <div class="form-group">
+                <label>Workout Type</label>
+                <select name="type" class="form-control">
+                    <option value="No equipment">No equipment</option>
+                    <option value="Weighted">Weighted</option>
+                    <option value="Body Weighted">Body Weighted</option>
+                </select>
+            </div>
 
-        <label>Strength Level</label>
-        <select name="level">
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advance">Advance</option>
-        </select><br>
+            <div class="form-group">
+                <label>Strength Level</label>
+                <select name="level" class="form-control">
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                </select>
+            </div>
 
-        <label>Training Days</label>
-        <select name="days" multiple>
-            <option value="Sunday">Sunday</option>
-            <option value="Monday">Monday</option>
-            <option value="Tuesday">Tuesday</option>
-            <option value="Wednesday">Wednesday</option>
-            <option value="Thursday">Thursday</option>
-            <option value="Friday">Friday</option>
-            <option value="Saturday">Saturday</option>
-        </select><br>
+            <div class="form-group">
+                <label>Training Days</label><br>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Sunday" class="form-check-input">
+                    <label class="form-check-label">Sunday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Monday" class="form-check-input">
+                    <label class="form-check-label">Monday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Tuesday" class="form-check-input">
+                    <label class="form-check-label">Tuesday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Wednesday" class="form-check-input">
+                    <label class="form-check-label">Wednesday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Thursday" class="form-check-input">
+                    <label class="form-check-label">Thursday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Friday" class="form-check-input">
+                    <label class="form-check-label">Friday</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" name="days" value="Saturday" class="form-check-input">
+                    <label class="form-check-label">Saturday</label>
+                </div>
+            </div>
 
-        <label>Workout Time</label>
-        <select name="time">
-            <option value="30 mins">30 mins</option>
-            <option value="45 mins">45 mins</option>
-            <option value="60 mins">60 mins</option>
-            <option value="75 mins">75 mins</option>
-            <option value="90 mins">90 mins</option>
-        </select><br>
-
-        <div class="fab-container">
-            <button class="fab-button" type="submit">
-                <i class="fas fa-plus"></i> Generate Workout
-            </button>
-        </div>
-    </form>
+            <div class="form-group">
+                <label>Workout Time</label>
+                <select name="time" class="form-control">
+                    <option value="30">30 mins</option>
+                    <option value="45">45 mins</option>
+                    <option value="60">60 mins</option>
+                    <option value="75">75 mins</option>
+                    <option value="90">90 mins</option>
+                </select>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary m-4 ">Generate Workout</button>
+            </div>
+        </form>
+    </div>
     <%- include('templates/footer') %>
