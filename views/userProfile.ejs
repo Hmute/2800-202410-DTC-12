@@ -11,14 +11,6 @@
     <%- include('templates/header', { user: user }) %>
     <div class="profile-container">
         <div class="profile-header">
-            <div class="profile-picture-wrap">
-                <% if (user.profilePicture) { %>
-                    <img src="/images/profile/<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture" id="profile-picture">
-                <% } else { %>
-                    <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture" id="profile-picture">
-                <% } %>
-                <i class="fas fa-pencil-alt edit-icon" id="edit-profile-picture-icon" style="display: none;"></i>
-            </div>
             <div class="profile-info">
                 <h2 class="profile-name" id="fullName-display"><%= user.fullName %></h2>
                 <p class="username">@<%= user.username %></p>
@@ -27,8 +19,8 @@
                     <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <i class="fas fa-pencil-alt edit-icon" id="edit-social-icons-icon" style="display: none;"></i>
+                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
                 </div>
-                <i class="fas fa-cog settings-icon" id="settings-icon"></i>
                 <div class="profile-actions">
                     <div class="button-group">
                         <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
@@ -37,6 +29,14 @@
                         </form>
                     </div>
                 </div>
+            </div>
+            <div class="profile-picture-wrap">
+                <% if (user.profilePicture) { %>
+                    <img src="/images/profile/<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                <% } else { %>
+                    <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture" id="profile-picture">
+                <% } %>
+                <i class="fas fa-pencil-alt edit-icon" id="edit-profile-picture-icon" style="display: none;"></i>
             </div>
         </div>
 
