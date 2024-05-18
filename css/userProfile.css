@@ -68,6 +68,8 @@ body {
 
 .social-icons {
     margin-top: 20px; /* Add margin to shift down */
+    display: flex;
+    align-items: center; /* Align icons horizontally */
 }
 
 .social-icons a {
@@ -81,6 +83,18 @@ body {
     color: #116c71;
 }
 
+.settings-icon {
+    color: #007bff; /* Blue color for the button */
+    margin-left: auto; /* Move to the right */
+    font-size: 1.3rem; /* Adjust font size */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.settings-icon:hover {
+    color: #0056b3;
+}
+
 .profile-actions {
     display: flex;
     flex-direction: column;
@@ -91,7 +105,9 @@ body {
 .button-group {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* Space between buttons */
+    width: 100%;
+    max-width: 300px; /* Adjust width as needed */
 }
 
 .edit-profile-btn {
@@ -102,7 +118,9 @@ body {
     border-radius: 20px; /* More round */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-right: 8px; /* Reduced space between buttons */
+    width: 110px; /* Fixed width */
+    text-align: center; /* Center text */
+    margin-right: 8px; /* Space between buttons */
 }
 
 .edit-profile-btn:hover {
@@ -115,9 +133,11 @@ body {
     color: #eeeeee;
     border: none;
     padding: 6px 12px; /* Smaller padding */
-    border-radius: 155px; /* More round */
+    border-radius: 20px; /* More round */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 110px; /* Fixed width */
+    text-align: center; /* Center text */
 }
 
 .sign-out-btn-info:hover {
@@ -173,7 +193,8 @@ button[type="submit"].form-submit-btn {
     background-color: #2cb8c4;
     color: #eeeeee;
     border: none;
-    padding: 6px 12px; /* Match the padding of edit-profile-btn */
+    width: 110px; /* Fixed width */
+    padding: 12px 12px; /* Match the padding of edit-profile-btn */
     border-radius: 20px; /* Match the border-radius of edit-profile-btn */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
