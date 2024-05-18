@@ -17,6 +17,7 @@
                 <% } else { %>
                     <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture" id="profile-picture">
                 <% } %>
+                <i class="fas fa-pencil-alt edit-icon" id="edit-profile-picture-icon" style="display: none;"></i>
             </div>
             <div class="profile-info">
                 <h2 class="profile-name" id="fullName-display"><%= user.fullName %></h2>
@@ -25,8 +26,9 @@
                     <a href="#"><i class="fab fa-instagram"></i></a>
                     <a href="#"><i class="fab fa-facebook"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
-                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
+                    <i class="fas fa-pencil-alt edit-icon" id="edit-social-icons-icon" style="display: none;"></i>
                 </div>
+                <i class="fas fa-cog settings-icon" id="settings-icon"></i>
                 <div class="profile-actions">
                     <div class="button-group">
                         <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
@@ -37,48 +39,77 @@
                 </div>
             </div>
         </div>
-        <form id="edit-profile-form" action="/user/<%= user.username %>/edit" method="POST" enctype="multipart/form-data" style="display: none;">
-            <div class="form-group">
-                <label for="fullName">Full Name:</label>
-                <input type="text" id="fullName" name="fullName" value="<%= user.fullName %>" placeholder="Enter your full name">
+
+        <!-- Combined Edit Form -->
+        <form id="edit-profile-form" action="/user/<%= user.username %>/editProfile" method="POST" enctype="multipart/form-data">
+            <!-- Profile Picture Section -->
+            <div class="edit-section" id="edit-profile-picture-section" style="display: none;">
+                <div class="form-group">
+                    <label for="profilePicture">Change Profile Photo:</label>
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender">
-                    <option value="" disabled selected>Select your gender</option>
-                    <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
-                    <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
-                    <option value="Other" <%= user.gender === 'Other' ? 'selected' : '' %>>Other</option>
-                </select>
+            <!-- Social Icons Section -->
+            <div class="edit-section" id="edit-social-icons-section" style="display: none;">
+                <div class="form-group">
+                    <label for="instagram">Instagram:</label>
+                    <input type="url" id="instagram" name="instagram" value="<%= user.instagram %>" placeholder="Enter Instagram URL">
+                </div>
+                <div class="form-group">
+                    <label for="facebook">Facebook:</label>
+                    <input type="url" id="facebook" name="facebook" value="<%= user.facebook %>" placeholder="Enter Facebook URL">
+                </div>
+                <div class="form-group">
+                    <label for="twitter">Twitter:</label>
+                    <input type="url" id="twitter" name="twitter" value="<%= user.twitter %>" placeholder="Enter Twitter URL">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="age">Age:</label>
-                <input type="number" id="age" name="age" value="<%= user.age %>" placeholder="Enter your age">
+            <!-- Health Details Section -->
+            <div class="edit-section" id="edit-health-details-section" style="display: none;">
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <select id="gender" name="gender">
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
+                        <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
+                        <option value="Other" <%= user.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" value="<%= user.age %>" placeholder="Enter your age">
+                </div>
+                <div class="form-group">
+                    <label for="height">Height (cm/in):</label>
+                    <input type="number" id="height" name="height" value="<%= user.height %>" placeholder="Enter your height">
+                </div>
+                <div class="form-group">
+                    <label for="weight">Weight (kg/lbs):</label>
+                    <input type="number" id="weight" name="weight" value="<%= user.weight %>" placeholder="Enter your weight">
+                </div>
+                <div class="form-group">
+                    <label for="bodyFat">Body Fat (%):</label>
+                    <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>" placeholder="Enter your body fat percentage">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="height">Height (cm/in):</label>
-                <input type="number" id="height" name="height" value="<%= user.height %>" placeholder="Enter your height">
+            <!-- Bio Section -->
+            <div class="edit-section" id="edit-bio-section" style="display: none;">
+                <div class="form-group">
+                    <label for="bio">Bio:</label>
+                    <textarea id="bio" name="bio" rows="4" placeholder="Enter your bio"><%= user.bio %></textarea>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="weight">Weight (kg/lbs):</label>
-                <input type="number" id="weight" name="weight" value="<%= user.weight %>" placeholder="Enter your weight">
+            <!-- Photos Section -->
+            <div class="edit-section" id="edit-photos-section" style="display: none;">
+                <div class="form-group">
+                    <label for="photos">Upload Photos:</label>
+                    <input type="file" id="photos" name="photos" multiple accept="image/*">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="bodyFat">Body Fat (%):</label>
-                <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>" placeholder="Enter your body fat percentage">
-            </div>
-            <div class="form-group">
-                <label for="profilePicture">Change Profile Photo:</label>
-                <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
-            </div>
-            <div class="form-group">
-                <label for="photos">Upload Photos:</label>
-                <input type="file" id="photos" name="photos" multiple accept="image/*">
-            </div>
-            <button type="submit" class="form-submit-btn">Save</button>
         </form>
-        <div class="details">
-            <h3>Health Details</h3>
+
+        <div class="details card">
+            <h3>Health Details <i class="fas fa-pencil-alt edit-icon" id="edit-health-details-icon" style="display: none;"></i></h3>
             <% if (user.gender) { %>
                 <p><strong>Gender:</strong> <span id="gender-display"><%= user.gender %></span></p>
             <% } %>
@@ -95,16 +126,18 @@
                 <p><strong>Body Fat:</strong> <span id="bodyFat-display"><%= user.bodyFat %></span></p>
             <% } %>
         </div>
-        <div class="bio">
-            <h3>Bio</h3>
+
+        <div class="bio card">
+            <h3>Bio <i class="fas fa-pencil-alt edit-icon" id="edit-bio-icon" style="display: none;"></i></h3>
             <% if (user.bio) { %>
                 <p><%= user.bio %></p>
             <% } else { %>
                 <p>No bio available</p>
             <% } %>
         </div>
-        <div class="photos">
-            <h3>Photos</h3>
+
+        <div class="photos card">
+            <h3>Photos <i class="fas fa-pencil-alt edit-icon" id="edit-photos-icon" style="display: none;"></i></h3>
             <% if (user.photos && user.photos.length > 0) { %>
                 <div class="photo-grid" id="photo-grid">
                     <% user.photos.forEach(photo => { %>
@@ -143,8 +176,43 @@
 
     <%- include('templates/footer', { user: user }) %>
     <script>
-        document.getElementById('edit-profile-btn').addEventListener('click', function() {
-            document.getElementById('edit-profile-form').style.display = 'block';
+        const editProfileBtn = document.getElementById('edit-profile-btn');
+        const editProfileForm = document.getElementById('edit-profile-form');
+
+        editProfileBtn.addEventListener('click', function() {
+            const isEditing = editProfileBtn.classList.contains('editing');
+
+            document.querySelectorAll('.edit-icon').forEach(function(icon) {
+                icon.style.display = isEditing ? 'none' : 'inline-block';
+            });
+
+            if (isEditing) {
+                editProfileForm.submit();
+            } else {
+                editProfileBtn.textContent = 'Save Profile';
+                editProfileBtn.classList.add('editing');
+                editProfileBtn.style.backgroundColor = '#28a745';
+            }
+        });
+
+        document.getElementById('edit-profile-picture-icon').addEventListener('click', function() {
+            document.getElementById('edit-profile-picture-section').style.display = 'block';
+        });
+
+        document.getElementById('edit-social-icons-icon').addEventListener('click', function() {
+            document.getElementById('edit-social-icons-section').style.display = 'block';
+        });
+
+        document.getElementById('edit-health-details-icon').addEventListener('click', function() {
+            document.getElementById('edit-health-details-section').style.display = 'block';
+        });
+
+        document.getElementById('edit-bio-icon').addEventListener('click', function() {
+            document.getElementById('edit-bio-section').style.display = 'block';
+        });
+
+        document.getElementById('edit-photos-icon').addEventListener('click', function() {
+            document.getElementById('edit-photos-section').style.display = 'block';
             document.querySelectorAll('.delete-photo-form').forEach(function(form) {
                 form.style.display = 'block';
             });
