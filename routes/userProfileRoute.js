@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./User'); // Adjust the path as needed
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const User = require('./User'); // Adjust the path as needed
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -59,7 +59,7 @@ router.get('/:username', async (req, res) => {
 });
 
 // Edit profile page
-router.post('/:username/edit', (req, res) => {
+router.post('/:username/editProfile', (req, res) => {
     upload(req, res, async (err) => {
         if (err) {
             // Handle Multer errors
@@ -70,7 +70,9 @@ router.post('/:username/edit', (req, res) => {
         }
 
         const username = req.params.username;
-        const { fullName, gender, age, height, weight, bodyFat } = req.body;
+        const {
+            fullName, gender, age, height, weight, bodyFat, instagram, facebook, twitter, bio
+        } = req.body;
         const profilePicture = req.files['profilePicture'] ? req.files['profilePicture'][0].filename : null;
         const photos = req.files['photos'] ? req.files['photos'].map(file => file.filename) : [];
 
@@ -90,6 +92,11 @@ router.post('/:username/edit', (req, res) => {
             user.height = height || user.height;
             user.weight = weight || user.weight;
             user.bodyFat = bodyFat || user.bodyFat;
+            user.instagram = instagram || user.instagram;
+            user.facebook = facebook || user.facebook;
+            user.twitter = twitter || user.twitter;
+            user.bio = bio || user.bio;
+
             if (profilePicture) {
                 // Delete the old profile picture if it exists
                 if (user.profilePicture) {

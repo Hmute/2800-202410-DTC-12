@@ -1,6 +1,6 @@
 body {
     font-family: "Montserrat", sans-serif;
-    background: linear-gradient(135deg, #1f2327, #30353a);
+    background-color: #393E46;
     color: #eeeeee;
     margin: 0;
     display: flex;
@@ -11,7 +11,7 @@ body {
 
 .profile-container {
     width: 100%;
-    padding: 15px; /* Reduced padding */
+    padding: 15px;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
@@ -23,19 +23,20 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 15px; /* Reduced padding */
+    padding: 15px;
     width: 100%;
-    max-width: 700px; /* Reduced max-width */
+    max-width: 700px;
     border-bottom: 1px solid #444;
 }
 
 .profile-picture-wrap {
-    width: 130px; /* Reduced size */
-    height: 130px; /* Reduced size */
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     overflow: hidden;
     border: 3px solid #2cb8c4;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
 .profile-picture {
@@ -44,38 +45,51 @@ body {
     object-fit: cover;
 }
 
+.edit-icon {
+    display: none;
+    color: #007bff;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-icon:hover {
+    color: #0056b3;
+}
+
 .profile-info {
-    padding-left: 15px; /* Reduced padding */
+    padding-left: 15px;
     color: #eeeeee;
     text-align: left;
-    margin-top: -10px; /* Move the name up */
+    margin-top: -10px;
 }
 
 .profile-name {
     margin: 0;
-    font-size: 1.7rem; /* Reduced font size */
+    font-size: 1.7rem;
     color: #2cb8c4;
     animation: fadeIn 1s ease-in-out;
-    line-height: 1.2; /* Adjust line height */
-    width: 100%; /* Make the name take full width */
+    line-height: 1.2;
+    width: 100%;
 }
 
 .username {
     color: #bbbbbb;
     margin: 5px 0;
-    font-size: 1rem; /* Reduced font size */
+    font-size: 1rem;
 }
 
 .social-icons {
-    margin-top: 20px; /* Add margin to shift down */
+    margin-top: 20px;
     display: flex;
-    align-items: center; /* Align icons horizontally */
+    align-items: center;
 }
 
 .social-icons a {
     color: #2cb8c4;
-    margin-right: 8px; /* Reduced margin */
-    font-size: 1.2rem; /* Reduced font size */
+    margin-right: 8px;
+    font-size: 1.2rem;
     transition: color 0.3s ease;
 }
 
@@ -84,9 +98,9 @@ body {
 }
 
 .settings-icon {
-    color: #007bff; /* Blue color for the button */
-    margin-left: auto; /* Move to the right */
-    font-size: 1.3rem; /* Adjust font size */
+    color: #007bff;
+    margin-left: 10px;
+    font-size: 1.3rem;
     cursor: pointer;
     transition: color 0.3s ease;
 }
@@ -99,28 +113,28 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px; /* Add margin to shift down */
+    margin-top: 20px;
 }
 
 .button-group {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between buttons */
+    justify-content: space-between;
     width: 100%;
-    max-width: 300px; /* Adjust width as needed */
+    max-width: 300px;
 }
 
 .edit-profile-btn {
-    background-color: #007bff; /* Blue color for the button */
+    background-color: #007bff;
     color: #eeeeee;
     border: none;
-    padding: 6px 12px; /* Smaller padding */
-    border-radius: 20px; /* More round */
+    padding: 6px 12px;
+    border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    width: 110px; /* Fixed width */
-    text-align: center; /* Center text */
-    margin-right: 8px; /* Space between buttons */
+    width: 110px;
+    text-align: center;
+    margin-right: 8px;
 }
 
 .edit-profile-btn:hover {
@@ -132,12 +146,12 @@ body {
     background-color: #2cb8c4;
     color: #eeeeee;
     border: none;
-    padding: 6px 12px; /* Smaller padding */
-    border-radius: 20px; /* More round */
+    padding: 6px 12px;
+    border-radius: 20px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    width: 110px; /* Fixed width */
-    text-align: center; /* Center text */
+    width: 110px;
+    text-align: center;
 }
 
 .sign-out-btn-info:hover {
@@ -145,18 +159,19 @@ body {
     transform: translateY(-3px);
 }
 
-#edit-profile-form {
+.edit-section {
+    display: none;
     width: 100%;
-    max-width: 700px; /* Reduced max-width */
-    margin: 15px auto; /* Reduced margin */
-    background-color: #2e343a;
-    padding: 15px; /* Reduced padding */
+    max-width: 700px;
+    margin: 15px auto;
+    background-color: #222831;
+    padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
-    margin-bottom: 15px; /* Reduced margin */
+    margin-bottom: 15px;
     text-align: left;
 }
 
@@ -169,14 +184,15 @@ label {
 input[type="text"],
 input[type="number"],
 input[type="file"],
+textarea,
 select {
     width: 100%;
-    padding: 8px; /* Reduced padding */
+    padding: 8px;
     border: none;
     border-radius: 5px;
     background-color: #393e46;
     color: #eeeeee;
-    font-size: 0.9rem; /* Reduced font size */
+    font-size: 0.9rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease;
 }
@@ -184,47 +200,40 @@ select {
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="file"]:focus,
+textarea:focus,
 select:focus {
     outline: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-button[type="submit"].form-submit-btn {
-    background-color: #2cb8c4;
-    color: #eeeeee;
-    border: none;
-    width: 110px; /* Fixed width */
-    padding: 12px 12px; /* Match the padding of edit-profile-btn */
-    border-radius: 20px; /* Match the border-radius of edit-profile-btn */
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-button[type="submit"].form-submit-btn:hover {
-    background-color: #116c71;
-    transform: translateY(-3px);
-}
-
 .details, .photos, .bio {
-    padding: 15px; /* Reduced padding */
+    padding: 15px;
     width: 100%;
-    max-width: 700px; /* Reduced max-width */
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin-top: 20px; /* Add margin to shift down */
+    margin-top: 20px;
+}
+
+.card {
+    background-color: #222831 !important;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
 }
 
 .details h3, .photos h3, .bio h3 {
     margin-top: 0;
     color: #2cb8c4;
-    font-size: 1.5rem; /* Reduced font size */
+    font-size: 1.5rem;
 }
 
 .details p {
     margin: 5px 0;
-    font-size: 1rem; /* Reduced font size */
+    font-size: 1rem;
 }
 
 .photo-grid {
@@ -239,8 +248,8 @@ button[type="submit"].form-submit-btn:hover {
 }
 
 .photo {
-    width: 100px; /* Reduced size */
-    height: 100px; /* Reduced size */
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 5px;
     border: 2px solid #2cb8c4;
@@ -304,7 +313,7 @@ button[type="submit"].form-submit-btn:hover {
 .popup-content {
     background-color: #fefefe;
     margin: 15% auto;
-    padding: 15px; /* Reduced padding */
+    padding: 15px;
     border: 1px solid #888;
     width: 80%;
     max-width: 600px;
@@ -315,7 +324,7 @@ button[type="submit"].form-submit-btn:hover {
 .close {
     color: #aaaaaa;
     float: right;
-    font-size: 25px; /* Reduced font size */
+    font-size: 25px;
     font-weight: bold;
 }
 
@@ -332,13 +341,13 @@ button[type="submit"].form-submit-btn:hover {
 }
 
 .settings ul li {
-    margin: 8px 0; /* Reduced margin */
+    margin: 8px 0;
 }
 
 .settings ul li a {
     color: #eeeeee;
     text-decoration: none;
-    font-size: 1rem; /* Reduced font size */
+    font-size: 1rem;
     transition: color 0.3s ease;
 }
 
