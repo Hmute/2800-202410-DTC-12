@@ -53,7 +53,7 @@ body {
 
 .profile-name {
     margin: 0;
-    font-size: 1.8rem; /* Reduced font size */
+    font-size: 1.7rem; /* Reduced font size */
     color: #2cb8c4;
     animation: fadeIn 1s ease-in-out;
     line-height: 1.2; /* Adjust line height */
@@ -68,6 +68,8 @@ body {
 
 .social-icons {
     margin-top: 20px; /* Add margin to shift down */
+    display: flex;
+    align-items: center; /* Align icons horizontally */
 }
 
 .social-icons a {
@@ -81,6 +83,18 @@ body {
     color: #116c71;
 }
 
+.settings-icon {
+    color: #007bff; /* Blue color for the button */
+    margin-left: auto; /* Move to the right */
+    font-size: 1.3rem; /* Adjust font size */
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.settings-icon:hover {
+    color: #0056b3;
+}
+
 .profile-actions {
     display: flex;
     flex-direction: column;
@@ -91,18 +105,22 @@ body {
 .button-group {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between; /* Space between buttons */
+    width: 100%;
+    max-width: 300px; /* Adjust width as needed */
 }
 
 .edit-profile-btn {
     background-color: #007bff; /* Blue color for the button */
     color: #eeeeee;
     border: none;
-    padding: 8px 16px; /* Reduced padding */
-    border-radius: 5px;
+    padding: 6px 12px; /* Smaller padding */
+    border-radius: 20px; /* More round */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-right: 8px; /* Reduced space between buttons */
+    width: 110px; /* Fixed width */
+    text-align: center; /* Center text */
+    margin-right: 8px; /* Space between buttons */
 }
 
 .edit-profile-btn:hover {
@@ -110,24 +128,19 @@ body {
     transform: translateY(-3px);
 }
 
-.settings-icon {
-    cursor: pointer;
-    color: #007bff;
-    font-size: 1.3rem; /* Reduced font size */
-    margin-bottom: 8px; /* Reduced space above the sign out button */
-}
-
-.sign-out-btn {
+.sign-out-btn-info {
     background-color: #2cb8c4;
     color: #eeeeee;
     border: none;
-    padding: 8px 16px; /* Reduced padding */
-    border-radius: 5px;
+    padding: 6px 12px; /* Smaller padding */
+    border-radius: 20px; /* More round */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    width: 110px; /* Fixed width */
+    text-align: center; /* Center text */
 }
 
-.sign-out-btn:hover {
+.sign-out-btn-info:hover {
     background-color: #116c71;
     transform: translateY(-3px);
 }
@@ -176,17 +189,18 @@ select:focus {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-button[type="submit"] {
+button[type="submit"].form-submit-btn {
     background-color: #2cb8c4;
     color: #eeeeee;
     border: none;
-    padding: 8px 16px; /* Reduced padding */
-    border-radius: 5px;
+    width: 110px; /* Fixed width */
+    padding: 12px 12px; /* Match the padding of edit-profile-btn */
+    border-radius: 20px; /* Match the border-radius of edit-profile-btn */
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-button[type="submit"]:hover {
+button[type="submit"].form-submit-btn:hover {
     background-color: #116c71;
     transform: translateY(-3px);
 }
@@ -273,20 +287,6 @@ button[type="submit"]:hover {
     display: flex;
     justify-content: space-around;
     align-items: center;
-}
-
-.bottom-nav .nav-link {
-    color: #eeeeee;
-    font-size: 1.2rem; /* Reduced font size */
-    padding: 8px; /* Reduced padding */
-}
-
-.bottom-nav .nav-link:hover {
-    color: #2cb8c4;
-}
-
-.bottom-nav .nav-icon {
-    font-size: 1.2rem; /* Reduced font size */
 }
 
 .popup {
