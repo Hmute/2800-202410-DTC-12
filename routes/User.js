@@ -38,10 +38,13 @@ const userSchema = new mongoose.Schema({
     profilePicture: String,
     photos: [String],
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+    blogPosts: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Blog'
+    }],
 });
 
-// Pre-save middleware to hash passwords before saving
 userSchema.pre('save', async function(next) {
     if (this.isModified('password') && !this.skipHashing) {
         try {

@@ -17,7 +17,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    position:sticky;
+    position: sticky;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
 }
 
 .nav-icon {
@@ -36,4 +39,8 @@ body {
     border: none;
     /* Remove border if needed */
     color: #FFFFFF;
+}
+
+body {
+    padding-bottom: 50px;
 }
