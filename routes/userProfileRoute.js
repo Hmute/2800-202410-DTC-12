@@ -1,19 +1,12 @@
 const express = require('express');
 const router = express.Router();
+const User = require('./User'); // Adjust the path as needed
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-const User = require('./User'); // Adjust the path as needed
 
 // Set storage engine
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        if (file.fieldname === 'profilePicture') {
-            cb(null, './public/images/profile');
-        } else {
-            cb(null, './public/images');
-        }
-    },
+    destination: './public/images',
     filename: function (req, file, cb) {
         cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
     }
@@ -22,7 +15,7 @@ const storage = multer.diskStorage({
 // Init upload
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB file size limit
+    limits: { fileSize: 1000000 },
     fileFilter: function (req, file, cb) {
         checkFileType(file, cb);
     }
@@ -71,7 +64,9 @@ router.post('/:username/editProfile', (req, res) => {
 
         const username = req.params.username;
         const {
-            fullName, gender, age, height, weight, bodyFat, instagram, facebook, twitter, bio
+            fullName, gender, age, height, weight, bodyFat,
+            fitnessLevel, workoutType, fitnessGoals,
+            additionalInterests, personalQuote
         } = req.body;
         const profilePicture = req.files['profilePicture'] ? req.files['profilePicture'][0].filename : null;
         const photos = req.files['photos'] ? req.files['photos'].map(file => file.filename) : [];
@@ -92,18 +87,12 @@ router.post('/:username/editProfile', (req, res) => {
             user.height = height || user.height;
             user.weight = weight || user.weight;
             user.bodyFat = bodyFat || user.bodyFat;
-            user.instagram = instagram || user.instagram;
-            user.facebook = facebook || user.facebook;
-            user.twitter = twitter || user.twitter;
-            user.bio = bio || user.bio;
-
-            if (profilePicture) {
-                // Delete the old profile picture if it exists
-                if (user.profilePicture) {
-                    fs.unlinkSync(path.join(__dirname, '../public/images/profile', user.profilePicture));
-                }
-                user.profilePicture = profilePicture;
-            }
+            user.fitnessLevel = fitnessLevel || user.fitnessLevel;
+            user.workoutType = workoutType || user.workoutType;
+            user.fitnessGoals = fitnessGoals || user.fitnessGoals;
+            user.additionalInterests = additionalInterests || user.additionalInterests;
+            user.personalQuote = personalQuote || user.personalQuote;
+            if (profilePicture) user.profilePicture = profilePicture;
             if (photos.length) user.photos.push(...photos);
 
             await user.save();

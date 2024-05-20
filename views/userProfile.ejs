@@ -92,11 +92,58 @@
                     <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>" placeholder="Enter your body fat percentage">
                 </div>
             </div>
-            <!-- Bio Section -->
+            <!-- Fitness Goals Section -->
             <div class="edit-section" id="edit-bio-section" style="display: none;">
                 <div class="form-group">
-                    <label for="bio">Bio:</label>
-                    <textarea id="bio" name="bio" rows="4" placeholder="Enter your bio"><%= user.bio %></textarea>
+                    <label for="fitnessLevel">Fitness Level:</label>
+                    <select id="fitnessLevel" name="fitnessLevel">
+                        <option value="" disabled selected>Select your fitness level</option>
+                        <option value="Beginner" <%= user.fitnessLevel === 'Beginner' ? 'selected' : '' %>>Beginner</option>
+                        <option value="Intermediate" <%= user.fitnessLevel === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
+                        <option value="Advanced" <%= user.fitnessLevel === 'Advanced' ? 'selected' : '' %>>Advanced</option>
+                        <option value="Expert" <%= user.fitnessLevel === 'Expert' ? 'selected' : '' %>>Expert</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="workoutType">Favorite Workout Type:</label>
+                    <select id="workoutType" name="workoutType">
+                        <option value="" disabled selected>Select your favorite workout type</option>
+                        <option value="Cardio" <%= user.workoutType === 'Cardio' ? 'selected' : '' %>>Cardio</option>
+                        <option value="Strength Training" <%= user.workoutType === 'Strength Training' ? 'selected' : '' %>>Strength Training</option>
+                        <option value="Yoga" <%= user.workoutType === 'Yoga' ? 'selected' : '' %>>Yoga</option>
+                        <option value="Pilates" <%= user.workoutType === 'Pilates' ? 'selected' : '' %>>Pilates</option>
+                        <option value="CrossFit" <%= user.workoutType === 'CrossFit' ? 'selected' : '' %>>CrossFit</option>
+                        <option value="HIIT" <%= user.workoutType === 'HIIT' ? 'selected' : '' %>>HIIT</option>
+                        <option value="Dance" <%= user.workoutType === 'Dance' ? 'selected' : '' %>>Dance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fitnessGoals">Fitness Goals:</label>
+                    <select id="fitnessGoals" name="fitnessGoals">
+                        <option value="" disabled selected>Select your fitness goals</option>
+                        <option value="Lose Weight" <%= user.fitnessGoals === 'Lose Weight' ? 'selected' : '' %>>Lose Weight</option>
+                        <option value="Build Muscle" <%= user.fitnessGoals === 'Build Muscle' ? 'selected' : '' %>>Build Muscle</option>
+                        <option value="Improve Flexibility" <%= user.fitnessGoals === 'Improve Flexibility' ? 'selected' : '' %>>Improve Flexibility</option>
+                        <option value="Increase Endurance" <%= user.fitnessGoals === 'Increase Endurance' ? 'selected' : '' %>>Increase Endurance</option>
+                        <option value="Increase Strength" <%= user.fitnessGoals === 'Increase Strength' ? 'selected' : '' %>>Increase Strength</option>
+                        <option value="Maintain Health" <%= user.fitnessGoals === 'Maintain Health' ? 'selected' : '' %>>Maintain Health</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="additionalInterests">Additional Interests:</label>
+                    <select id="additionalInterests" name="additionalInterests">
+                        <option value="" disabled selected>Select additional interests</option>
+                        <option value="Nutrition" <%= user.additionalInterests === 'Nutrition' ? 'selected' : '' %>>Nutrition</option>
+                        <option value="Meditation" <%= user.additionalInterests === 'Meditation' ? 'selected' : '' %>>Meditation</option>
+                        <option value="Sports" <%= user.additionalInterests === 'Sports' ? 'selected' : '' %>>Sports</option>
+                        <option value="Wellness" <%= user.additionalInterests === 'Wellness' ? 'selected' : '' %>>Wellness</option>
+                        <option value="Mental Health" <%= user.additionalInterests === 'Mental Health' ? 'selected' : '' %>>Mental Health</option>
+                        <option value="Outdoor Activities" <%= user.additionalInterests === 'Outdoor Activities' ? 'selected' : '' %>>Outdoor Activities</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="personalQuote">Personal Quote/Motto (max 80 characters):</label>
+                    <textarea id="personalQuote" name="personalQuote" rows="2" maxlength="80" placeholder="Enter your personal quote or motto (max 80 characters)"><%= user.personalQuote %></textarea>
                 </div>
             </div>
             <!-- Photos Section -->
@@ -128,11 +175,21 @@
         </div>
 
         <div class="bio card">
-            <h3>Bio <i class="fas fa-pencil-alt edit-icon" id="edit-bio-icon" style="display: none;"></i></h3>
-            <% if (user.bio) { %>
-                <p><%= user.bio %></p>
-            <% } else { %>
-                <p>No bio available</p>
+            <h3>Fitness Bio <i class="fas fa-pencil-alt edit-icon" id="edit-bio-icon" style="display: none;"></i></h3>
+            <% if (user.fitnessLevel) { %>
+                <p><strong>Fitness Level:</strong> <span id="fitnessLevel-display"><%= user.fitnessLevel %></span></p>
+            <% } %>
+            <% if (user.workoutType) { %>
+                <p><strong>Favorite Workout Type:</strong> <span id="workoutType-display"><%= user.workoutType %></span></p>
+            <% } %>
+            <% if (user.fitnessGoals) { %>
+                <p><strong>Fitness Goals:</strong> <span id="fitnessGoals-display"><%= user.fitnessGoals %></span></p>
+            <% } %>
+            <% if (user.additionalInterests) { %>
+                <p><strong>Additional Interests:</strong> <span id="additionalInterests-display"><%= user.additionalInterests %></span></p>
+            <% } %>
+            <% if (user.personalQuote) { %>
+                <p><strong>Personal Quote/Motto:</strong> <span id="personalQuote-display"><%= user.personalQuote %></span></p>
             <% } %>
         </div>
 
