@@ -28,6 +28,7 @@ app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/script', express.static(path.join(__dirname, 'script')));
 app.use('/setup', express.static(path.join(__dirname, 'setup')));
+app.use('/middlewares', express.static(path.join(__dirname, 'middlewares')));
 
 // Database Connection
 const mongoUser = process.env.MONGODB_USER;
