@@ -1,3 +1,4 @@
+/* Basic body styles */
 body {
     font-family: "Montserrat", sans-serif;
     background-color: #2E2F38;
@@ -9,6 +10,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Profile container */
 .profile-container {
     width: 100%;
     padding: 15px;
@@ -19,6 +21,7 @@ body {
     text-align: center;
 }
 
+/* Profile header */
 .profile-header {
     display: flex;
     align-items: center;
@@ -32,6 +35,7 @@ body {
     margin-bottom: 20px;
 }
 
+/* Profile picture wrap */
 .profile-picture-wrap {
     width: 130px;
     height: 130px;
@@ -42,12 +46,14 @@ body {
     position: relative;
 }
 
+/* Profile picture */
 .profile-picture {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
+/* Edit icon */
 .edit-icon {
     display: none;
     color: #007bff;
@@ -61,12 +67,14 @@ body {
     color: #0056b3;
 }
 
+/* Profile info */
 .profile-info {
     color: #eeeeee;
     text-align: left;
     width: calc(100% - 150px);
 }
 
+/* Profile name */
 .profile-name {
     margin: 0;
     font-size: 1.6rem;
@@ -75,12 +83,14 @@ body {
     line-height: 1.2;
 }
 
+/* Username */
 .username {
     color: #bbbbbb;
     margin: 5px 0;
     font-size: 1.1rem;
 }
 
+/* Social icons */
 .social-icons {
     margin-top: 15px;
     display: flex;
@@ -95,10 +105,11 @@ body {
     transition: color 0.3s ease;
 }
 
-.social-icons a:hover {
+social-icons a:hover {
     color: #116c71;
 }
 
+/* Settings icon */
 .settings-icon {
     color: #acb9c7;
     font-size: 1.7rem;
@@ -111,6 +122,7 @@ body {
     color: #0056b3;
 }
 
+/* Profile actions */
 .profile-actions {
     display: flex;
     justify-content: flex-start;
@@ -123,6 +135,7 @@ body {
     align-items: center;
 }
 
+/* Edit and sign out buttons */
 .edit-profile-btn,
 .sign-out-btn-info {
     background-color: #007bff;
@@ -135,7 +148,6 @@ body {
     width: 118px;
     text-align: center;
     margin: 0 7px;
-    
 }
 
 .edit-profile-btn:hover,
@@ -144,6 +156,7 @@ body {
     transform: translateY(-3px);
 }
 
+/* Edit section */
 .edit-section {
     display: none;
     width: 100%;
@@ -168,6 +181,7 @@ label {
     font-weight: bold;
 }
 
+/* Input and textarea fields */
 input[type="text"],
 input[type="number"],
 input[type="file"],
@@ -193,7 +207,8 @@ select:focus {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.details, .photos, .bio {
+/* Details, bio, and photos sections */
+.details, .bio, .photos {
     padding: 20px;
     width: 100%;
     max-width: 700px;
@@ -218,6 +233,7 @@ select:focus {
     font-size: 1rem;
 }
 
+/* Photo grid */
 .photo-grid {
     display: flex;
     flex-wrap: wrap;
@@ -260,6 +276,7 @@ select:focus {
     background-color: rgba(255, 0, 0, 1);
 }
 
+/* Footer styles */
 .footer {
     background-color: #2e343a;
     padding: 15px 0;
@@ -281,6 +298,7 @@ select:focus {
     align-items: center;
 }
 
+/* Settings popup */
 .popup {
     display: none;
     position: fixed;
@@ -318,6 +336,7 @@ select:focus {
     cursor: pointer;
 }
 
+/* Settings list */
 .settings ul {
     list-style: none;
     padding: 0;
@@ -338,6 +357,13 @@ select:focus {
     color: #2cb8c4;
 }
 
+/* Toggle icon */
+.toggle-icon {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+/* Fade-in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
