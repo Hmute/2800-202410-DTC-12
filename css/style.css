@@ -1,3 +1,4 @@
+
 body {
     background-color: #393E46;
     color: #EEEEEE;
@@ -55,10 +56,6 @@ body {
     color: white;
 }
 
-.card-body.exercise {
-    background-color: #3E3F48;
-}
-
 .list-group-item {
     background-color: #3E3F48;
     color: white;
@@ -66,6 +63,14 @@ body {
 
 a.text-black {
     color: white !important;
+}
+
+.card {
+    background-color: transparent;
+    /* or set to match your background color */
+    border: none;
+    /* Remove border if needed */
+    color: #FFFFFF;
 }
 
 /** Exercise card **/
@@ -129,10 +134,33 @@ a.text-black {
     display: none;
 }
 
-.card {
-    background-color: transparent;
-    /* or set to match your background color */
-    border: none;
-    /* Remove border if needed */
-    color: #FFFFFF;
+.card-header.d-flex {
+    flex-direction: row !important; /* Ensure it overrides other styles */
 }
+
+.CardMealExercise {
+    max-width: 100% !important; /* Use !important if necessary, but with caution */
+}
+
+.FoodCard {
+    min-width: 70% !important;
+}
+
+.ExerciseCard {
+    min-width: 70% !important;
+}
+
+
+.MealCardBody {
+    display: flex;
+    justify-content: center;
+}
+
+.ExerciseCardBody {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
