@@ -1,6 +1,3 @@
-// Add another tag when user click the + icon 
-// Add - icon once there are 2 tags
-// Delete the generated tag when - icon is clicked 
 document.addEventListener("DOMContentLoaded", function () {
   const addTagIcon = document.getElementById("addTagIcon");
   const removeTagIcon = document.getElementById("removeTagIcon");
@@ -37,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
   submitForm();
 });
 
-// Submit the form and properly handle the image file submission.
 const submitForm = () => {
   document
     .getElementById("blogForm")
@@ -61,13 +57,16 @@ const submitForm = () => {
       })
         .then((response) => {
           if (response.ok) {
-            window.location.href = "/blog";
+            return response.text().then((blogId) => {
+              window.location.href = `/blog/postSave?blogId=${blogId}`;
+            });
           } else {
             alert("Error saving blog post");
           }
         })
         .catch((error) => {
           console.error("Error:", error);
+          alert(`Error saving blog post: ${error.message}`);
         });
     });
 };

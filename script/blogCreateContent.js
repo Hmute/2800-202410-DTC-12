@@ -19,7 +19,7 @@ const createDoneButton = () => {
     doneBtn.style.position = "fixed";
     doneBtn.style.top = "10px";
     doneBtn.style.right = "10px";
-    doneBtn.style.zIndex = "1000";
+    doneBtn.style.zIndex = "9999";
     doneBtn.style.padding = "10px 20px";
     doneBtn.style.cursor = "pointer";
 
