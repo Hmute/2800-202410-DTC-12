@@ -17,21 +17,23 @@
                     <%= user.fullName %>
                 </h2>
                 <p class="username">@<%= user.username %>
-                        <p class="username">Email: <%= user.email %>
-                        </p>
-                        <div class="social-icons">
-                            <a href="<%= user.instagram %>"><i class="fab fa-instagram"></i></a>
-                            <a href="<%= user.facebook %>"><i class="fab fa-facebook"></i></a>
-                            <a href="<%= user.twitter %>"><i class="fab fa-twitter"></i></a>
-                        </div>
-                        <div class="profile-actions">
-                            <div class="button-group">
-                                <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
-                                <form id="signout-form" action="/user/logout" method="POST">
-                                    <button type="submit" class="sign-out-btn-info" id="sign-out-btn">Sign Out</button>
-                                </form>
-                            </div>
-                        </div>
+                </p>
+                <p class="username">
+                    <%= user.email %>
+                </p>
+                <div class="social-icons">
+                    <a href="<%= user.instagram %>"><i class="fab fa-instagram"></i></a>
+                    <a href="<%= user.facebook %>"><i class="fab fa-facebook"></i></a>
+                    <a href="<%= user.twitter %>"><i class="fab fa-twitter"></i></a>
+                </div>
+                <div class="profile-actions">
+                    <div class="button-group">
+                        <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+                        <form id="signout-form" action="/user/logout" method="POST">
+                            <button type="submit" class="sign-out-btn-info" id="sign-out-btn">Sign Out</button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -42,7 +44,8 @@
             <div class="edit-section" id="edit-profile-picture-section" style="display: none;">
                 <div class="form-group">
                     <label for="profilePicture">Change Profile Photo:</label>
-                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*">
+                    <input type="file" id="profilePicture" name="profilePicture" accept="image/*"
+                        style="display: none;">
                 </div>
             </div>
             <!-- Social Icons Section -->
@@ -226,4 +229,5 @@
                                                     </span></p>
                                                 <% } %>
         </div>
-<%- include('templates/footer') %>
+    </div>
+    <%- include('templates/footer') %>

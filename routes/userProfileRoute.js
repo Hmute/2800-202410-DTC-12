@@ -18,7 +18,7 @@ router.get("/profile", async (req, res) => {
     return res.status(401).send("Unauthorized: No username in session");
   }
   try {
-    const user = await User.findOne({ fullName: username });
+    const user = await User.findOne({ username: username });
     if (!user) {
       console.log("User not found:", username);
       return res.status(404).send("User not found");
@@ -55,18 +55,17 @@ router.post("/profile/edit", upload, async (req, res) => {
   } = req.body;
 
   try {
-    const user = await User.findOne({ fullName: username });
+    const user = await User.findOne({ username: username });
     if (!user) {
       console.log("User not found:", username);
       return res.status(404).send("User not found");
     }
 
-    // Handle profile picture upload to Cloudinary
     if (req.files["profilePicture"]) {
       const profilePicBuffer = req.files["profilePicture"][0].buffer;
       const result = await new Promise((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-          { folder: "profile_pictures" },
+          { folder: "profile_pictures", eager: [{ transformation: {} }] },
           (error, result) => {
             if (error) {
               reject(error);
@@ -77,7 +76,19 @@ router.post("/profile/edit", upload, async (req, res) => {
         );
         uploadStream.end(profilePicBuffer);
       });
-      user.profilePicture = result.secure_url;
+
+      // Check for duplicate `etag`
+      const existingUser = await User.findOne({
+        profilePictureEtag: result.etag,
+        email: user.email,
+      });
+
+      if (!existingUser) {
+        user.profilePicture = result.secure_url;
+        user.profilePictureEtag = result.etag;
+      } else {
+        console.log('Duplicate image detected');
+      }
     }
 
     // Update user details
