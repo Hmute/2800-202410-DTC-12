@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const User = require('./User'); 
 
-// Define the weight schema and model
+// Define the weight schema and model if not already defined
 const weightSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
