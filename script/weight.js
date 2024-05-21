@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateUI(unit) {
-        const data = weightData[unit];
-        startWeight.textContent = data[0].weightKg + (unit === 'kg' ? ' kg' : ' lbs');
-        currentWeight.textContent = data[data.length - 1].weightKg + (unit === 'kg' ? ' kg' : ' lbs');
+        const data = weightData[unit].sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
+        startWeight.textContent = data[data.length - 1].weightKg + (unit === 'kg' ? ' kg' : ' lbs');
+        currentWeight.textContent = data[0].weightKg + (unit === 'kg' ? ' kg' : ' lbs');
         progress.textContent = (data[0].weightKg - data[data.length - 1].weightKg).toFixed(2) + (unit === 'kg' ? ' kg' : ' lbs');
 
         weightEntriesContainer.innerHTML = '';
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function renderGraph(unit) {
         const ctx = document.getElementById('weightGraph').getContext('2d');
-        const data = weightData[unit];
+        const data = weightData[unit].sort((a, b) => new Date(a.date) - new Date(b.date)); // Sort by date ascending for graph
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -102,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
         event.preventDefault();
         const weightKg = parseFloat(weightInput.value);
         const weightLbs = (weightKg * 2.20462).toFixed(2);
-        const date = new Date().toISOString();
+        const currentDate = new Date();
+        const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).toISOString(); // Normalize to start of the day
 
         const newEntry = {
             date: date,
@@ -119,12 +120,27 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         if (response.ok) {
-            weightData.kg.push(newEntry);
-            weightData.lbs.push({
-                ...newEntry,
-                weightKg: undefined,
-                weightLbs: weightLbs
-            });
+            const updatedEntryKg = { ...newEntry, weightKg: parseFloat(newEntry.weightKg).toFixed(2) };
+            const updatedEntryLbs = { ...newEntry, weightLbs: parseFloat(newEntry.weightLbs).toFixed(2) };
+
+            // Normalize date for comparison
+            const normalizedDate = new Date(newEntry.date).setHours(0, 0, 0, 0);
+
+            // Find and replace the existing entry for today, or add a new one
+            const kgIndex = weightData.kg.findIndex(entry => new Date(entry.date).setHours(0, 0, 0, 0) === normalizedDate);
+            if (kgIndex !== -1) {
+                weightData.kg[kgIndex] = updatedEntryKg;
+            } else {
+                weightData.kg.push(updatedEntryKg);
+            }
+
+            const lbsIndex = weightData.lbs.findIndex(entry => new Date(entry.date).setHours(0, 0, 0, 0) === normalizedDate);
+            if (lbsIndex !== -1) {
+                weightData.lbs[lbsIndex] = updatedEntryLbs;
+            } else {
+                weightData.lbs.push(updatedEntryLbs);
+            }
+
             updateUI('kg');
             renderGraph('kg');
             weightInput.value = '';

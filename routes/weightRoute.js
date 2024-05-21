@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const User = require('./User'); 
+const User = require('./User');
 
-// Define the weight schema and model
+// Define the weight schema
 const weightSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
@@ -12,6 +12,7 @@ const weightSchema = new mongoose.Schema({
 });
 
 weightSchema.index({ userId: 1, date: 1 }, { unique: true });
+
 
 const Weight = mongoose.model('Weight', weightSchema);
 
@@ -32,7 +33,7 @@ router.get('/', authMiddleware, (req, res) => {
 router.get('/weight-data', authMiddleware, async (req, res) => {
   const userId = req.session.userId;
   try {
-    const weightDataKg = await Weight.find({ userId }).sort({ date: 1 }).exec();
+    const weightDataKg = await Weight.find({ userId }).sort({ date: -1 }).exec();
     const weightDataLbs = weightDataKg.map(entry => ({
       ...entry.toObject(),
       weightKg: undefined,
@@ -67,9 +68,13 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
   }
 
   try {
+    // Normalize the date to the start of the day in local time
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0);
+
     // Find the existing entry for the user and date, or create a new one
     const updatedWeightEntry = await Weight.findOneAndUpdate(
-      { userId, date: new Date(date).setHours(0, 0, 0, 0) }, 
+      { userId, date: normalizedDate },
       { $set: { weightKg: parseFloat(weightInKg), weightLbs: (weightInKg * 2.20462).toFixed(2) } },
       { new: true, upsert: true }
     );
