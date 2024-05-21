@@ -1,111 +1,52 @@
-// routes/userProfileRoute.js
+document.addEventListener("DOMContentLoaded", function () {
+  const editBtn = document.querySelector(".edit-profile-btn");
+  const signOutBtn = document.getElementById("sign-out-btn");
+  const signOutForm = document.getElementById("signout-form");
 
-const express = require('express');
-const router = express.Router();
-const User = require('./User'); // Adjust the path as needed
-const multer = require('multer');
-const path = require('path');
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      const detailsCard = document.querySelector(".details");
+      const bioCard = document.querySelector(".bio");
+      const editDetails = document.querySelector(
+        "#edit-health-details-section"
+      );
+      const editBio = document.querySelector("#edit-bio-section");
+      const editProfileForm = document.getElementById("edit-profile-form");
+      const editLinks = document.getElementById("edit-social-icons-section");
 
-// Set storage engine
-const storage = multer.diskStorage({
-    destination: './public/images',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
+      const isEditing = editBtn.classList.toggle("editing");
 
-// Init upload
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1000000 },
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).fields([{ name: 'profilePicture', maxCount: 1 }, { name: 'photos', maxCount: 10 }]);
+      if (isEditing) {
+        detailsCard.style.display = "none";
+        bioCard.style.display = "none";
 
-// Check File Type
-function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
+        editDetails.style.display = "block";
+        editBio.style.display = "block";
+        editLinks.style.display = "block";
 
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!');
-    }
-}
+        editProfileForm.style.display = "block";
 
-// Get profile page
-router.get('/:username', async (req, res) => {
-    const username = req.params.username;
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
-        }
-        console.log('Displaying profile for user:', user);
-        res.render('userProfile', { user, page: 'Profile' });
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
-    }
-});
+        editBtn.textContent = "Save Profile";
+      } else {
+        detailsCard.style.display = "block";
+        bioCard.style.display = "block";
 
-// Edit profile page
-router.post('/:username/edit', upload, async (req, res) => {
-    const username = req.params.username;
-    const { fullName, gender, age, height, weight } = req.body;
-    const profilePicture = req.files['profilePicture'] ? req.files['profilePicture'][0].filename : null;
-    const photos = req.files['photos'] ? req.files['photos'].map(file => file.filename) : [];
+        editDetails.style.display = "none";
+        editBio.style.display = "none";
+        editLinks.style.display = "none";
 
-    console.log('Uploaded Profile Picture:', profilePicture);
-    console.log('Uploaded Photos:', photos);
+        editProfileForm.style.display = "none";
 
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
-        }
+        editBtn.textContent = "Edit Profile";
 
-        user.fullName = fullName || user.fullName;
-        user.gender = gender || user.gender;
-        user.age = age || user.age;
-        user.height = height || user.height;
-        user.weight = weight || user.weight;
-        if (profilePicture) user.profilePicture = profilePicture;
-        if (photos.length) user.photos.push(...photos);
+        editProfileForm.submit();
+      }
+    });
+  }
 
-        await user.save();
-        res.redirect(`/user/${username}`);
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
-    }
-});
-
-module.exports = router;
-// public/script/userProfile.js
-
-document.getElementById('edit-profile-btn').addEventListener('click', function() {
-    document.getElementById('edit-profile-form').style.display = 'block';
-    this.style.display = 'none';
-});
-
-document.getElementById('profile-picture').addEventListener('click', function() {
-    document.getElementById('profile-picture-input').click();
-});
-
-document.getElementById('profile-picture-input').addEventListener('change', function(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        document.getElementById('profile-picture').src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-});
-
-document.getElementById('sign-out-btn').addEventListener('click', function() {
-    window.location.href = '/login';
+  if (signOutBtn) {
+    signOutBtn.addEventListener("click", function () {
+      signOutForm.submit();
+    });
+  }
 });

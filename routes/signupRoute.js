@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
         console.log('User successfully created:', user);
 
         // Redirect to the user's profile page after successful signup
-        res.redirect(`/user/${user.username}`);
+        res.redirect(`/user/profile`);
     } catch (err) {
         if (err.code === 11000) {
             console.log('Email already exists');

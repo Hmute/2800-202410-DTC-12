@@ -1,47 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="/css/userProfile.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-</head>
-<body>
-    <%- include('templates/header', { user: user }) %>
+<%- include('templates/header') %>
     <div class="profile-container">
         <div class="profile-header">
-            <div class="profile-info">
-                <h2 class="profile-name" id="fullName-display"><%= user.fullName %></h2>
-                <p class="username">@<%= user.username %></p>
-                <div class="social-icons">
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <i class="fas fa-pencil-alt edit-icon" id="edit-social-icons-icon" style="display: none;"></i>
-                    <i class="fas fa-cog settings-icon" id="settings-icon"></i>
-                </div>
-                <div class="profile-actions">
-                    <div class="button-group">
-                        <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
-                        <form id="signout-form" action="/logout" method="POST">
-                            <button type="submit" class="sign-out-btn-info" id="sign-out-btn">Sign Out</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
             <div class="profile-picture-wrap">
                 <% if (user.profilePicture) { %>
-                    <img src="/images/profile/<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture" id="profile-picture">
-                <% } else { %>
-                    <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture" id="profile-picture">
-                <% } %>
-                <i class="fas fa-pencil-alt edit-icon" id="edit-profile-picture-icon" style="display: none;"></i>
+                    <img src="<%= user.profilePicture %>" alt="Profile Picture" class="profile-picture"
+                        id="profile-picture">
+                    <% } else { %>
+                        <img src="/images/profile/Default_pfp.png" alt="Default Profile Picture" class="profile-picture"
+                            id="profile-picture">
+                        <% } %>
+                            <i class="fas fa-pencil-alt edit-icon" id="edit-profile-picture-icon"
+                                style="display: none;"></i>
+            </div>
+            <div class="profile-info">
+                <h2 class="profile-name" id="fullName-display">
+                    <%= user.fullName %>
+                </h2>
+                <p class="username">@<%= user.username %>
+                        <p class="username">Email: <%= user.email %>
+                        </p>
+                        <div class="social-icons">
+                            <a href="<%= user.instagram %>"><i class="fab fa-instagram"></i></a>
+                            <a href="<%= user.facebook %>"><i class="fab fa-facebook"></i></a>
+                            <a href="<%= user.twitter %>"><i class="fab fa-twitter"></i></a>
+                        </div>
+                        <div class="profile-actions">
+                            <div class="button-group">
+                                <button class="edit-profile-btn" id="edit-profile-btn">Edit Profile</button>
+                                <form id="signout-form" action="/user/logout" method="POST">
+                                    <button type="submit" class="sign-out-btn-info" id="sign-out-btn">Sign Out</button>
+                                </form>
+                            </div>
+                        </div>
             </div>
         </div>
 
         <!-- Combined Edit Form -->
-        <form id="edit-profile-form" action="/user/<%= user.username %>/editProfile" method="POST" enctype="multipart/form-data">
+        <form id="edit-profile-form" action="/user/profile/edit" method="POST" enctype="multipart/form-data"
+            style="display: none;">
             <!-- Profile Picture Section -->
             <div class="edit-section" id="edit-profile-picture-section" style="display: none;">
                 <div class="form-group">
@@ -53,15 +49,18 @@
             <div class="edit-section" id="edit-social-icons-section" style="display: none;">
                 <div class="form-group">
                     <label for="instagram">Instagram:</label>
-                    <input type="url" id="instagram" name="instagram" value="<%= user.instagram %>" placeholder="Enter Instagram URL">
+                    <input type="url" id="instagram" name="instagram" value="<%= user.instagram %>"
+                        placeholder="Enter Instagram URL">
                 </div>
                 <div class="form-group">
                     <label for="facebook">Facebook:</label>
-                    <input type="url" id="facebook" name="facebook" value="<%= user.facebook %>" placeholder="Enter Facebook URL">
+                    <input type="url" id="facebook" name="facebook" value="<%= user.facebook %>"
+                        placeholder="Enter Facebook URL">
                 </div>
                 <div class="form-group">
                     <label for="twitter">Twitter:</label>
-                    <input type="url" id="twitter" name="twitter" value="<%= user.twitter %>" placeholder="Enter Twitter URL">
+                    <input type="url" id="twitter" name="twitter" value="<%= user.twitter %>"
+                        placeholder="Enter Twitter URL">
                 </div>
             </div>
             <!-- Health Details Section -->
@@ -70,9 +69,9 @@
                     <label for="gender">Gender:</label>
                     <select id="gender" name="gender">
                         <option value="" disabled selected>Select your gender</option>
-                        <option value="Male" <%= user.gender === 'Male' ? 'selected' : '' %>>Male</option>
-                        <option value="Female" <%= user.gender === 'Female' ? 'selected' : '' %>>Female</option>
-                        <option value="Other" <%= user.gender === 'Other' ? 'selected' : '' %>>Other</option>
+                        <option value="Male" <%=user.gender==='Male' ? 'selected' : '' %>>Male</option>
+                        <option value="Female" <%=user.gender==='Female' ? 'selected' : '' %>>Female</option>
+                        <option value="Other" <%=user.gender==='Other' ? 'selected' : '' %>>Other</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -80,16 +79,19 @@
                     <input type="number" id="age" name="age" value="<%= user.age %>" placeholder="Enter your age">
                 </div>
                 <div class="form-group">
-                    <label for="height">Height (cm/in):</label>
-                    <input type="number" id="height" name="height" value="<%= user.height %>" placeholder="Enter your height">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" name="height" value="<%= user.height %>"
+                        placeholder="Enter your height">
                 </div>
                 <div class="form-group">
-                    <label for="weight">Weight (kg/lbs):</label>
-                    <input type="number" id="weight" name="weight" value="<%= user.weight %>" placeholder="Enter your weight">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" id="weight" name="weight" value="<%= user.weight %>"
+                        placeholder="Enter your weight">
                 </div>
                 <div class="form-group">
                     <label for="bodyFat">Body Fat (%):</label>
-                    <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>" placeholder="Enter your body fat percentage">
+                    <input type="number" id="bodyFat" name="bodyFat" value="<%= user.bodyFat %>"
+                        placeholder="Enter your body fat percentage">
                 </div>
             </div>
             <!-- Fitness Goals Section -->
@@ -98,202 +100,130 @@
                     <label for="fitnessLevel">Fitness Level:</label>
                     <select id="fitnessLevel" name="fitnessLevel">
                         <option value="" disabled selected>Select your fitness level</option>
-                        <option value="Beginner" <%= user.fitnessLevel === 'Beginner' ? 'selected' : '' %>>Beginner</option>
-                        <option value="Intermediate" <%= user.fitnessLevel === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
-                        <option value="Advanced" <%= user.fitnessLevel === 'Advanced' ? 'selected' : '' %>>Advanced</option>
-                        <option value="Expert" <%= user.fitnessLevel === 'Expert' ? 'selected' : '' %>>Expert</option>
+                        <option value="Beginner" <%=user.fitnessLevel==='Beginner' ? 'selected' : '' %>>Beginner
+                        </option>
+                        <option value="Intermediate" <%=user.fitnessLevel==='Intermediate' ? 'selected' : '' %>
+                            >Intermediate</option>
+                        <option value="Advanced" <%=user.fitnessLevel==='Advanced' ? 'selected' : '' %>>Advanced
+                        </option>
+                        <option value="Expert" <%=user.fitnessLevel==='Expert' ? 'selected' : '' %>>Expert</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="workoutType">Favorite Workout Type:</label>
                     <select id="workoutType" name="workoutType">
                         <option value="" disabled selected>Select your favorite workout type</option>
-                        <option value="Cardio" <%= user.workoutType === 'Cardio' ? 'selected' : '' %>>Cardio</option>
-                        <option value="Strength Training" <%= user.workoutType === 'Strength Training' ? 'selected' : '' %>>Strength Training</option>
-                        <option value="Yoga" <%= user.workoutType === 'Yoga' ? 'selected' : '' %>>Yoga</option>
-                        <option value="Pilates" <%= user.workoutType === 'Pilates' ? 'selected' : '' %>>Pilates</option>
-                        <option value="CrossFit" <%= user.workoutType === 'CrossFit' ? 'selected' : '' %>>CrossFit</option>
-                        <option value="HIIT" <%= user.workoutType === 'HIIT' ? 'selected' : '' %>>HIIT</option>
-                        <option value="Dance" <%= user.workoutType === 'Dance' ? 'selected' : '' %>>Dance</option>
+                        <option value="Cardio" <%=user.workoutType==='Cardio' ? 'selected' : '' %>>Cardio</option>
+                        <option value="Strength Training" <%=user.workoutType==='Strength Training' ? 'selected' : '' %>
+                            >Strength Training</option>
+                        <option value="Yoga" <%=user.workoutType==='Yoga' ? 'selected' : '' %>>Yoga</option>
+                        <option value="Pilates" <%=user.workoutType==='Pilates' ? 'selected' : '' %>>Pilates</option>
+                        <option value="CrossFit" <%=user.workoutType==='CrossFit' ? 'selected' : '' %>>CrossFit</option>
+                        <option value="HIIT" <%=user.workoutType==='HIIT' ? 'selected' : '' %>>HIIT</option>
+                        <option value="Dance" <%=user.workoutType==='Dance' ? 'selected' : '' %>>Dance</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="fitnessGoals">Fitness Goals:</label>
                     <select id="fitnessGoals" name="fitnessGoals">
                         <option value="" disabled selected>Select your fitness goals</option>
-                        <option value="Lose Weight" <%= user.fitnessGoals === 'Lose Weight' ? 'selected' : '' %>>Lose Weight</option>
-                        <option value="Build Muscle" <%= user.fitnessGoals === 'Build Muscle' ? 'selected' : '' %>>Build Muscle</option>
-                        <option value="Improve Flexibility" <%= user.fitnessGoals === 'Improve Flexibility' ? 'selected' : '' %>>Improve Flexibility</option>
-                        <option value="Increase Endurance" <%= user.fitnessGoals === 'Increase Endurance' ? 'selected' : '' %>>Increase Endurance</option>
-                        <option value="Increase Strength" <%= user.fitnessGoals === 'Increase Strength' ? 'selected' : '' %>>Increase Strength</option>
-                        <option value="Maintain Health" <%= user.fitnessGoals === 'Maintain Health' ? 'selected' : '' %>>Maintain Health</option>
+                        <option value="Lose Weight" <%=user.fitnessGoals==='Lose Weight' ? 'selected' : '' %>>Lose
+                            Weight</option>
+                        <option value="Build Muscle" <%=user.fitnessGoals==='Build Muscle' ? 'selected' : '' %>>Build
+                            Muscle</option>
+                        <option value="Improve Flexibility" <%=user.fitnessGoals==='Improve Flexibility' ? 'selected'
+                            : '' %>>Improve Flexibility</option>
+                        <option value="Increase Endurance" <%=user.fitnessGoals==='Increase Endurance' ? 'selected' : ''
+                            %>>Increase Endurance</option>
+                        <option value="Increase Strength" <%=user.fitnessGoals==='Increase Strength' ? 'selected' : ''
+                            %>>Increase Strength</option>
+                        <option value="Maintain Health" <%=user.fitnessGoals==='Maintain Health' ? 'selected' : '' %>
+                            >Maintain Health</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="additionalInterests">Additional Interests:</label>
                     <select id="additionalInterests" name="additionalInterests">
                         <option value="" disabled selected>Select additional interests</option>
-                        <option value="Nutrition" <%= user.additionalInterests === 'Nutrition' ? 'selected' : '' %>>Nutrition</option>
-                        <option value="Meditation" <%= user.additionalInterests === 'Meditation' ? 'selected' : '' %>>Meditation</option>
-                        <option value="Sports" <%= user.additionalInterests === 'Sports' ? 'selected' : '' %>>Sports</option>
-                        <option value="Wellness" <%= user.additionalInterests === 'Wellness' ? 'selected' : '' %>>Wellness</option>
-                        <option value="Mental Health" <%= user.additionalInterests === 'Mental Health' ? 'selected' : '' %>>Mental Health</option>
-                        <option value="Outdoor Activities" <%= user.additionalInterests === 'Outdoor Activities' ? 'selected' : '' %>>Outdoor Activities</option>
+                        <option value="Nutrition" <%=user.additionalInterests==='Nutrition' ? 'selected' : '' %>
+                            >Nutrition</option>
+                        <option value="Meditation" <%=user.additionalInterests==='Meditation' ? 'selected' : '' %>
+                            >Meditation</option>
+                        <option value="Sports" <%=user.additionalInterests==='Sports' ? 'selected' : '' %>>Sports
+                        </option>
+                        <option value="Wellness" <%=user.additionalInterests==='Wellness' ? 'selected' : '' %>>Wellness
+                        </option>
+                        <option value="Mental Health" <%=user.additionalInterests==='Mental Health' ? 'selected' : '' %>
+                            >Mental Health</option>
+                        <option value="Outdoor Activities" <%=user.additionalInterests==='Outdoor Activities'
+                            ? 'selected' : '' %>>Outdoor Activities</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="personalQuote">Personal Quote/Motto (max 80 characters):</label>
-                    <textarea id="personalQuote" name="personalQuote" rows="2" maxlength="80" placeholder="Enter your personal quote or motto (max 80 characters)"><%= user.personalQuote %></textarea>
-                </div>
-            </div>
-            <!-- Photos Section -->
-            <div class="edit-section" id="edit-photos-section" style="display: none;">
-                <div class="form-group">
-                    <label for="photos">Upload Photos:</label>
-                    <input type="file" id="photos" name="photos" multiple accept="image/*">
+                    <textarea id="personalQuote" name="personalQuote" rows="2" maxlength="80"
+                        placeholder="Enter your personal quote or motto (max 80 characters)"><%= user.personalQuote %></textarea>
                 </div>
             </div>
         </form>
 
         <div class="details card">
-            <h3>Health Details <i class="fas fa-pencil-alt edit-icon" id="edit-health-details-icon" style="display: none;"></i></h3>
+            <h3>Health Details</h3>
             <% if (user.gender) { %>
-                <p><strong>Gender:</strong> <span id="gender-display"><%= user.gender %></span></p>
-            <% } %>
-            <% if (user.age) { %>
-                <p><strong>Age:</strong> <span id="age-display"><%= user.age %></span></p>
-            <% } %>
-            <% if (user.height) { %>
-                <p><strong>Height:</strong> <span id="height-display"><%= user.height %></span></p>
-            <% } %>
-            <% if (user.weight) { %>
-                <p><strong>Weight:</strong> <span id="weight-display"><%= user.weight %></span></p>
-            <% } %>
-            <% if (user.bodyFat) { %>
-                <p><strong>Body Fat:</strong> <span id="bodyFat-display"><%= user.bodyFat %></span></p>
-            <% } %>
+                <p><strong>Gender:</strong> <span id="gender-display">
+                        <%= user.gender %>
+                    </span></p>
+                <% } %>
+                    <% if (user.age) { %>
+                        <p><strong>Age:</strong> <span id="age-display">
+                                <%= user.age %>
+                            </span></p>
+                        <% } %>
+                            <% if (user.height) { %>
+                                <p><strong>Height:</strong> <span id="height-display">
+                                        <%= user.height %> cm
+                                    </span></p>
+                                <% } %>
+                                    <% if (user.weight) { %>
+                                        <p><strong>Weight:</strong> <span id="weight-display">
+                                                <%= user.weight %> kg
+                                            </span></p>
+                                        <% } %>
+                                            <% if (user.bodyFat) { %>
+                                                <p><strong>Body Fat:</strong> <span id="bodyFat-display">
+                                                        <%= user.bodyFat %>
+                                                    </span></p>
+                                                <% } %>
         </div>
 
         <div class="bio card">
-            <h3>Fitness Bio <i class="fas fa-pencil-alt edit-icon" id="edit-bio-icon" style="display: none;"></i></h3>
+            <h3>Fitness Bio</h3>
             <% if (user.fitnessLevel) { %>
-                <p><strong>Fitness Level:</strong> <span id="fitnessLevel-display"><%= user.fitnessLevel %></span></p>
-            <% } %>
-            <% if (user.workoutType) { %>
-                <p><strong>Favorite Workout Type:</strong> <span id="workoutType-display"><%= user.workoutType %></span></p>
-            <% } %>
-            <% if (user.fitnessGoals) { %>
-                <p><strong>Fitness Goals:</strong> <span id="fitnessGoals-display"><%= user.fitnessGoals %></span></p>
-            <% } %>
-            <% if (user.additionalInterests) { %>
-                <p><strong>Additional Interests:</strong> <span id="additionalInterests-display"><%= user.additionalInterests %></span></p>
-            <% } %>
-            <% if (user.personalQuote) { %>
-                <p><strong>Personal Quote/Motto:</strong> <span id="personalQuote-display"><%= user.personalQuote %></span></p>
-            <% } %>
+                <p><strong>Fitness Level:</strong> <span id="fitnessLevel-display">
+                        <%= user.fitnessLevel %>
+                    </span></p>
+                <% } %>
+                    <% if (user.workoutType) { %>
+                        <p><strong>Favorite Workout Type:</strong> <span id="workoutType-display">
+                                <%= user.workoutType %>
+                            </span></p>
+                        <% } %>
+                            <% if (user.fitnessGoals) { %>
+                                <p><strong>Fitness Goals:</strong> <span id="fitnessGoals-display">
+                                        <%= user.fitnessGoals %>
+                                    </span></p>
+                                <% } %>
+                                    <% if (user.additionalInterests) { %>
+                                        <p><strong>Additional Interests:</strong> <span
+                                                id="additionalInterests-display">
+                                                <%= user.additionalInterests %>
+                                            </span></p>
+                                        <% } %>
+                                            <% if (user.personalQuote) { %>
+                                                <p><strong>Personal Quote/Motto:</strong> <span
+                                                        id="personalQuote-display">
+                                                        <%= user.personalQuote %>
+                                                    </span></p>
+                                                <% } %>
         </div>
-
-        <div class="photos card">
-            <h3>Photos <i class="fas fa-pencil-alt edit-icon" id="edit-photos-icon" style="display: none;"></i></h3>
-            <% if (user.photos && user.photos.length > 0) { %>
-                <div class="photo-grid" id="photo-grid">
-                    <% user.photos.forEach(photo => { %>
-                        <div class="photo-wrap">
-                            <img src="/images/<%= photo %>" alt="Photo" class="photo">
-                            <form action="/user/<%= user.username %>/deletePhoto" method="POST" class="delete-photo-form" style="display: none;">
-                                <input type="hidden" name="photo" value="<%= photo %>">
-                                <button type="submit" class="delete-photo-btn">Delete</button>
-                            </form>
-                        </div>
-                    <% }) %>
-                </div>
-            <% } else { %>
-                <p id="no-photos">No photos available</p>
-            <% } %>
-        </div>
-    </div>
-
-    <!-- Settings Popup -->
-    <div id="settings-popup" class="popup">
-        <div class="popup-content">
-            <span class="close" id="close-settings">&times;</span>
-            <h3>Settings</h3>
-            <ul>
-                <li><a href="/account/reset">Reset account</a></li>
-                <li><a href="/account/connected">Connected accounts</a></li>
-                <li><a href="/account/blocking">Blocking and permission</a></li>
-                <li><a href="/account/privacy">Privacy</a></li>
-                <li><a href="/account/security">Security</a></li>
-                <li><a href="/account/notification">Notification</a></li>
-                <li><a href="/account/view-options">View Options</a></li>
-            </ul>
-            <button class="sign-out-popup-btn" onclick="location.href='/logout'">Sign Out</button>
-        </div>
-    </div>
-
-    <%- include('templates/footer', { user: user }) %>
-    <script>
-        const editProfileBtn = document.getElementById('edit-profile-btn');
-        const editProfileForm = document.getElementById('edit-profile-form');
-
-        editProfileBtn.addEventListener('click', function() {
-            const isEditing = editProfileBtn.classList.contains('editing');
-
-            document.querySelectorAll('.edit-icon').forEach(function(icon) {
-                icon.style.display = isEditing ? 'none' : 'inline-block';
-            });
-
-            if (isEditing) {
-                editProfileForm.submit();
-            } else {
-                editProfileBtn.textContent = 'Save Profile';
-                editProfileBtn.classList.add('editing');
-                editProfileBtn.style.backgroundColor = '#28a745';
-            }
-        });
-
-        document.getElementById('edit-profile-picture-icon').addEventListener('click', function() {
-            document.getElementById('edit-profile-picture-section').style.display = 'block';
-        });
-
-        document.getElementById('edit-social-icons-icon').addEventListener('click', function() {
-            document.getElementById('edit-social-icons-section').style.display = 'block';
-        });
-
-        document.getElementById('edit-health-details-icon').addEventListener('click', function() {
-            document.getElementById('edit-health-details-section').style.display = 'block';
-        });
-
-        document.getElementById('edit-bio-icon').addEventListener('click', function() {
-            document.getElementById('edit-bio-section').style.display = 'block';
-        });
-
-        document.getElementById('edit-photos-icon').addEventListener('click', function() {
-            document.getElementById('edit-photos-section').style.display = 'block';
-            document.querySelectorAll('.delete-photo-form').forEach(function(form) {
-                form.style.display = 'block';
-            });
-        });
-
-        // Settings Popup
-        const settingsIcon = document.getElementById('settings-icon');
-        const settingsPopup = document.getElementById('settings-popup');
-        const closeSettings = document.getElementById('close-settings');
-
-        settingsIcon.addEventListener('click', function() {
-            settingsPopup.style.display = 'block';
-        });
-
-        closeSettings.addEventListener('click', function() {
-            settingsPopup.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target == settingsPopup) {
-                settingsPopup.style.display = 'none';
-            }
-        });
-    </script>
-    <script src="/script/userProfile.js"></script>
-</body>
-</html>
+<%- include('templates/footer') %>

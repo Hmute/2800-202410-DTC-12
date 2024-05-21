@@ -4,24 +4,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const messagesLink = document.getElementById("blogpage");
   const profileLink = document.getElementById("profilepage");
 
-  homeLink.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleHomeClick();
+  homeLink.addEventListener("click", function () {
+    handleHomeClick();
   });
 
-  generateLink.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleGenerateClick();
+  generateLink.addEventListener("click", function () {
+    handleGenerateClick();
   });
 
-  messagesLink.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleMessagesClick();
+  messagesLink.addEventListener("click", function () {
+    handleMessagesClick();
   });
 
-  profileLink.addEventListener("click", function (event) {
-      event.preventDefault();
-      handleProfileClick();
+  profileLink.addEventListener("click", function () {
+    handleProfileClick();
   });
 });
 
@@ -41,7 +37,6 @@ function handleMessagesClick() {
 }
 
 function handleProfileClick() {
-  const username = document.querySelector('#profilepage').getAttribute('href').split('/').pop();
   console.log("Profile link clicked");
-  window.location.href = `/user/${username}`;
+  window.location.href = "/user/profile";
 }
