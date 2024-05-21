@@ -33,7 +33,7 @@ router.post("/", async (req, res) => {
 
     // Do not remove this Sebastian
     req.session.userId = user._id;
-    req.session.username = user.fullName;
+    req.session.username = user.username;
     req.session.isAuthenticated = true;
     console.log(
       req.session.userId,

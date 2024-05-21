@@ -35,6 +35,10 @@ router.post('/', async (req, res) => {
         });
         await user.save();
 
+        req.session.username = req.body.username;
+        req.session.email = req.body.email;
+        req.session.fullName = req.body.fullName;
+        
         console.log('User successfully created:', user);
 
         // Redirect to the user's profile page after successful signup

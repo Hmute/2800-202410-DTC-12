@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const editBtn = document.querySelector(".edit-profile-btn");
   const signOutBtn = document.getElementById("sign-out-btn");
   const signOutForm = document.getElementById("signout-form");
+  const profilePicture = document.getElementById("profile-picture");
+  const profilePictureInput = document.getElementById("profilePicture");
 
   if (editBtn) {
     editBtn.addEventListener("click", () => {
@@ -27,6 +29,24 @@ document.addEventListener("DOMContentLoaded", function () {
         editProfileForm.style.display = "block";
 
         editBtn.textContent = "Save Profile";
+
+        if (profilePicture && profilePictureInput) {
+          profilePicture.addEventListener("click", function () {
+            profilePictureInput.click();
+          });
+
+          profilePictureInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                profilePicture.src = e.target.result;
+              };
+              reader.readAsDataURL(file);
+            }
+          });
+        }
+        
       } else {
         detailsCard.style.display = "block";
         bioCard.style.display = "block";
