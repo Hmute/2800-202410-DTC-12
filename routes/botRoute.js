@@ -18,7 +18,7 @@ router.post('/generate', async (req, res) => {
 
   try {
     const recommendations = await getWorkoutRecommendations(userInput);
-    res.render('botResults', { page: 'Recommended Exercises', data: userInput, recommendations, generatedAt });
+    res.render('botResults', { page: 'Recommendations', data: userInput, recommendations, generatedAt });
   } catch (error) {
     console.error('Error generating workout recommendations:', error);
     res.status(500).send('Error generating workout recommendations');
@@ -110,6 +110,8 @@ function calculateRepetitions(level, days, time) {
   console.log('Time (number):', timeNumber);
 
   if (isNaN(days) || isNaN(timeNumber)) {
+    time = 30; // Default to 30 minutes if time is not a number
+    days = 1; // Default to 1 day if days is not a number
     console.error('Invalid days or time value');
     return 'Invalid input';
   }
@@ -133,6 +135,7 @@ function calculateRepetitions(level, days, time) {
   const timeFactor = timeNumber / 30; // Assuming time is in minutes, normalized to 30 minutes
 
   // Calculate repetitions based on level, days, and time
+  
   const repetitions = Math.round(baseReps * dayFactor * timeFactor);
   return repetitions;
 }
