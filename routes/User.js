@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema({
     age: Number,
     height: String,
     weight: String,
+    startWeight: Number,
     bodyFat: String,
     fitnessLevel: String,
     workoutType: String,

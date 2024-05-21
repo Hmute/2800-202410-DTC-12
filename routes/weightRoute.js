@@ -31,12 +31,24 @@ router.get('/', authMiddleware, (req, res) => {
 router.get('/weight-data', authMiddleware, async (req, res) => {
   const userId = req.session.userId;
   try {
-    const weightDataKg = await Weight.find({ userId }).sort({ date: -1 }).exec();
-    res.json(weightDataKg.map(entry => ({
-      ...entry.toObject(),
-      weightKg: entry.weightKg.toFixed(2),
-      change: calculateChange(entry, weightDataKg)
-    })));
+    const user = await User.findById(userId);
+    const startingWeight = user.startWeight ? parseFloat(user.startWeight) : null;
+
+    const weightDataKg = await Weight.find({ userId }).sort({ date: 1 }).exec();
+
+    const currentWeight = weightDataKg.length > 0 ? weightDataKg[weightDataKg.length - 1].weightKg : startingWeight;
+    const progress = startingWeight && currentWeight ? currentWeight - startingWeight : 0;
+
+    res.json({
+      startingWeight: startingWeight ? startingWeight.toFixed(2) : 'N/A',
+      currentWeight: currentWeight ? currentWeight.toFixed(2) : 'N/A',
+      progress: progress ? progress.toFixed(2) : 'N/A',
+      weights: weightDataKg.map((entry, index, array) => ({
+        ...entry.toObject(),
+        weightKg: entry.weightKg.toFixed(2),
+        change: index === 0 ? 0 : calculateChange(array[index - 1].weightKg, entry.weightKg)
+      }))
+    });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -49,19 +61,26 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
   const weightInKg = parseFloat(weightKg).toFixed(2);
 
   try {
-    // Normalize the date to the start of the day in local time
     const normalizedDate = new Date(date);
     normalizedDate.setHours(0, 0, 0, 0);
 
-    // Find the existing entry for the user and date, or create a new one
+    const user = await User.findById(userId);
+    let startWeight = user.startWeight;
+
+    if (!startWeight) {
+      startWeight = weightInKg;
+      await User.findByIdAndUpdate(userId, { weight: weightInKg, startWeight: weightInKg });
+    } else if (!user.weight) {
+      await User.findByIdAndUpdate(userId, { weight: weightInKg });
+    } else {
+      await User.findByIdAndUpdate(userId, { weight: weightInKg });
+    }
+
     const updatedWeightEntry = await Weight.findOneAndUpdate(
       { userId, date: normalizedDate },
       { $set: { weightKg: weightInKg } },
       { new: true, upsert: true }
     );
-
-    // Update the user's weight in the users collection
-    await User.findByIdAndUpdate(userId, { weight: weightInKg.toString() });
 
     res.status(201).send(updatedWeightEntry);
   } catch (error) {
@@ -70,10 +89,8 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
 });
 
 // Helper function to calculate change percentage
-function calculateChange(entry, data) {
-  const prevEntry = data.find(e => e.date < entry.date);
-  if (!prevEntry) return 0;
-  const change = ((entry.weightKg - prevEntry.weightKg) / prevEntry.weightKg) * 100;
+function calculateChange(prevWeight, currentWeight) {
+  const change = ((currentWeight - prevWeight) / prevWeight) * 100;
   return change.toFixed(2);
 }
 

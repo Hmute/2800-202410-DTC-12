@@ -11,7 +11,11 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchData() {
         const response = await fetch('/weight/weight-data');
         if (response.ok) {
-            weightData = await response.json();
+            const data = await response.json();
+            weightData = data.weights;
+            startWeight.textContent = data.startingWeight + ' kg';
+            currentWeight.textContent = data.currentWeight + ' kg';
+            progress.textContent = (data.currentWeight - data.startingWeight).toFixed(2) + ' kg';
             updateUI();
             renderGraph();
         } else {
@@ -26,10 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateUI() {
         const data = weightData.sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
-        startWeight.textContent = data[data.length - 1].weightKg + ' kg';
-        currentWeight.textContent = data[0].weightKg + ' kg';
-        progress.textContent = (data[0].weightKg - data[data.length - 1].weightKg).toFixed(2) + ' kg';
-
         weightEntriesContainer.innerHTML = '';
         data.forEach(entry => {
             const entryElement = document.createElement('div');
@@ -107,6 +107,12 @@ document.addEventListener('DOMContentLoaded', function () {
             // Normalize date for comparison
             const normalizedDate = new Date(newEntry.date).setHours(0, 0, 0, 0);
 
+            // Find the most recent previous entry for comparison
+            const previousEntry = weightData.find(entry => new Date(entry.date).setHours(0, 0, 0, 0) < normalizedDate);
+            const change = previousEntry ? ((weightKg - previousEntry.weightKg) / previousEntry.weightKg * 100).toFixed(2) : 0;
+
+            updatedEntryKg.change = change;
+
             // Find and replace the existing entry for today, or add a new one
             const kgIndex = weightData.findIndex(entry => new Date(entry.date).setHours(0, 0, 0, 0) === normalizedDate);
             if (kgIndex !== -1) {
@@ -114,6 +120,14 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 weightData.push(updatedEntryKg);
             }
+
+            // Update current weight and progress
+            const currentWeightValue = weightData[0].weightKg;
+            const startingWeightValue = parseFloat(startWeight.textContent);
+            const progressValue = (currentWeightValue - startingWeightValue).toFixed(2);
+
+            currentWeight.textContent = currentWeightValue + ' kg';
+            progress.textContent = progressValue + ' kg';
 
             updateUI();
             renderGraph();
