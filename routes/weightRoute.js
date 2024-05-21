@@ -1,18 +1,16 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const User = require('./User');
+const User = require('./User'); 
 
-// Define the weight schema
+// Define the weight schema and model
 const weightSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
-  weightKg: { type: Number, required: true },
-  weightLbs: { type: Number, required: true }
+  weightKg: { type: Number, required: true }
 });
 
 weightSchema.index({ userId: 1, date: 1 }, { unique: true });
-
 
 const Weight = mongoose.model('Weight', weightSchema);
 
@@ -34,21 +32,11 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
   const userId = req.session.userId;
   try {
     const weightDataKg = await Weight.find({ userId }).sort({ date: -1 }).exec();
-    const weightDataLbs = weightDataKg.map(entry => ({
+    res.json(weightDataKg.map(entry => ({
       ...entry.toObject(),
-      weightKg: undefined,
-      weightLbs: (entry.weightKg * 2.20462).toFixed(2),
+      weightKg: entry.weightKg.toFixed(2),
       change: calculateChange(entry, weightDataKg)
-    }));
-    res.json({
-      kg: weightDataKg.map(entry => ({
-        ...entry.toObject(),
-        weightKg: entry.weightKg.toFixed(2),
-        weightLbs: undefined,
-        change: calculateChange(entry, weightDataKg)
-      })),
-      lbs: weightDataLbs
-    });
+    })));
   } catch (error) {
     res.status(500).send(error);
   }
@@ -56,16 +44,9 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
 
 // Route to add or update a weight entry
 router.post('/weight-data', authMiddleware, async (req, res) => {
-  const { date, weightKg, weightLbs } = req.body;
+  const { date, weightKg } = req.body;
   const userId = req.session.userId;
-  let weightInKg;
-
-  // Convert weight to kg if it was entered in lbs
-  if (weightLbs) {
-    weightInKg = (weightLbs / 2.20462).toFixed(2);
-  } else {
-    weightInKg = parseFloat(weightKg).toFixed(2);
-  }
+  const weightInKg = parseFloat(weightKg).toFixed(2);
 
   try {
     // Normalize the date to the start of the day in local time
@@ -75,7 +56,7 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
     // Find the existing entry for the user and date, or create a new one
     const updatedWeightEntry = await Weight.findOneAndUpdate(
       { userId, date: normalizedDate },
-      { $set: { weightKg: parseFloat(weightInKg), weightLbs: (weightInKg * 2.20462).toFixed(2) } },
+      { $set: { weightKg: weightInKg } },
       { new: true, upsert: true }
     );
 
