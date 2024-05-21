@@ -23,7 +23,14 @@ router.post('/', async (req, res) => {
         const existingUser = await User.findOne({ username: req.body.username });
         if (existingUser) {
             console.log('Username already exists');
-            return res.render('signup', { error: 'Username already exists' });
+            return res.render('signup', { error: 'Username already in use' });
+        }
+
+        // Check if the email already exists
+        const existingEmail = await User.findOne({ email: req.body.email });
+        if (existingEmail) {
+            console.log('Email already exists');
+            return res.render('signup', { error: 'Email already exists' });
         }
 
         // Create a new user with the provided information
@@ -44,13 +51,8 @@ router.post('/', async (req, res) => {
         // Redirect to the user's profile page after successful signup
         res.redirect(`/user/profile`);
     } catch (err) {
-        if (err.code === 11000) {
-            console.log('Email already exists');
-            res.render('signup', { error: 'Email already exists' });
-        } else {
-            console.error('Signup error:', err);
-            res.render('signup', { error: 'An error occurred during signup' });
-        }
+        console.error('Signup error:', err);
+        res.render('signup', { error: 'An error occurred during signup' });
     }
 });
 
