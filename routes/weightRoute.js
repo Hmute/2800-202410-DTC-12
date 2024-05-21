@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const User = require('./User'); 
 
-// Define the weight schema and model if not already defined
+// Define the weight schema and model
 const weightSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
@@ -13,8 +13,7 @@ const weightSchema = new mongoose.Schema({
 
 weightSchema.index({ userId: 1, date: 1 }, { unique: true });
 
-// Check if the model already exists to avoid OverwriteModelError
-const Weight = mongoose.models.Weight || mongoose.model('Weight', weightSchema);
+const Weight = mongoose.model('Weight', weightSchema);
 
 // Authentication middleware
 function authMiddleware(req, res, next) {
