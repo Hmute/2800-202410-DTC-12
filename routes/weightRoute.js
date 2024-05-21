@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+const User = require('./User'); 
 
 // Define the weight schema and model
 const weightSchema = new mongoose.Schema({
@@ -10,9 +11,10 @@ const weightSchema = new mongoose.Schema({
   weightLbs: { type: Number, required: true }
 });
 
-weightSchema.index({ userId: 1, date: 1 }, { unique: true }); 
+weightSchema.index({ userId: 1, date: 1 }, { unique: true });
 
-const Weight = mongoose.model('Weight', weightSchema);
+// Check if the model already exists to avoid OverwriteModelError
+const Weight = mongoose.models.Weight || mongoose.model('Weight', weightSchema);
 
 // Authentication middleware
 function authMiddleware(req, res, next) {
@@ -41,6 +43,7 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
     res.json({
       kg: weightDataKg.map(entry => ({
         ...entry.toObject(),
+        weightKg: entry.weightKg.toFixed(2),
         weightLbs: undefined,
         change: calculateChange(entry, weightDataKg)
       })),
@@ -51,14 +54,31 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
   }
 });
 
-// Route to add a new weight entry
+// Route to add or update a weight entry
 router.post('/weight-data', authMiddleware, async (req, res) => {
   const { date, weightKg, weightLbs } = req.body;
   const userId = req.session.userId;
+  let weightInKg;
+
+  // Convert weight to kg if it was entered in lbs
+  if (weightLbs) {
+    weightInKg = (weightLbs / 2.20462).toFixed(2);
+  } else {
+    weightInKg = parseFloat(weightKg).toFixed(2);
+  }
+
   try {
-    const newWeightEntry = new Weight({ userId, date, weightKg, weightLbs });
-    await newWeightEntry.save();
-    res.status(201).send(newWeightEntry);
+    // Find the existing entry for the user and date, or create a new one
+    const updatedWeightEntry = await Weight.findOneAndUpdate(
+      { userId, date: new Date(date).setHours(0, 0, 0, 0) }, 
+      { $set: { weightKg: parseFloat(weightInKg), weightLbs: (weightInKg * 2.20462).toFixed(2) } },
+      { new: true, upsert: true }
+    );
+
+    // Update the user's weight in the users collection
+    await User.findByIdAndUpdate(userId, { weight: weightInKg.toString() });
+
+    res.status(201).send(updatedWeightEntry);
   } catch (error) {
     res.status(500).send(error);
   }
