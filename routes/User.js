@@ -42,13 +42,15 @@ const userSchema = new mongoose.Schema({
     additionalInterests: String,
     personalQuote: String,
     profilePicture: String,
-    photos: [String],
     resetPasswordToken: String,
     resetPasswordExpires: Date,
     blogPosts: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Blog'
     }],
+    instagram: String,
+    facebook: String,
+    twitter: String,
 });
 
 userSchema.pre('save', async function(next) {

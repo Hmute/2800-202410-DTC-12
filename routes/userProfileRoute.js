@@ -1,133 +1,118 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const User = require('./User'); // Adjust the path as needed
-const multer = require('multer');
-const path = require('path');
+const User = require("./User");
+const multer = require("multer");
+const cloudinary = require("../setup/cloudinary");
 
-// Set storage engine
-const storage = multer.diskStorage({
-    destination: './public/images',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
-
-// Init upload
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1000000 },
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).fields([{ name: 'profilePicture', maxCount: 1 }, { name: 'photos', maxCount: 10 }]);
-
-// Check File Type
-function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!');
-    }
-}
+// Set storage engine for memory storage
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage }).fields([
+  { name: "profilePicture", maxCount: 1 },
+  { name: "photos", maxCount: 3 },
+]);
 
 // Get profile page
-router.get('/:username', async (req, res) => {
-    const username = req.params.username;
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
-        }
-        console.log('Displaying profile for user:', user);
-        res.render('userProfile', { user, page: 'Profile' });
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
+router.get("/profile", async (req, res) => {
+  const username = req.session.username;
+  if (!username) {
+    return res.status(401).send("Unauthorized: No username in session");
+  }
+  try {
+    const user = await User.findOne({ fullName: username });
+    if (!user) {
+      console.log("User not found:", username);
+      return res.status(404).send("User not found");
     }
+    console.log("Displaying profile for user:", user);
+    res.render("userProfile", { user, page: "Profile" });
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).send("Server error");
+  }
 });
 
 // Edit profile page
-router.post('/:username/editProfile', (req, res) => {
-    upload(req, res, async (err) => {
-        if (err) {
-            // Handle Multer errors
-            if (err instanceof multer.MulterError) {
-                return res.status(400).send('File upload error: ' + err.message);
+router.post("/profile/edit", upload, async (req, res) => {
+  const username = req.session.username;
+  if (!username) {
+    return res.status(401).send("Unauthorized: No username in session");
+  }
+  const {
+    fullName,
+    gender,
+    age,
+    height,
+    weight,
+    bodyFat,
+    fitnessLevel,
+    workoutType,
+    fitnessGoals,
+    additionalInterests,
+    personalQuote,
+    instagram,
+    facebook,
+    twitter,
+  } = req.body;
+
+  try {
+    const user = await User.findOne({ fullName: username });
+    if (!user) {
+      console.log("User not found:", username);
+      return res.status(404).send("User not found");
+    }
+
+    // Handle profile picture upload to Cloudinary
+    if (req.files["profilePicture"]) {
+      const profilePicBuffer = req.files["profilePicture"][0].buffer;
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { folder: "profile_pictures" },
+          (error, result) => {
+            if (error) {
+              reject(error);
+            } else {
+              resolve(result);
             }
-            return res.status(500).send('Server error: ' + err.message);
-        }
+          }
+        );
+        uploadStream.end(profilePicBuffer);
+      });
+      user.profilePicture = result.secure_url;
+    }
 
-        const username = req.params.username;
-        const {
-            fullName, gender, age, height, weight, bodyFat,
-            fitnessLevel, workoutType, fitnessGoals,
-            additionalInterests, personalQuote
-        } = req.body;
-        const profilePicture = req.files['profilePicture'] ? req.files['profilePicture'][0].filename : null;
-        const photos = req.files['photos'] ? req.files['photos'].map(file => file.filename) : [];
+    // Update user details
+    user.fullName = fullName || user.fullName;
+    user.gender = gender || user.gender;
+    user.age = age || user.age;
+    user.height = height || user.height;
+    user.weight = weight || user.weight;
+    user.bodyFat = bodyFat || user.bodyFat;
+    user.fitnessLevel = fitnessLevel || user.fitnessLevel;
+    user.workoutType = workoutType || user.workoutType;
+    user.fitnessGoals = fitnessGoals || user.fitnessGoals;
+    user.additionalInterests = additionalInterests || user.additionalInterests;
+    user.personalQuote = personalQuote || user.personalQuote;
+    user.instagram = instagram || user.instagram;
+    user.facebook = facebook || user.facebook;
+    user.twitter = twitter || user.twitter;
 
-        console.log('Uploaded Profile Picture:', profilePicture);
-        console.log('Uploaded Photos:', photos);
-
-        try {
-            const user = await User.findOne({ username });
-            if (!user) {
-                console.log('User not found:', username);
-                return res.status(404).send('User not found');
-            }
-
-            user.fullName = fullName || user.fullName;
-            user.gender = gender || user.gender;
-            user.age = age || user.age;
-            user.height = height || user.height;
-            user.weight = weight || user.weight;
-            user.bodyFat = bodyFat || user.bodyFat;
-            user.fitnessLevel = fitnessLevel || user.fitnessLevel;
-            user.workoutType = workoutType || user.workoutType;
-            user.fitnessGoals = fitnessGoals || user.fitnessGoals;
-            user.additionalInterests = additionalInterests || user.additionalInterests;
-            user.personalQuote = personalQuote || user.personalQuote;
-            if (profilePicture) user.profilePicture = profilePicture;
-            if (photos.length) user.photos.push(...photos);
-
-            await user.save();
-            res.redirect(`/user/${username}`);
-        } catch (err) {
-            console.error('Server error:', err);
-            res.status(500).send('Server error');
-        }
-    });
+    await user.save();
+    res.redirect(`/user/profile`);
+  } catch (err) {
+    console.error("Server error:", err);
+    res.status(500).send("Server error");
+  }
 });
 
-// Delete photo
-router.post('/:username/deletePhoto', async (req, res) => {
-    const username = req.params.username;
-    const { photo } = req.body;
-
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
-        }
-
-        // Remove photo from user photos array
-        user.photos = user.photos.filter(p => p !== photo);
-        await user.save();
-
-        // Delete the photo file
-        fs.unlinkSync(path.join(__dirname, '../public/images', photo));
-
-        res.redirect(`/user/${username}`);
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
+router.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error("Failed to destroy session during logout:", err);
+      return res.status(500).send("Failed to log out");
     }
+    res.clearCookie("connect.sid", { path: "/" });
+    res.redirect("/");
+  });
 });
 
 module.exports = router;
