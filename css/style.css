@@ -129,10 +129,10 @@ a.text-black {
     display: none;
 }
 
-.card {
-    background-color: transparent;
-    /* or set to match your background color */
-    border: none;
-    /* Remove border if needed */
-    color: #FFFFFF;
+#botCard {
+    background-color: transparent; /* or set to match your background color */
+    border: none; /* Remove border if needed */
+}
+.form-check-label {
+    color: white; /* Adjust the text color as needed */
 }

@@ -2,28 +2,34 @@
 
 
     <div class="container mt-5 d-flex justify-content-center align-items-center">
-        <div class="card p-4" style="width: 100%; max-width: 600px;">
+        <div id="botCard" class="card p-4" style="width: 100%; max-width: 600px;">
+            <h1 class="mb-4 text-center">Recommended Exercises</h1>
             <form action="/bot/save" method="POST" class="form">
                 <input type="hidden" name="selectedExercises" id="selectedExercises">
                 <input type="hidden" name="generatedAt" id="generatedAt" value="<%= generatedAt.toISOString() %>">
 
                 <div class="form-group">
-                    <% recommendations.forEach(function(recommendation, index) { %>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                value='<%= JSON.stringify(recommendation) %>' id="exercise<%= index %>">
-                            <label class="form-check-label" for="exercise<%= index %>">
-                                <%= recommendation.name %>: <%= recommendation.repetitions %> reps
-                            </label>
-                        </div>
-                        <% }) %>
+                    <% if (recommendations.length> 0) { %>
+                        <% recommendations.forEach(function(recommendation, index) { %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    value='<%= JSON.stringify(recommendation) %>' id="exercise<%= index %>">
+                                <label class="form-check-label" for="exercise<%= index %>">
+                                    <%= recommendation.name %>: <%= recommendation.repetitions %> reps
+                                </label>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p class="text-center text-white">No exercises found. Please try generating again.
+                                    </p>
+                                    <% } %>
                 </div>
 
-                <div class="d-flex justify-content-around">
-                    <button type="button" class="btn btn-primary py-2" onclick="saveSelectedExercises()">Save Selected
+                <div class="d-flex justify-content-around mt-3">
+                    <button type="button" class="btn btn-primary" onclick="saveSelectedExercises()">Save Selected
                         Exercises</button>
-                    <a href="/bot" class="btn btn-secondary py-2">Back to Bot</a>
-                    <button type="button" class="btn btn-secondary py-2" onclick="regenerateWorkout()">Regenerate
+                    <a href="/bot" class="btn btn-secondary">Back to Bot</a>
+                    <button type="button" class="btn btn-secondary" onclick="regenerateWorkout()">Regenerate
                         Workout</button>
                 </div>
             </form>
