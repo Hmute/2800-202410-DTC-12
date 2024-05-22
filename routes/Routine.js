@@ -8,7 +8,8 @@ const workoutSchema = new mongoose.Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    completed: { type: Boolean, default: false } // Add completed field
 });
 
 const routineSchema = new mongoose.Schema({

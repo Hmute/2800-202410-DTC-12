@@ -1,7 +1,6 @@
 <%- include('templates/header') %>
     <div class="container mt-5 d-flex justify-content-center align-items-center">
         <div id="botCard" class="card p-4 bg-transparent" style="width: 100%; max-width: 600px;">
-            <h1 class="mb-4 text-center">Recommended Exercises</h1>
             <form action="/bot/generate" method="POST" class="form" id="regenerateForm">
                 <input type="hidden" name="goal" value="<%= data.goal %>">
                 <input type="hidden" name="method" value="<%= data.method %>">
@@ -31,16 +30,24 @@
                                     <% } %>
                 </div>
 
-                <div class="d-flex justify-content-around mt-3">
-                    <button type="button" class="btn btn-primary" onclick="saveSelectedExercises()">Save Selected
-                        Exercises</button>
-                    <a href="/bot" class="btn btn-secondary">Back to Bot</a>
-                    <button type="button" class="btn btn-secondary" onclick="regenerateWorkout()">Regenerate
-                        Workout</button>
+                <div class="form-group d-flex flex-column align-items-center mt-3">
+                    <button type="button" class="btn btn-primary mb-2" id="save-button"
+                        onclick="saveSelectedExercises()">Save Selected Exercises</button>
+                    <span id="warning-message" class="text-danger small" style="display: none;">Please select at least
+                        one exercise.</span>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <div class="btn-group" role="group" style="width: 100%;">
+                        <a href="/bot" class="btn btn-secondary" style="flex: 1;">Back to Bot</a>
+                        <button type="button" class="btn btn-secondary" style="flex: 1;"
+                            onclick="regenerateWorkout()">Regenerate Workout</button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
+
     <script src="/script/botResults.js"></script>
 
     <%- include('templates/footer') %>

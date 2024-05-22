@@ -1,8 +1,6 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const saved = urlParams.get('saved');
-
-    if (saved === 'true') {
+document.addEventListener('DOMContentLoaded', function () {
+    const savedModal = document.getElementById('savedModal');
+    if (savedModal) {
         $('#savedModal').modal('show');
     }
 });

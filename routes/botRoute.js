@@ -68,12 +68,13 @@ async function getWorkoutRecommendations(data) {
       const repetitions = calculateRepetitions(level, daysCount, time);
       const sets = calculateSets(level); // Calculate sets based on level
 
-      // Include exercise names, repetitions, and sets
+      // Include exercise names, repetitions, sets, and completed status
       return selectedExercises.map(exercise => ({
         name: exercise.name,
         repetitions: repetitions,
         sets: sets,
-        date: new Date() // Set the date to the current date
+        date: new Date(), // Set the date to the current date
+        completed: false // Set completed to false initially
       }));
     } else {
       throw new Error('Invalid response structure from WGER API');
@@ -156,7 +157,6 @@ function shuffleArray(array) {
   return array;
 }
 
-// Handle form submission for saving selected exercises
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
   const userId = req.session.userId; // Ensure userId is set in the session
@@ -164,6 +164,11 @@ router.post('/save', async (req, res) => {
   if (!userId) {
     console.error('User ID not found in session');
     return res.status(400).send('User ID not found in session');
+  }
+
+  if (!selectedExercises || JSON.parse(selectedExercises).length === 0) {
+    console.error('No exercises selected');
+    return res.status(400).send('No exercises selected');
   }
 
   try {
@@ -177,7 +182,10 @@ router.post('/save', async (req, res) => {
 
     const routine = new Routine({
       user: userId,
-      exercises: exercises
+      exercises: exercises.map(exercise => ({
+        ...exercise,
+        completed: false // Ensure completed is set to false initially
+      }))
     });
 
     await routine.save();
