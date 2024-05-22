@@ -1,7 +1,7 @@
 .easter-egg {
     position: absolute;
-    width: 70px;
-    height: 70px;
+    width: 70px; /* Original width */
+    height: 70px; /* Original height */
     border-radius: 50%; /* Make images round */
     padding: 10px;
     box-sizing: border-box;
