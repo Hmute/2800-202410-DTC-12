@@ -65,6 +65,9 @@ mongoose.connect(mongoUri, {
   const botRoute = require('./routes/botRoute');
   const userProfileRoute = require('./routes/userProfileRoute');
   const weightRoute = require('./routes/weightRoute');
+  const logExerciseRoute = require('./routes/logExerciseRoute');
+  const homeRoute = require('./routes/homeRoute');
+  const addFoodRoute = require('./routes/addFoodRoute');
 
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
   app.use('/', launchRoute);
@@ -74,12 +77,9 @@ mongoose.connect(mongoUri, {
   app.use('/bot', botRoute);
   app.use('/user', userProfileRoute);
   app.use('/weight', weightRoute);
-
-  app.get('/home', (req, res) => {
-    const { saved } = req.query;
-    const user = req.session.user;
-    res.render('home', { user, page: 'Home', saved });
-  });
+  app.use('/logExercise', logExerciseRoute);
+  app.use('/home', homeRoute);
+  app.use('/addFood', addFoodRoute);
 
   // Sign-out route
   app.post('/logout', (req, res) => {

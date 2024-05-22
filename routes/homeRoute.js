@@ -1,8 +1,10 @@
 const express = require('express');
-const app = express();
-const ejs = require('ejs'); // need to import because it's 'require' (npm i ejs)
-app.set('view engine', 'ejs');
+const router = express.Router();
 
-app.get('/homepage', (req, res) => {
-    res.render('homepage');
+router.get('/', (req, res) => {
+  const { saved } = req.query;
+  const user = req.session.user;
+  res.render('home', { user, page: 'Home', saved });
 });
+
+module.exports = router;
