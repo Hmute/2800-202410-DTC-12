@@ -3,6 +3,7 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Workout = require('../routes/Workout');
+const User = require('../routes/User');
 
 const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .env file
 
@@ -104,14 +105,10 @@ function getEquipmentBasedOnType(type) {
 }
 
 function calculateRepetitions(level, days, time) {
-  // Convert time to a number and log it for debugging
-  const timeNumber = parseInt(time, 10);
-  console.log('Days (number):', days);
-  console.log('Time (number):', timeNumber);
+  const timeNumber = parseInt(time, 10) || 30; // Default to 30 minutes if time is not a number
+  const daysNumber = parseInt(days, 10) || 1; // Default to 1 day if days is not a number
 
-  if (isNaN(days) || isNaN(timeNumber)) {
-    time = 30; // Default to 30 minutes if time is not a number
-    days = 1; // Default to 1 day if days is not a number
+  if (isNaN(daysNumber) || isNaN(timeNumber)) {
     console.error('Invalid days or time value');
     return 'Invalid input';
   }
@@ -131,11 +128,9 @@ function calculateRepetitions(level, days, time) {
       baseReps = 10;
   }
 
-  const dayFactor = days / 7; // Normalizing days to a factor of 1
+  const dayFactor = daysNumber / 7; // Normalizing days to a factor of 1
   const timeFactor = timeNumber / 30; // Assuming time is in minutes, normalized to 30 minutes
 
-  // Calculate repetitions based on level, days, and time
-  
   const repetitions = Math.round(baseReps * dayFactor * timeFactor);
   return repetitions;
 }
@@ -143,18 +138,34 @@ function calculateRepetitions(level, days, time) {
 // Handle form submission for saving selected exercises
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
-  const userId = req.session.userId; // Assuming you have user sessions
+  const userId = req.session.userId; // Ensure userId is set in the session
+
+  if (!userId) {
+    console.error('User ID not found in session');
+    return res.status(400).send('User ID not found in session');
+  }
 
   try {
+    const user = await User.findById(userId);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).send('User not found');
+    }
+
     const exercises = JSON.parse(selectedExercises);
+    const workoutIds = [];
 
     for (const exercise of exercises) {
-      await Workout.create({
+      const workout = await Workout.create({
         name: exercise.name,
         repetitions: exercise.repetitions,
         user: userId
       });
+      workoutIds.push(workout._id);
     }
+
+    user.workouts.push(...workoutIds);
+    await user.save();
 
     res.send('Workout saved successfully!');
   } catch (error) {
