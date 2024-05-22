@@ -9,7 +9,7 @@ const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .en
 
 // Render the initial form page
 router.get('/', (req, res) => {
-  res.render('botInitial', { page: 'Workout Settings' });
+  res.render('botInitial', { page: 'Fitness Planner' });
 });
 
 // Handle form submission and generate workout recommendations

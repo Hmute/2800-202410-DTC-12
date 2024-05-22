@@ -1,7 +1,7 @@
-
 body {
     background-color: #393E46;
     color: #EEEEEE;
+    padding-bottom: 60px;
 }
 
 .header {
@@ -22,6 +22,7 @@ body {
     position: fixed;
     z-index: 1000;
     width: 100%;
+    height:7%;
 }
 
 .nav-icon {
@@ -75,6 +76,10 @@ a.text-black {
     color: #FFFFFF;
 }
 
-body {
-    padding-bottom: 50px;
+.active-nav {
+    color: rgb(255, 8, 0);
+}
+
+.active-nav .nav-icon {
+    color: rgb(255, 38, 0);
 }

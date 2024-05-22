@@ -3,6 +3,24 @@ document.addEventListener("DOMContentLoaded", function () {
   const generateLink = document.getElementById("botpage");
   const messagesLink = document.getElementById("blogpage");
   const profileLink = document.getElementById("profilepage");
+  const links = document.querySelectorAll(".bottom-nav .nav-link");
+
+  function handleLinkClick(event) {
+    links.forEach((link) => link.classList.remove("active-nav"));
+
+    event.currentTarget.classList.add("active-nav");
+  }
+
+  links.forEach((link) => {
+    link.addEventListener("click", handleLinkClick);
+  });
+
+  const currentPath = window.location.pathname;
+  links.forEach((link) => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("active-nav");
+    }
+  });
 
   homeLink.addEventListener("click", function () {
     handleHomeClick();
