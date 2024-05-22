@@ -1,8 +1,14 @@
+const { date } = require('joi');
 const mongoose = require('mongoose');
 
 const workoutSchema = new mongoose.Schema({
     name: String,
     repetitions: Number,
+    sets: Number,
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 const routineSchema = new mongoose.Schema({

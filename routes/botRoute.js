@@ -2,14 +2,14 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const router = express.Router();
-const Routine = require('../routes/routine'); // Ensure this refers to the correct model file
+const Routine = require('../routes/Routine'); // Ensure this refers to the correct model file
 const User = require('../routes/User');
 
 const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .env file
 
 // Render the initial form page
 router.get('/', (req, res) => {
-  res.render('botInitial', { page: 'Fitness Planner' });
+  res.render('botInitial', { page: 'Workout Settings' });
 });
 
 // Handle form submission and generate workout recommendations
@@ -38,7 +38,7 @@ async function getWorkoutRecommendations(data) {
   console.log('Days count:', daysCount);
 
   try {
-    // Fetch exercises based on the user settings
+    // Fetch a larger set of exercises based on the user settings
     const response = await axios.get('https://wger.de/api/v2/exerciseinfo/', {
       headers: {
         'Authorization': `Token ${WGER_API_KEY}`
@@ -46,7 +46,7 @@ async function getWorkoutRecommendations(data) {
       params: {
         category: getCategoryBasedOnGoal(goal),
         equipment: getEquipmentBasedOnType(type),
-        limit: 200 // Fetch more exercises for better randomness
+        limit: 500 // Fetch even more exercises for better randomness
       }
     });
 
@@ -58,22 +58,22 @@ async function getWorkoutRecommendations(data) {
         exercise.language && exercise.language.id === 2
       );
 
-      // Use the Fisher-Yates shuffle algorithm to randomize the array
-      for (let i = englishExercises.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [englishExercises[i], englishExercises[j]] = [englishExercises[j], englishExercises[i]];
-      }
+      // Shuffle the exercises
+      const shuffledExercises = shuffleArray(englishExercises);
 
-      // Limit to 10 exercises
-      const selectedExercises = englishExercises.slice(0, 10);
+      // Select a subset of exercises
+      const selectedExercises = shuffledExercises.slice(0, 10);
 
       // Calculate repetitions based on level, days, and time
       const repetitions = calculateRepetitions(level, daysCount, time);
+      const sets = calculateSets(level); // Calculate sets based on level
 
-      // Include exercise names and repetitions
+      // Include exercise names, repetitions, and sets
       return selectedExercises.map(exercise => ({
         name: exercise.name,
-        repetitions: repetitions
+        repetitions: repetitions,
+        sets: sets,
+        date: new Date() // Set the date to the current date
       }));
     } else {
       throw new Error('Invalid response structure from WGER API');
@@ -133,6 +133,27 @@ function calculateRepetitions(level, days, time) {
 
   const repetitions = Math.round(baseReps * dayFactor * timeFactor);
   return repetitions;
+}
+
+function calculateSets(level) {
+  switch (level) {
+    case 'Beginner':
+      return 3;
+    case 'Intermediate':
+      return 4;
+    case 'Advanced':
+      return 5;
+    default:
+      return 3;
+  }
+}
+
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 // Handle form submission for saving selected exercises

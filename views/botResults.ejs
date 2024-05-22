@@ -1,8 +1,15 @@
 <%- include('templates/header') %>
     <div class="container mt-5 d-flex justify-content-center align-items-center">
-        <div id="botCard" class="card p-4" style="width: 100%; max-width: 600px;">
+        <div id="botCard" class="card p-4 bg-transparent" style="width: 100%; max-width: 600px;">
             <h1 class="mb-4 text-center">Recommended Exercises</h1>
-            <form action="/bot/save" method="POST" class="form">
+            <form action="/bot/generate" method="POST" class="form" id="regenerateForm">
+                <input type="hidden" name="goal" value="<%= data.goal %>">
+                <input type="hidden" name="method" value="<%= data.method %>">
+                <input type="hidden" name="type" value="<%= data.type %>">
+                <input type="hidden" name="level" value="<%= data.level %>">
+                <input type="hidden" name="days" value="<%= data.days %>">
+                <input type="hidden" name="time" value="<%= data.time %>">
+
                 <input type="hidden" name="selectedExercises" id="selectedExercises">
                 <input type="hidden" name="generatedAt" id="generatedAt" value="<%= generatedAt.toISOString() %>">
 
@@ -13,7 +20,8 @@
                                 <input class="form-check-input" type="checkbox"
                                     value='<%= JSON.stringify(recommendation) %>' id="exercise-<%= index %>">
                                 <label class="form-check-label" for="exercise-<%= index %>">
-                                    <%= recommendation.name %>: <%= recommendation.repetitions %> reps
+                                    <%= recommendation.name %>: <%= recommendation.repetitions %> reps, <%=
+                                                recommendation.sets %> sets, <%= recommendation.date.toDateString() %>
                                 </label>
                             </div>
                             <% }) %>
@@ -33,9 +41,6 @@
             </form>
         </div>
     </div>
-
-    <script src="/script/botResults.js"></script>
-
     <script src="/script/botResults.js"></script>
 
     <%- include('templates/footer') %>

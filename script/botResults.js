@@ -8,15 +8,6 @@ function saveSelectedExercises() {
 }
 
 function regenerateWorkout() {
-    const form = document.querySelector('form');
-    form.action = '/bot/generate';
-    form.method = 'POST';
-
-    const generatedAtInput = document.createElement('input');
-    generatedAtInput.type = 'hidden';
-    generatedAtInput.name = 'generatedAt';
-    generatedAtInput.value = new Date().toISOString();
-    form.appendChild(generatedAtInput);
-
-    form.submit();
+    document.getElementById('regenerateForm').action = '/bot/generate';
+    document.getElementById('regenerateForm').submit();
 }
