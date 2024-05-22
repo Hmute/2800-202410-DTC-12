@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
     resetPasswordToken: String,
     resetPasswordExpires: Date,
 
-    workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Workout' }] // Reference to Workout model
+    routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }] // Reference to Routine model
 });
 
 // Pre-save middleware to hash passwords before saving

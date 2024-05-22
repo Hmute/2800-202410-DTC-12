@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const router = express.Router();
-const Workout = require('../routes/Workout');
+const Routine = require('../routes/routine'); // Ensure this refers to the correct model file
 const User = require('../routes/User');
 
 const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .env file
@@ -135,6 +135,7 @@ function calculateRepetitions(level, days, time) {
   return repetitions;
 }
 
+// Handle form submission for saving selected exercises
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
   const userId = req.session.userId; // Ensure userId is set in the session
@@ -152,18 +153,19 @@ router.post('/save', async (req, res) => {
     }
 
     const exercises = JSON.parse(selectedExercises);
-    const workoutIds = [];
 
-    for (const exercise of exercises) {
-      const workout = await Workout.create({
-        name: exercise.name,
-        repetitions: exercise.repetitions,
-        user: userId
-      });
-      workoutIds.push(workout._id);
+    const routine = new Routine({
+      user: userId,
+      exercises: exercises
+    });
+
+    await routine.save();
+
+    if (!user.routines) {
+      user.routines = [];
     }
 
-    user.workouts.push(...workoutIds);
+    user.routines.push(routine._id);
     await user.save();
 
     res.redirect('/home?saved=true'); // Redirect to home with query parameter
@@ -172,4 +174,5 @@ router.post('/save', async (req, res) => {
     res.status(500).send('Error saving workout');
   }
 });
+
 module.exports = router;
