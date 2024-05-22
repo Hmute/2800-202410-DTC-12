@@ -1,20 +1,22 @@
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
 
-const WorkoutSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  repetitions: {
-    type: Number,
-    required: true,
-  },
+const workoutSchema = new mongoose.Schema({
+  name: String,
+  repetitions: Number,
+});
+
+const routineSchema = new mongoose.Schema({
   user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User', // assuming you have a User model
-    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  name: String, // You can also add a name for the routine
+  exercises: [workoutSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 });
 
-module.exports = mongoose.model('Workout', WorkoutSchema);
+module.exports = mongoose.model('Routine', routineSchema);

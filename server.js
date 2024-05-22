@@ -52,8 +52,8 @@ mongoose.connect(mongoUri, {
 
   // Middleware to make user available in all templates (must be after session middleware)
   app.use((req, res, next) => {
-      res.locals.user = req.session.user || null;
-      next();
+    res.locals.user = req.session.user || null;
+    next();
   });
 
   // Routes
@@ -76,8 +76,9 @@ mongoose.connect(mongoUri, {
   app.use('/weight', weightRoute);
 
   app.get('/home', (req, res) => {
+    const { saved } = req.query;
     const user = req.session.user;
-    res.render('home', { user, page: 'Home' });
+    res.render('home', { user, page: 'Home', saved });
   });
 
   // Sign-out route
