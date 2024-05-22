@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             weightData = data.weights;
             startWeight.textContent = data.startingWeight + ' kg';
             currentWeight.textContent = data.currentWeight + ' kg';
-            progress.textContent = (data.currentWeight - data.startingWeight).toFixed(2) + ' kg';
+            progress.textContent = data.progress + ' kg';
             updateUI();
             renderGraph();
         } else {

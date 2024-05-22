@@ -32,9 +32,13 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
   const userId = req.session.userId;
   try {
     const user = await User.findById(userId);
-    const startingWeight = user.startWeight ? parseFloat(user.startWeight) : null;
+    let startingWeight = parseFloat(user.startWeight) || null;
 
     const weightDataKg = await Weight.find({ userId }).sort({ date: 1 }).exec();
+
+    if (!startingWeight && weightDataKg.length > 0) {
+      startingWeight = weightDataKg[0].weightKg;
+    }
 
     const currentWeight = weightDataKg.length > 0 ? weightDataKg[weightDataKg.length - 1].weightKg : startingWeight;
     const progress = startingWeight && currentWeight ? currentWeight - startingWeight : 0;
@@ -43,10 +47,10 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
       startingWeight: startingWeight ? startingWeight.toFixed(2) : 'N/A',
       currentWeight: currentWeight ? currentWeight.toFixed(2) : 'N/A',
       progress: progress ? progress.toFixed(2) : 'N/A',
-      weights: weightDataKg.map((entry, index, array) => ({
+      weights: weightDataKg.map((entry, index) => ({
         ...entry.toObject(),
         weightKg: entry.weightKg.toFixed(2),
-        change: index === 0 ? 0 : calculateChange(array[index - 1].weightKg, entry.weightKg)
+        change: index === 0 && startingWeight ? calculateChange(startingWeight, entry.weightKg) : index === 0 ? 0 : calculateChange(weightDataKg[index - 1].weightKg, entry.weightKg)
       }))
     });
   } catch (error) {
@@ -64,23 +68,17 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
     const normalizedDate = new Date(date);
     normalizedDate.setHours(0, 0, 0, 0);
 
-    const user = await User.findById(userId);
-    let startWeight = user.startWeight;
-
-    if (!startWeight) {
-      startWeight = weightInKg;
-      await User.findByIdAndUpdate(userId, { weight: weightInKg, startWeight: weightInKg });
-    } else if (!user.weight) {
-      await User.findByIdAndUpdate(userId, { weight: weightInKg });
-    } else {
-      await User.findByIdAndUpdate(userId, { weight: weightInKg });
-    }
-
     const updatedWeightEntry = await Weight.findOneAndUpdate(
       { userId, date: normalizedDate },
       { $set: { weightKg: weightInKg } },
       { new: true, upsert: true }
     );
+
+    const user = await User.findById(userId);
+    if (!user.startWeight) {
+      await User.findByIdAndUpdate(userId, { startWeight: weightInKg });
+    }
+    await User.findByIdAndUpdate(userId, { weight: weightInKg });
 
     res.status(201).send(updatedWeightEntry);
   } catch (error) {
