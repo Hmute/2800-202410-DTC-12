@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const User = require("./User"); // Ensure the correct path to the User model
+const User = require("./User");
 const bcrypt = require("bcrypt");
 
 // GET: Display login form
