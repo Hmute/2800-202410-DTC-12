@@ -135,7 +135,6 @@ function calculateRepetitions(level, days, time) {
   return repetitions;
 }
 
-// Handle form submission for saving selected exercises
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
   const userId = req.session.userId; // Ensure userId is set in the session
@@ -167,11 +166,10 @@ router.post('/save', async (req, res) => {
     user.workouts.push(...workoutIds);
     await user.save();
 
-    res.send('Workout saved successfully!');
+    res.redirect('/home?saved=true'); // Redirect to home with query parameter
   } catch (error) {
     console.error('Error saving workout:', error);
     res.status(500).send('Error saving workout');
   }
 });
-
 module.exports = router;
