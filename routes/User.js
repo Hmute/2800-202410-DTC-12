@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         trim: true,
         lowercase: true,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/i.test(v);
             },
             message: 'Please enter a valid email address'
@@ -38,11 +38,13 @@ const userSchema = new mongoose.Schema({
     profilePicture: String,
     photos: [String],
     resetPasswordToken: String,
-    resetPasswordExpires: Date
+    resetPasswordExpires: Date,
+
+    workouts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Workout' }] // Reference to Workout model
 });
 
 // Pre-save middleware to hash passwords before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
     if (this.isModified('password') && !this.skipHashing) {
         try {
             const salt = await bcrypt.genSalt(10);

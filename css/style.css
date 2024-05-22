@@ -1,3 +1,4 @@
+
 body {
     background-color: #393E46;
     color: #EEEEEE;
@@ -17,7 +18,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    position:sticky;
+    position: sticky;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
 }
 
 .nav-icon {
@@ -55,10 +59,6 @@ body {
     color: white;
 }
 
-.card-body.exercise {
-    background-color: #3E3F48;
-}
-
 .list-group-item {
     background-color: #3E3F48;
     color: white;
@@ -66,6 +66,14 @@ body {
 
 a.text-black {
     color: white !important;
+}
+
+.card {
+    background-color: transparent;
+    /* or set to match your background color */
+    border: none;
+    /* Remove border if needed */
+    color: #FFFFFF;
 }
 
 /** Exercise card **/
