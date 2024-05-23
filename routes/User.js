@@ -55,7 +55,8 @@ const userSchema = new mongoose.Schema({
     twitter: String,
     profilePictureEtag: String,
 
-    routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }] // Reference to Routine model
+    routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }], // Reference to Routine model
+    weightGoal: { type: Number, required: false }
 });
 
 userSchema.pre('save', async function (next) {
