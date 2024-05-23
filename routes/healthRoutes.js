@@ -95,7 +95,7 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
     const goalFats = (goalCalories * 0.30) / 9; // 30% of calories from fats, 9 cal per gram
 
     res.render('macroProgression', {
-      page: 'Calories',
+      page: 'Nutrition',
       macros: [], 
       goalCalories,
       consumedCalories,
