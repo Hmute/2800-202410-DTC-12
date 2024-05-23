@@ -1,15 +1,14 @@
 <%- include('templates/header') %>
 <h1>Calories</h1>
-<div class="calories">
-  <div>Goal: <span><%= goalCalories %></span></div>
-  <div>Consumed: <span><%= consumedCalories %></span></div>
-  <div>Remaining: <span><%= remainingCalories %></span></div>
+<div>
+  <p>Goal: <%= goalCalories.toFixed(0) %></p>
+  <p>Consumed: <%= consumedCalories.toFixed(0) %></p>
+  <p>Remaining: <%= remainingCalories.toFixed(0) %></p>
 </div>
 <h2>Nutrients</h2>
-<div class="nutrients">
-  <div>Protein: <span><%= totalProtein %> g</span></div>
-  <div>Carbohydrate: <span><%= totalCarbs %> g</span></div>
-  <div>Fat: <span><%= totalFats %> g</span></div>
+<div>
+  <p>Protein: <%= totalProtein.toFixed(1) %> / <%= goalProtein.toFixed(1) %> g</p>
+  <p>Carbohydrate: <%= totalCarbs.toFixed(1) %> / <%= goalCarbs.toFixed(1) %> g</p>
+  <p>Fat: <%= totalFats.toFixed(1) %> / <%= goalFats.toFixed(1) %> g</p>
 </div>
 <%- include('templates/footer') %>
-

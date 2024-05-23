@@ -74,27 +74,20 @@ const checkWeightGoal = async (req, res, next) => {
   next();
 };
 
-// Route to render the macro progression page
+// Route to macro progression page
 router.get('/macroProgression', checkWeightGoal, async (req, res) => {
   try {
     const userId = req.session.user._id;
     const user = await User.findById(userId);
-    const macros = await DailyMacro.find({ userId }).sort({ date: -1 }).limit(30); 
 
-    let totalCalories = 0;
+    // Default values when no meals have been logged
+    let consumedCalories = 0;
     let totalProtein = 0;
     let totalCarbs = 0;
     let totalFats = 0;
 
-    macros.forEach(macro => {
-      totalCalories += macro.calories;
-      totalProtein += macro.protein;
-      totalCarbs += macro.carbs;
-      totalFats += macro.fats;
-    });
-
+    // Calculate the goal based on the user's calorie goal
     const goalCalories = user.calorieGoal || 2500; 
-    const consumedCalories = totalCalories;
     const remainingCalories = goalCalories - consumedCalories;
 
     const goalProtein = (goalCalories * 0.30) / 4; // 30% of calories from protein, 4 cal per gram
@@ -103,7 +96,7 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
 
     res.render('macroProgression', {
       page: 'Calories',
-      macros,
+      macros: [], 
       goalCalories,
       consumedCalories,
       remainingCalories,
@@ -119,6 +112,7 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 // Route to fetch nutritional info and add food entry from spoonacular api
 const getNutritionalInfo = async (foodItems) => {
