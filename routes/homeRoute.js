@@ -8,13 +8,11 @@ router.get('/', async (req, res) => {
     const user = req.session.user;
 
     try {
-        // Fetch routines for the logged-in user from the 'test' database
         const myDatabase = mongoose.connection.useDb('test');
         const Routines = myDatabase.model('Routine', Routine.schema);
         const routines = await Routines.find({ user: user._id });
 
-        // Render the homeBot view with the fetched routines
-        res.render('homeBot', { user, page: 'Home', saved, routines });
+        res.render('home', { user, page: 'Home', saved, routines });
     } catch (err) {
         console.error('Error fetching routines:', err);
         res.status(500).send('An error occurred');
