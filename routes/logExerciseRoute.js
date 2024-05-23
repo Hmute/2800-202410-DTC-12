@@ -1,57 +1,94 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const isAuthenticated = require('../middlewares/blogMiddlewares'); 
+const isAuthenticated = require('../middlewares/blogMiddlewares');
 
-// Assuming your Mongoose model is defined like this (adjust the schema as needed):
 const Workout = mongoose.model('Workout', {
     exercise: String,
     sets: Number,
     reps: Number,
     weight: Number,
-    complete: String // You can use Boolean too
+    complete: String,
 });
 
-// GET route to render logExercise.ejs (unchanged)
-router.get('/', isAuthenticated, (req, res) => {
-    res.render('logExercise', { user: req.session.user, page: 'Log Exercise' });
-});
-
-// POST route to handle form submission and save data to MongoDB
-router.post('/', isAuthenticated, async (req, res) => {
+router.get('/', isAuthenticated, async (req, res) => {
     try {
-        // 1. Get database and Model
         const myDatabase = mongoose.connection.useDb('test');
         const ExerciseLogs = myDatabase.model('ExerciseLogs', Workout.schema);
 
-        // 2. Get the form data (adjusting keys as needed to match your form fields)
-        const { exercise, sets, reps, weight, complete } = req.body;
+        const exerciseLogs = await ExerciseLogs.find({});
 
-        // 3. Optional: Validate the data
-        // (e.g., check if all fields are present and have valid types)
-        if (!exercise || !sets || !reps || !weight || !complete) {
-            return res.status(400).send('All fields are required');
-        }
-
-        // 4. Create a new workout document
-        const newExerciseLog = new ExerciseLogs({
-            exercise,
-            sets,
-            reps,
-            weight,
-            complete
-        });
-
-        // 5. Save the workout to the database
-        await newExerciseLog.save();
-
-        // 6. Send a response
-        res.redirect('/logExercise'); 
+        res.render('logExercise', { user: req.session.user, page: 'Log Exercise', exerciseLogs });
     } catch (err) {
-        console.error('Error saving exercise log:', err);
+        console.error('Error fetching exercise logs:', err);
         res.status(500).send('An error occurred');
     }
 });
 
-module.exports = router;
+router.post('/', isAuthenticated, async (req, res) => {
+    try {
+        const myDatabase = mongoose.connection.useDb('test');
+        const ExerciseLogs = myDatabase.model('ExerciseLogs', Workout.schema);
 
+        const { exercise, sets, reps, weight, complete } = req.body;
+
+        if (!exercise || !sets || !reps || !weight || !complete) {
+            return res.status(400).json({ error: 'All fields are required' });
+        }
+
+        const newExerciseLog = new ExerciseLogs({ exercise, sets, reps, weight, complete });
+        await newExerciseLog.save();
+
+        res.status(201).json(newExerciseLog);
+    } catch (err) {
+        console.error('Error saving exercise log:', err);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+router.put('/:id', isAuthenticated, async (req, res) => {
+    try {
+        const myDatabase = mongoose.connection.useDb('test');
+        const ExerciseLogs = myDatabase.model('ExerciseLogs', Workout.schema);
+
+        const { id } = req.params;
+        const { exercise, sets, reps, weight, complete } = req.body;
+
+        const updatedExerciseLog = await ExerciseLogs.findByIdAndUpdate(
+            id,
+            { exercise, sets, reps, weight, complete },
+            { new: true }
+        );
+
+        if (!updatedExerciseLog) {
+            return res.status(404).json({ error: 'Exercise log not found' });
+        }
+
+        res.status(200).json(updatedExerciseLog);
+    } catch (err) {
+        console.error('Error updating exercise log:', err);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+router.delete('/:id', isAuthenticated, async (req, res) => {
+    try {
+        const myDatabase = mongoose.connection.useDb('test');
+        const ExerciseLogs = myDatabase.model('ExerciseLogs', Workout.schema);
+
+        const { id } = req.params;
+
+        const deletedExerciseLog = await ExerciseLogs.findByIdAndDelete(id);
+
+        if (!deletedExerciseLog) {
+            return res.status(404).json({ error: 'Exercise log not found' });
+        }
+
+        res.sendStatus(200);
+    } catch (err) {
+        console.error('Error deleting exercise log:', err);
+        res.status(500).json({ error: 'An error occurred' });
+    }
+});
+
+module.exports = router;
