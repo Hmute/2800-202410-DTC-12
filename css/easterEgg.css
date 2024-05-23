@@ -36,12 +36,12 @@
 }
 
 .easter-egg:nth-child(even) {
-    --glow-color: #7512cc;
+    --glow-color: #fefdfc;
 }
 
 .robot {
     position: absolute;
-    width: 25%;
+    width: 30%;
     height: auto;
     top: 50%;
     left: 50%;
