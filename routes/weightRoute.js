@@ -36,12 +36,22 @@ router.get('/weight-data', authMiddleware, async (req, res) => {
 
     const weightDataKg = await Weight.find({ userId }).sort({ date: 1 }).exec();
 
-    if (!startingWeight && weightDataKg.length > 0) {
+    // If there are no weight logs and user weight exists, set startingWeight to user's weight
+    if (!weightDataKg.length && user.weight) {
+      startingWeight = parseFloat(user.weight);
+
+      // Add the startWeight to the user collection
+      await User.findByIdAndUpdate(userId, { startWeight: startingWeight });
+    } else if (!startingWeight && weightDataKg.length > 0) {
       startingWeight = weightDataKg[0].weightKg;
     }
 
     const currentWeight = weightDataKg.length > 0 ? weightDataKg[weightDataKg.length - 1].weightKg : startingWeight;
     const progress = startingWeight && currentWeight ? currentWeight - startingWeight : 0;
+
+    console.log('Starting Weight:', startingWeight);
+    console.log('Current Weight:', currentWeight);
+    console.log('Progress:', progress);
 
     res.json({
       startingWeight: startingWeight ? startingWeight.toFixed(2) : 'N/A',
@@ -75,9 +85,16 @@ router.post('/weight-data', authMiddleware, async (req, res) => {
     );
 
     const user = await User.findById(userId);
+
+    // Set startWeight only if it doesn't exist
     if (!user.startWeight) {
+      console.log('Setting start weight:', weightInKg);
       await User.findByIdAndUpdate(userId, { startWeight: weightInKg });
+    } else {
+      console.log('Start weight already set:', user.startWeight);
     }
+
+    // Update current weight
     await User.findByIdAndUpdate(userId, { weight: weightInKg });
 
     res.status(201).send(updatedWeightEntry);

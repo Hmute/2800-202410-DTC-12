@@ -56,6 +56,7 @@ const userSchema = new mongoose.Schema({
     profilePictureEtag: String,
 
     routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }], // Reference to Routine model
+    startWeight: { type: Number, default: null },
     weightGoal: Number,
     calorieGoal: Number,
     goalTimeframe: Number
