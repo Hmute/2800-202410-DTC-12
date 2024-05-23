@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <input type="number" name="weight" value="">
                 </div>
                 <div class="form-group">
-                    <label for="time">Time (sec):</label>
+                    <label for="time">Time (minute):</label>
                     <input type="number" name="time" value="">
                 </div>
                 <div class="form-group">

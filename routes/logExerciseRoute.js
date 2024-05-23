@@ -12,7 +12,7 @@ const RoutineSchema = new mongoose.Schema({
             repetitions: { type: Number, required: true },
             sets: { type: Number, default: 0 },
             weight: { type: Number, default: 0 },
-            time: { type: Number, default: 0 }, // in seconds
+            time: { type: Number, default: 0 }, 
             completion: { type: String, enum: ['Yes', 'No'], default: 'No' },
         },
     ],
@@ -48,8 +48,8 @@ router.post('/', isAuthenticated, async (req, res) => {
 
         const { name, repetitions, sets, weight, time, completion } = req.body;
 
-        if (!name || repetitions === undefined) {
-            return res.status(400).json({ error: 'Name and repetitions are required' });
+        if (!name) {
+            return res.status(400).json({ error: 'Name is required' });
         }
 
         const routine = await Routines.findOne({ user: req.session.user._id });
@@ -109,34 +109,29 @@ router.put('/:id', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     }
 });
-
 router.delete('/:id', isAuthenticated, async (req, res) => {
     try {
         const myDatabase = mongoose.connection.useDb('test');
-        const Routines = myDatabase.model('Routine', RoutineSchema);
-
         const { id } = req.params;
 
-        const routine = await Routines.findOne({ user: req.session.user._id });
-
+        const routine = await Routine.findOne({ user: req.session.user._id });
         if (!routine) {
             return res.status(404).json({ error: 'Routine not found' });
         }
+        
+        // Update to remove the exercise with the specified ID
+        await Routine.findOneAndUpdate(
+            { _id: routine._id },
+            { $pull: { exercises: { _id: id } } }
+        );
 
-        const exercise = routine.exercises.id(id);
 
-        if (!exercise) {
-            return res.status(404).json({ error: 'Exercise not found' });
-        }
-
-        exercise.remove();
-        await routine.save();
-
-        res.sendStatus(200);
+        res.sendStatus(200); 
     } catch (err) {
         console.error('Error deleting exercise:', err);
-        res.status(500).json({ error: 'An error occurred' });
+        res.status(500).json({ error: 'Failed to delete exercise' });
     }
 });
+
 
 module.exports = router;
