@@ -33,8 +33,8 @@ const userSchema = new mongoose.Schema({
     },
     gender: String,
     age: Number,
-    height: String,
-    weight: String,
+    height: Number,
+    weight: Number,
     bodyFat: String,
     fitnessLevel: String,
     workoutType: String,
@@ -56,7 +56,9 @@ const userSchema = new mongoose.Schema({
     profilePictureEtag: String,
 
     routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }], // Reference to Routine model
-    weightGoal: { type: Number, required: false }
+    weightGoal: Number,
+    calorieGoal: Number,
+    goalTimeframe: Number
 });
 
 userSchema.pre('save', async function (next) {

@@ -68,6 +68,8 @@ mongoose.connect(mongoUri, {
   const logExerciseRoute = require('./routes/logExerciseRoute');
   const homeRoute = require('./routes/homeRoute');
   const addFoodRoute = require('./routes/addFoodRoute');
+  const healthRoutes = require('./routes/healthRoutes');
+  
 
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
   app.use('/', launchRoute);
@@ -80,6 +82,8 @@ mongoose.connect(mongoUri, {
   app.use('/logExercise', logExerciseRoute);
   app.use('/home', homeRoute);
   app.use('/addFood', addFoodRoute);
+  app.use('/health', healthRoutes);
+  
 
   // Sign-out route
   app.post('/logout', (req, res) => {

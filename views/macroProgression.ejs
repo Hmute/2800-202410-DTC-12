@@ -1,0 +1,15 @@
+<%- include('templates/header') %>
+<h1>Calories</h1>
+<div class="calories">
+  <div>Goal: <span><%= goalCalories %></span></div>
+  <div>Consumed: <span><%= consumedCalories %></span></div>
+  <div>Remaining: <span><%= remainingCalories %></span></div>
+</div>
+<h2>Nutrients</h2>
+<div class="nutrients">
+  <div>Protein: <span><%= totalProtein %> g</span></div>
+  <div>Carbohydrate: <span><%= totalCarbs %> g</span></div>
+  <div>Fat: <span><%= totalFats %> g</span></div>
+</div>
+<%- include('templates/footer') %>
+
