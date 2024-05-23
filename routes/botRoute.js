@@ -3,29 +3,12 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 const router = express.Router();
 const Routine = require('../routes/Routine'); // Ensure this refers to the correct model file
+const PastRoutine = require('../routes/PastRoutine');
 const User = require('../routes/User');
 
 const WGER_API_KEY = process.env.WGER_API_KEY; // Ensure this is set in your .env file
 
-// Render the initial form page
-router.get('/', (req, res) => {
-  res.render('botInitial', { page: 'Workout Settings' });
-});
-
-// Handle form submission and generate workout recommendations
-router.post('/generate', async (req, res) => {
-  const userInput = req.body;
-  const generatedAt = new Date(); // Save the current date and time
-
-  try {
-    const recommendations = await getWorkoutRecommendations(userInput);
-    res.render('botResults', { page: 'Recommendations', data: userInput, recommendations, generatedAt });
-  } catch (error) {
-    console.error('Error generating workout recommendations:', error);
-    res.status(500).send('Error generating workout recommendations');
-  }
-});
-
+// Function to fetch workout recommendations
 async function getWorkoutRecommendations(data) {
   const { goal, method, type, level, days, time } = data;
 
@@ -86,28 +69,26 @@ async function getWorkoutRecommendations(data) {
 }
 
 function getCategoryBasedOnGoal(goal) {
-  // Map the user's goal to a WGER exercise category ID
   const goalCategoryMap = {
-    'Lose fat': 10, // Example category ID for fat loss exercises
-    'Build muscle': 8, // Example category ID for muscle building exercises
-    'Maintain': 14 // Example category ID for maintenance exercises
+    'Lose fat': 10,
+    'Build muscle': 8,
+    'Maintain': 14
   };
-  return goalCategoryMap[goal] || 8; // Default to muscle building if goal is not found
+  return goalCategoryMap[goal] || 8;
 }
 
 function getEquipmentBasedOnType(type) {
-  // Map the user's workout type to a WGER equipment ID
   const typeEquipmentMap = {
-    'No equipment': 7, // Example equipment ID for no equipment exercises
-    'Weighted': 3, // Example equipment ID for weighted exercises
-    'Body Weighted': 8 // Example equipment ID for body weighted exercises
+    'No equipment': 7,
+    'Weighted': 3,
+    'Body Weighted': 8
   };
-  return typeEquipmentMap[type] || 7; // Default to no equipment if type is not found
+  return typeEquipmentMap[type] || 7;
 }
 
 function calculateRepetitions(level, days, time) {
-  const timeNumber = parseInt(time, 10) || 30; // Default to 30 minutes if time is not a number
-  const daysNumber = parseInt(days, 10) || 1; // Default to 1 day if days is not a number
+  const timeNumber = parseInt(time, 10) || 30;
+  const daysNumber = parseInt(days, 10) || 1;
 
   if (isNaN(daysNumber) || isNaN(timeNumber)) {
     console.error('Invalid days or time value');
@@ -129,11 +110,10 @@ function calculateRepetitions(level, days, time) {
       baseReps = 10;
   }
 
-  const dayFactor = daysNumber / 7; // Normalizing days to a factor of 1
-  const timeFactor = timeNumber / 30; // Assuming time is in minutes, normalized to 30 minutes
+  const dayFactor = daysNumber / 7;
+  const timeFactor = timeNumber / 30;
 
-  const repetitions = Math.round(baseReps * dayFactor * timeFactor);
-  return repetitions;
+  return Math.round(baseReps * dayFactor * timeFactor);
 }
 
 function calculateSets(level) {
@@ -157,9 +137,80 @@ function shuffleArray(array) {
   return array;
 }
 
+// Render the initial form page
+router.get('/', async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    console.error('User ID not found in session');
+    return res.status(400).send('User ID not found in session');
+  }
+
+  try {
+    const user = await User.findById(userId).populate('currentRoutine'); // Fetch the user's current routine
+
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).send('User not found');
+    }
+
+    const hasCurrentRoutine = user.currentRoutine !== null;
+
+    res.render('botInitial', { page: 'Workout Settings', hasCurrentRoutine });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    res.status(500).send('Error fetching user data');
+  }
+});
+
+// Handle form submission and generate workout recommendations
+router.post('/generate', async (req, res) => {
+  const userInput = req.body;
+  const generatedAt = new Date(); // Save the current date and time
+
+  try {
+    const recommendations = await getWorkoutRecommendations(userInput);
+    res.render('botResults', { page: 'Recommendations', data: userInput, recommendations, generatedAt });
+  } catch (error) {
+    console.error('Error generating workout recommendations:', error);
+    res.status(500).send('Error generating workout recommendations');
+  }
+});
+
+// Generate daily workouts based on saved routines
+router.get('/daily', async (req, res) => {
+  const userId = req.session.userId;
+
+  if (!userId) {
+    console.error('User ID not found in session');
+    return res.status(400).send('User ID not found in session');
+  }
+
+  try {
+    const user = await User.findById(userId).populate('currentRoutine');
+
+    if (!user || !user.currentRoutine) {
+      console.error('User or current routine not found');
+      return res.status(404).send('User or current routine not found');
+    }
+
+    const dailyWorkout = generateDailyWorkout(user.currentRoutine);
+    res.json({ dailyWorkout }); // Return the daily workout as JSON
+  } catch (error) {
+    console.error('Error generating daily workout:', error);
+    res.status(500).send('Error generating daily workout');
+  }
+});
+
+function generateDailyWorkout(currentRoutine) {
+  const allExercises = currentRoutine.exercises;
+  const shuffledExercises = shuffleArray(allExercises);
+  return shuffledExercises.slice(0, 5); // Select a subset of exercises for the daily workout
+}
+
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
-  const userId = req.session.userId; // Ensure userId is set in the session
+  const userId = req.session.userId;
 
   if (!userId) {
     console.error('User ID not found in session');
@@ -180,27 +231,87 @@ router.post('/save', async (req, res) => {
 
     const exercises = JSON.parse(selectedExercises);
 
-    const routine = new Routine({
+    const newRoutine = new Routine({
       user: userId,
       exercises: exercises.map(exercise => ({
         ...exercise,
-        completed: false // Ensure completed is set to false initially
+        completed: false
       }))
     });
 
-    await routine.save();
+    await newRoutine.save();
 
-    if (!user.routines) {
-      user.routines = [];
+    if (user.currentRoutine) {
+      const pastRoutine = new PastRoutine({
+        user: userId,
+        exercises: user.currentRoutine.exercises
+      });
+      await pastRoutine.save();
+
+      user.pastRoutines.push(pastRoutine._id);
     }
 
-    user.routines.push(routine._id);
+    user.currentRoutine = newRoutine._id;
     await user.save();
 
     res.redirect('/home?saved=true'); // Redirect to home with query parameter
   } catch (error) {
     console.error('Error saving workout:', error);
     res.status(500).send('Error saving workout');
+  }
+});
+
+// Accept a workout
+router.post('/accept', async (req, res) => {
+  const { routineId } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    console.error('User ID not found in session');
+    return res.status(400).send('User ID not found in session');
+  }
+
+  try {
+    const routine = await Routine.findById(routineId);
+    if (!routine) {
+      console.error('Routine not found');
+      return res.status(404).send('Routine not found');
+    }
+
+    routine.status = 'accepted';
+    await routine.save();
+
+    res.redirect('/home');
+  } catch (error) {
+    console.error('Error accepting workout:', error);
+    res.status(500).send('Error accepting workout');
+  }
+});
+
+// Decline a workout
+router.post('/decline', async (req, res) => {
+  const { routineId } = req.body;
+  const userId = req.session.userId;
+
+  if (!userId) {
+    console.error('User ID not found in session');
+    return res.status(400).send('User ID not found in session');
+  }
+
+  try {
+    const routine = await Routine.findById(routineId);
+    if (!routine) {
+      console.error('Routine not found');
+      return res.status(404).send('Routine not found');
+    }
+
+    routine.status = 'declined';
+    await routine.save();
+
+    res.redirect('/home');
+  } catch (error) {
+    console.error('Error declining workout:', error);
+    res.status(500).send('Error declining workout');
   }
 });
 

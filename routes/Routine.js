@@ -1,4 +1,3 @@
-const { date } = require('joi');
 const mongoose = require('mongoose');
 
 const workoutSchema = new mongoose.Schema({
@@ -9,7 +8,7 @@ const workoutSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    completed: { type: Boolean, default: false } // Add completed field
+    completed: { type: Boolean, default: false }
 });
 
 const routineSchema = new mongoose.Schema({
@@ -23,6 +22,11 @@ const routineSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    status: {
+        type: String,
+        enum: ['accepted', 'declined'],
+        default: 'accepted'
     }
 });
 

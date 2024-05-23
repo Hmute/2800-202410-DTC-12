@@ -55,7 +55,10 @@ const userSchema = new mongoose.Schema({
     twitter: String,
     profilePictureEtag: String,
 
-    routines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }], // Reference to Routine model
+    // routines reference
+    currentRoutine: { type: mongoose.Schema.Types.ObjectId, ref: 'Routine' },
+    pastRoutines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }],
+
     startWeight: { type: Number, default: null },
     weightGoal: Number,
     calorieGoal: Number,
