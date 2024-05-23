@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const caloriesChart = new Chart(ctx, {
       type: 'doughnut',
       data: {
-        labels: ['Consumed', 'Remaining'],
         datasets: [{
           data: [consumedCalories, remainingCalories],
           backgroundColor: ['#4caf50', '#e0e0e0'], 
