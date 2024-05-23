@@ -13,7 +13,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Define rate limit for API requests (adjust settings as needed)
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 60 * 60 * 1000, // 60 minutes
   max: 100,
   message: 'Too many requests, please try again later.'
 });
