@@ -90,3 +90,8 @@
 body {
     padding-bottom: 50px;
 }
+
+div.exercise-info {
+    margin-bottom: 10px;
+}
+
