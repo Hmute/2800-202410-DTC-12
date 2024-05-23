@@ -50,4 +50,14 @@
     z-index: 1000;
 }
 
+.disco-ball {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    z-index: 1000;
+    width: 30%;
+    height: auto;
+}
 

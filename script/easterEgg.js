@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const logoWrap = document.getElementById("logoWrap");
   const music = document.getElementById("explosionMusic");
+  const discoBall = document.getElementById("discoBall");
   let longPressTimer;
 
   logoWrap.addEventListener("mousedown", () => {
@@ -54,12 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
         showRobot();
         explodeEasterEggs();
         playMusic();
+        showDiscoBall();
       }, 1000); // Explode after 1 second
 
       setTimeout(() => {
         clearEasterEggs();
         hideRobot();
         stopMusic();
+        hideDiscoBall();
       }, 15000); // Clear after 15 seconds
     });
   }
@@ -183,5 +186,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function stopMusic() {
     music.pause();
     music.currentTime = 0;
+  }
+
+  function showDiscoBall() {
+    discoBall.style.display = "block";
+  }
+
+  function hideDiscoBall() {
+    discoBall.style.display = "none";
   }
 });
