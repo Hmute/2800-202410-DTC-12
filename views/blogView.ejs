@@ -40,8 +40,11 @@
     <div class="width-98 mx-auto">
 
       <!-- Start of author. Put their image and the date -->
-      <div class="author d-flex align-items-center justify-content-between mt-3">
-        <small id="author"><%= blog.author %></small>
+      <div class="author mt-3">
+        <div>
+          <img src="<%= profile %>" alt="" style="width: 15%; border-radius: 50px;">
+          <small id="author"><%= blog.author %></small>
+        </div>
         <small id="date"><%= blog.createdAt %></small>
       </div>
 
