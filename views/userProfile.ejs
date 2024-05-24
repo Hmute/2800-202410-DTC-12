@@ -171,7 +171,7 @@
         </form>
 
         <div class="details card">
-            <h3>Health Details</h3>
+            <h2>Health Details</h2>
             <% if (user.gender) { %>
                 <p><strong>Gender:</strong> <span id="gender-display">
                         <%= user.gender %>
@@ -200,7 +200,7 @@
         </div>
 
         <div class="bio card">
-            <h3>Fitness Bio</h3>
+            <h2>Fitness Bio</h2>
             <% if (user.fitnessLevel) { %>
                 <p><strong>Fitness Level:</strong> <span id="fitnessLevel-display">
                         <%= user.fitnessLevel %>
@@ -223,9 +223,9 @@
                                             </span></p>
                                         <% } %>
                                             <% if (user.personalQuote) { %>
-                                                <p><strong>Personal Quote/Motto:</strong> <span
+                                                <p><strong>Personal Quote/Motto</strong> <span
                                                         id="personalQuote-display">
-                                                        <%= user.personalQuote %>
+                                                        "<%= user.personalQuote %>"
                                                     </span></p>
                                                 <% } %>
         </div>
