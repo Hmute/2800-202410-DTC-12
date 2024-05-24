@@ -65,7 +65,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
       fullDate: currentDate,
       views: 0,
       cloudinary: result.secure_url,
-      author: req.session.username,
+      author: req.session.fullName,
     });
 
     const savedBlog = await newBlog.save();
@@ -100,12 +100,15 @@ router.get("/view", isAuthenticated, async (req, res) => {
   const blogId = req.query.id;
   try {
     const blog = await Blog.findByIdAndUpdate(blogId, { $inc: { views: 1 } });
-
     if (!blog) {
       res.status(404).send("Blog not found");
     }
-
-    res.render("blogView", { blog });
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      res.status(404).send('User not found.')
+    }
+    const profile = user.profilePicture || '/images/Default_pfp.png'
+    res.render("blogView", { blog, profile });
   } catch (err) {
     res.status(500).send("Error loading blog post.");
   }
@@ -145,7 +148,7 @@ router.post("/posts/delete", async (req, res) => {
       { $pull: { blogPosts: blogId } }
     );
     console.log(`${blogId} has been delete from the User blogPosts Array.`);
-    res.redirect('/blog/posts');
+    res.redirect("/blog/posts");
   } catch (err) {
     console.error("Error deleting post:", err);
     res.status(500).send("Error deleting post");

@@ -35,10 +35,12 @@ router.post("/", async (req, res) => {
     req.session.userId = user._id;
     req.session.username = user.username;
     req.session.isAuthenticated = true;
+    req.session.fullName = user.fullName;
     console.log(
       req.session.userId,
       req.session.username,
-      req.session.isAuthenticated
+      req.session.isAuthenticated,
+      req.session.fullName
     );
 
     req.session.user = user;

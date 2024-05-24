@@ -57,3 +57,21 @@ p {
 .content {
   white-space: pre-wrap;
 }
+
+.author {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.author div {
+  display: flex;
+  align-items: center;
+  max-width: 70%;
+}
+
+.author img {
+  width: 15%;
+  border-radius: 50px;
+  margin-right: 10px;
+}
