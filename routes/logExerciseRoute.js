@@ -9,7 +9,7 @@ const RoutineSchema = new mongoose.Schema({
     exercises: [
         {
             name: { type: String, required: true },
-            repetitions: { type: Number, required: true },
+            repetitions: { type: Number, default: 0},
             sets: { type: Number, default: 0 },
             weight: { type: Number, default: 0 },
             time: { type: Number, default: 0 },
