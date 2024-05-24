@@ -12,14 +12,13 @@ const RoutineSchema = new mongoose.Schema({
             repetitions: { type: Number, required: true },
             sets: { type: Number, default: 0 },
             weight: { type: Number, default: 0 },
-            time: { type: Number, default: 0 }, 
+            time: { type: Number, default: 0 },
             completion: { type: String, enum: ['Yes', 'No'], default: 'No' },
         },
     ],
     createdAt: { type: Date, default: Date.now },
 });
 
-// Register the model if it doesn't already exist
 let Routine;
 try {
     Routine = mongoose.model('Routine');
@@ -109,6 +108,7 @@ router.put('/:id', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     }
 });
+
 router.delete('/:id', isAuthenticated, async (req, res) => {
     try {
         const myDatabase = mongoose.connection.useDb('test');
@@ -118,20 +118,19 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
         if (!routine) {
             return res.status(404).json({ error: 'Routine not found' });
         }
-        
-        // Update to remove the exercise with the specified ID
-        await Routine.findOneAndUpdate(
+
+        // Use $pull to remove the exercise
+        await Routine.updateOne(
             { _id: routine._id },
             { $pull: { exercises: { _id: id } } }
         );
 
-
-        res.sendStatus(200); 
+        console.log('Exercise deleted successfully');
+        res.sendStatus(200);
     } catch (err) {
         console.error('Error deleting exercise:', err);
         res.status(500).json({ error: 'Failed to delete exercise' });
     }
 });
-
 
 module.exports = router;
