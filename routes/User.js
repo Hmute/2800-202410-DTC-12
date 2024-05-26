@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema({
 
     // routines reference
     currentRoutine: { type: mongoose.Schema.Types.ObjectId, ref: 'Routine' },
-    pastRoutines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Routine' }],
+    pastRoutines: [{ type: mongoose.Schema.Types.ObjectId, ref: 'PastRoutine' }],
 
     startWeight: { type: Number, default: null },
     weightGoal: Number,

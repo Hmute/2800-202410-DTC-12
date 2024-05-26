@@ -53,9 +53,9 @@ async function getWorkoutRecommendations(data) {
 
       // Include exercise names, repetitions, sets, and completed status
       return selectedExercises.map(exercise => ({
-        name: exercise.name,
-        repetitions: repetitions,
-        sets: sets,
+        name: exercise.name, // Name of the exercise
+        repetitions: repetitions, // Number of repetitions
+        sets: sets, // Number of sets
         date: new Date(), // Set the date to the current date
         completed: false // Set completed to false initially
       }));
@@ -68,6 +68,7 @@ async function getWorkoutRecommendations(data) {
   }
 }
 
+// Helper function to map user goal to exercise category
 function getCategoryBasedOnGoal(goal) {
   const goalCategoryMap = {
     'Lose fat': 10,
@@ -77,6 +78,7 @@ function getCategoryBasedOnGoal(goal) {
   return goalCategoryMap[goal] || 8;
 }
 
+// Helper function to map workout type to equipment ID
 function getEquipmentBasedOnType(type) {
   const typeEquipmentMap = {
     'No equipment': 7,
@@ -86,6 +88,7 @@ function getEquipmentBasedOnType(type) {
   return typeEquipmentMap[type] || 7;
 }
 
+// Helper function to calculate repetitions based on user input
 function calculateRepetitions(level, days, time) {
   const timeNumber = parseInt(time, 10) || 30;
   const daysNumber = parseInt(days, 10) || 1;
@@ -116,6 +119,7 @@ function calculateRepetitions(level, days, time) {
   return Math.round(baseReps * dayFactor * timeFactor);
 }
 
+// Helper function to calculate sets based on user level
 function calculateSets(level) {
   switch (level) {
     case 'Beginner':
@@ -129,6 +133,7 @@ function calculateSets(level) {
   }
 }
 
+// Helper function to shuffle an array
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -188,26 +193,27 @@ router.get('/daily', async (req, res) => {
 
   try {
     const user = await User.findById(userId).populate('currentRoutine');
-
     if (!user || !user.currentRoutine) {
       console.error('User or current routine not found');
       return res.status(404).send('User or current routine not found');
     }
 
     const dailyWorkout = generateDailyWorkout(user.currentRoutine);
-    res.json({ dailyWorkout }); // Return the daily workout as JSON
+    res.json({ dailyWorkout });
   } catch (error) {
     console.error('Error generating daily workout:', error);
     res.status(500).send('Error generating daily workout');
   }
 });
 
+// Function to generate daily workout from the current routine
 function generateDailyWorkout(currentRoutine) {
   const allExercises = currentRoutine.exercises;
   const shuffledExercises = shuffleArray(allExercises);
   return shuffledExercises.slice(0, 5); // Select a subset of exercises for the daily workout
 }
 
+// Save selected exercises as a new routine
 router.post('/save', async (req, res) => {
   const { selectedExercises } = req.body;
   const userId = req.session.userId;
@@ -234,13 +240,21 @@ router.post('/save', async (req, res) => {
     const newRoutine = new Routine({
       user: userId,
       exercises: exercises.map(exercise => ({
-        ...exercise,
+        name: exercise.name, // Ensure name is included
+        repetitions: exercise.repetitions, // Ensure repetitions are included
+        sets: exercise.sets || 0,
+        weight: exercise.weight || 0,
+        time: exercise.time || 0,
+        date: exercise.date || new Date(),
         completed: false
       }))
     });
 
+    console.log('Saving new routine:', newRoutine);
+
     await newRoutine.save();
 
+    // Save the current routine to past routines if it exists
     if (user.currentRoutine) {
       const pastRoutine = new PastRoutine({
         user: userId,
@@ -254,7 +268,7 @@ router.post('/save', async (req, res) => {
     user.currentRoutine = newRoutine._id;
     await user.save();
 
-    res.redirect('/home?saved=true'); // Redirect to home with query parameter
+    res.redirect('/home?saved=true');
   } catch (error) {
     console.error('Error saving workout:', error);
     res.status(500).send('Error saving workout');

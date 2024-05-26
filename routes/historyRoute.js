@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
             return res.status(404).send('User not found');
         }
 
-        const routines = await Routine.find({ user: userId }).sort({ createdAt: -1 });
+        const routines = await Routine.find({ user: userId }).populate('exercises').sort({ createdAt: -1 });
 
         res.render('history', { user, routines, page: 'History' });
     } catch (error) {
