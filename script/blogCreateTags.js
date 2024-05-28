@@ -60,8 +60,6 @@ const submitForm = () => {
             return response.text().then((blogId) => {
               window.location.href = `/blog/postSave?blogId=${blogId}`;
             });
-          } else {
-            alert("Error saving blog post");
           }
         })
         .catch((error) => {
@@ -74,3 +72,39 @@ const submitForm = () => {
 document.getElementById("backBtn").addEventListener("click", () => {
   window.location.href = "/blog";
 });
+
+document
+  .getElementById("blogForm")
+  .addEventListener("submit", function (event) {
+    let hasError = false;
+    let errorMessage = "";
+
+    const fileInput = document.getElementById("fileInput3");
+    if (!fileInput.files.length) {
+      errorMessage += "Please upload an image.\n";
+      hasError = true;
+    }
+
+    const title = document.getElementById("title").value.trim();
+    if (title === "") {
+      errorMessage += "Please enter a title.\n";
+      hasError = true;
+    }
+
+    const content = document.getElementById("contentTextArea").value.trim();
+    if (content === "") {
+      errorMessage += "Please fill in the content.\n";
+      hasError = true;
+    }
+
+    const tags = document.getElementById("tags").value;
+    if (tags === "None") {
+      errorMessage += "Please select at least one tag.\n";
+      hasError = true;
+    }
+
+    if (hasError) {
+      event.preventDefault();
+      alert(errorMessage);
+    }
+  });

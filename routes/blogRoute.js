@@ -34,8 +34,11 @@ router.get("/create", (req, res) => {
 router.post("/save", upload.single("image"), async (req, res) => {
   const { title, content, tags } = req.body;
 
-  if (!req.file) {
-    return res.status(400).send("No image file provided");
+  if (!req.file || !title || !content || !tags || tags === "None") {
+    res
+      .status(400)
+      .send("All fields (image, title, content, and tags) are required.");
+    return;
   }
 
   try {
