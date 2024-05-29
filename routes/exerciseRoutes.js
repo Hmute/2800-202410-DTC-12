@@ -63,4 +63,21 @@ router.put('/data/:routineId/:exerciseId', async (req, res) => {
   }
 });
 
+// Delete a specific exercise in a routine
+router.delete('/data/:routineId/:exerciseId', async (req, res) => {
+  const { routineId, exerciseId } = req.params;
+  try {
+    const routine = await Routine.findById(routineId);
+    if (!routine) {
+      return res.status(404).json({ error: 'Routine not found' });
+    }
+    routine.exercises.pull({ _id: exerciseId });
+    await routine.save();
+    res.json({ message: 'Exercise deleted successfully' });
+  } catch (error) {
+    console.error('Failed to delete exercise:', error);
+    res.status(500).json({ error: 'Failed to delete exercise' });
+  }
+});
+
 module.exports = router;
