@@ -40,6 +40,9 @@ const submitForm = () => {
     .addEventListener("submit", function (event) {
       event.preventDefault();
 
+      const submitButton = document.querySelector("button[type='submit']");
+      submitButton.disabled = true;
+
       const form = event.target;
       const formData = new FormData(form);
 
@@ -60,11 +63,14 @@ const submitForm = () => {
             return response.text().then((blogId) => {
               window.location.href = `/blog/postSave?blogId=${blogId}`;
             });
+          } else {
+            throw new Error("Failed to save blog post.");
           }
         })
         .catch((error) => {
           console.error("Error:", error);
           alert(`Error saving blog post: ${error.message}`);
+          submitButton.disabled = false; // Re-enable the button if there was an error
         });
     });
 };
