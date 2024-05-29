@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const axios = require('axios');
 const User = require('./User');
+const cron = require('node-cron'); 
 
 const API_KEY = 'c67a4478403a4b289ed42b3d73447701';
 
@@ -171,9 +172,6 @@ const getNutritionalInfo = async (ingredients) => {
   }
 };
 
-
-
-
 // Route to render the add meal page
 router.get('/addMeal', checkWeightGoal, async (req, res) => {
   const { mealType } = req.query;
@@ -236,7 +234,6 @@ router.post('/addMeal', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
 
 // Route to render the meal page
 router.get('/meals', checkWeightGoal, async (req, res) => {
@@ -422,6 +419,21 @@ router.get('/autocomplete', async (req, res) => {
   } catch (error) {
     console.error('Error fetching autocomplete suggestions:', error);
     res.status(500).send('Internal Server Error');
+  }
+});
+
+// Clear previous day's data at midnight
+cron.schedule('0 0 * * *', async () => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+
+  // Clear previous day's data
+  try {
+    await DailyMacro.deleteMany({ date: yesterday });
+    console.log('Previous day\'s data cleared');
+  } catch (error) {
+    console.error('Error clearing previous day\'s data:', error);
   }
 });
 
