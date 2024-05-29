@@ -115,7 +115,7 @@ const getNutritionalInfo = async (ingredients) => {
     const ingredientList = ingredients.map(ingredient => `${ingredient.name} ${ingredient.amount}${ingredient.unit}`).join('\n');
     console.log('Formatted ingredientList:', ingredientList);
 
-    // Step 1: Parse ingredients to get IDs
+    // Parse ingredients to get IDs
     const parseResponse = await axios.post(
       `https://api.spoonacular.com/recipes/parseIngredients?apiKey=${API_KEY}`,
       { ingredientList, servings: 1 },
@@ -137,7 +137,7 @@ const getNutritionalInfo = async (ingredients) => {
     let totalCarbs = 0;
     let totalFats = 0;
 
-    // Step 2: Fetch detailed nutritional information using ingredient IDs
+    // Fetch detailed nutritional information using ingredient IDs
     for (const ingredient of parsedIngredients) {
       const ingredientId = ingredient.id;
       const ingredientInfoResponse = await axios.get(`https://api.spoonacular.com/food/ingredients/${ingredientId}/information?apiKey=${API_KEY}&amount=${ingredient.amount}&unit=${ingredient.unit}`);
