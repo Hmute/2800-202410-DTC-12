@@ -63,16 +63,18 @@
         $(document).ready(function () {
             $('#savedModal').modal('show');
         });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date();
-            const options = { month: 'long', day: 'numeric' };
-            const formattedDate = today.toLocaleDateString('en-US', options);
-            document.getElementById('todayDate').innerText = `Today: ${formattedDate}`;
-        });
     </script>
 <% } %>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const today = new Date();
+        const options = { month: 'long', day: 'numeric' };
+        const formattedDate = today.toLocaleDateString('en-US', options);
+        document.getElementById('todayDate').innerText = `Today: ${formattedDate}`;
+    });
+</script>
+
 <script src="/script/progression.js"></script>
 <script src="/script/savePopup.js"></script>
-<%- include('templates/footer', { user: user }) %>
+<%- include('templates/footer') %>
