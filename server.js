@@ -66,7 +66,6 @@ mongoose.connect(mongoUri, {
   const historyRoute = require('./routes/historyRoute');
   const userProfileRoute = require('./routes/userProfileRoute');
   const { router: weightRoute } = require('./routes/weightRoute');
-  const logExerciseRoute = require('./routes/logExerciseRoute');
   const homeRoute = require('./routes/homeRoute');
   const addFoodRoute = require('./routes/addFoodRoute');
   const { router: healthRoutes } = require('./routes/healthRoutes'); 
@@ -83,7 +82,6 @@ mongoose.connect(mongoUri, {
   app.use('/history', historyRoute);
   app.use('/user', userProfileRoute);
   app.use('/weight', weightRoute);
-  app.use('/logExercise', logExerciseRoute);
   app.use('/home', homeRoute);
   app.use('/addFood', addFoodRoute);
   app.use('/health', healthRoutes);

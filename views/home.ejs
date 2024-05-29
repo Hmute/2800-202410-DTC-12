@@ -1,27 +1,78 @@
 <%- include('templates/header') %>
-    <%- include('templates/footer', { user: user }) %>
-        <%- include("homeTop") %>
+<link href="/css/homeTop.css" rel="stylesheet">
 
-                <!-- Popup modal for saved workouts -->
-                <% if (saved === 'true') { %>
-                    <div class="modal fade" id="savedModal" tabindex="-1" aria-labelledby="savedModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-body text-black">
-                                    Your workouts have been saved successfully!
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary text-black" data-bs-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <script>
-                        $(document).ready(function () {
-                            $('#savedModal').modal('show');
-                        });
-                    </script>
-                <% } %>
-                <script src="/script/savePopup.js"></script>
-                <%- include('templates/footer') %>
-                
+<div class="greeting-body d-flex justify-content-between align-items-center mt-3 px-3">
+    <h5 class="text-white">Hello, <%= userName %>!</h5>
+    <h6 id="todayDate" class="text-info"></h6>
+</div>
+
+<div class="progression-body pb-3">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <div class="progression-box p-3 text-center" onclick="navigateTo('/weight')">
+                    <h3 class="mb-3">Weight</h3>
+                    <p id="weightCurrent">Current: -- kg</p>
+                    <p id="weightGoal">Starting: -- kg</p>
+                    <p id="weightProgress">--</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="progression-box p-3 text-center" onclick="navigateTo('/exercises')">
+                    <h3 class="mb-3">Exercises</h3>
+                    <p id="totalExercises">Total: --</p>
+                    <p id="completedExercises">Completed: --</p>
+                    <p id="exerciseMessage">--</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="progression-box p-3 text-center" onclick="navigateTo('/health/meals')">
+                    <h3 class="mb-3">Meals</h3>
+                    <p id="recentMeal">Recent Meal: --</p>
+                    <p id="caloriesConsumed">Calories: --</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="progression-box p-3 text-center" onclick="navigateTo('/health/macroProgression')">
+                    <h3 class="mb-3">Calories</h3>
+                    <p id="caloriesConsumedValue">Consumed: --</p>
+                    <p id="caloriesGoal">Goal: --</p>
+                    <p id="caloriesRemaining">Remaining: --</p>
+                    <p id="caloriesMessage">--</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Popup modal for saved workouts -->
+<% if (saved === 'true') { %>
+    <div class="modal fade" id="savedModal" tabindex="-1" aria-labelledby="savedModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body text-black">
+                    Your workouts have been saved successfully!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary text-black" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#savedModal').modal('show');
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const options = { month: 'long', day: 'numeric' };
+            const formattedDate = today.toLocaleDateString('en-US', options);
+            document.getElementById('todayDate').innerText = `Today: ${formattedDate}`;
+        });
+    </script>
+<% } %>
+
+<script src="/script/progression.js"></script>
+<script src="/script/savePopup.js"></script>
+<%- include('templates/footer', { user: user }) %>

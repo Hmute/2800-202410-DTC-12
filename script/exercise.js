@@ -31,8 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
     container.innerHTML = ''; // Clear existing content
   
     const today = new Date().toLocaleDateString();
+    const sortedDates = Object.keys(groupedRoutines).sort((a, b) => new Date(b) - new Date(a));
   
-    Object.keys(groupedRoutines).forEach(date => {
+    sortedDates.forEach(date => {
       const routines = groupedRoutines[date];
       const dateGroup = document.createElement('div');
       dateGroup.className = 'date-group';
@@ -63,13 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
       container.appendChild(dateGroup);
   
       // Add event listener for collapsing
-      document.getElementById(`routine-${date.replace(/\//g, '-')}`).addEventListener('show.bs.collapse', () => {
+      const headerElement = dateGroup.querySelector('.routine-header');
+      headerElement.addEventListener('click', () => {
+        const collapseElement = document.getElementById(`routine-${date.replace(/\//g, '-')}`);
         const allOtherCollapses = document.querySelectorAll('.collapse');
         allOtherCollapses.forEach(collapse => {
-          if (collapse !== document.getElementById(`routine-${date.replace(/\//g, '-')}`)) {
+          if (collapse !== collapseElement) {
             bootstrap.Collapse.getOrCreateInstance(collapse).hide();
           }
         });
+        bootstrap.Collapse.getOrCreateInstance(collapseElement).toggle();
       });
     });
   }
