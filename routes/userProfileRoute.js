@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("./User");
-const { Weight } = require("./weightRoute"); // Correctly importing Weight model
+const { Weight } = require("./weightRoute"); 
 const multer = require("multer");
 const cloudinary = require("../setup/cloudinary");
 
