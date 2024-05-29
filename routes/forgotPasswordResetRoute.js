@@ -4,14 +4,15 @@ const User = require('./User'); // Ensure the correct path to the User model
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const sgMail = require('@sendgrid/mail');
+const he = require('he'); // Import the 'he' library for HTML escaping
 const rateLimit = require('express-rate-limit');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Rate Limiting (adjust as needed)
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 40, // Limit each IP to 5 requests per windowMs
+    windowMs: 60 * 60 * 1000, // 15 minutes
+    max: 40, // Limit each IP to 40 requests per windowMs
     message: 'Too many requests from this IP, please try again later.'
 });
 router.use(limiter);
@@ -44,12 +45,12 @@ router.post('/', async (req, res) => {
 
         const msg = {
             to: user.email,
-            from: 'wellbotbcit@outlook.com', // Replace with your verified email address
+            from: 'wellbotbcit@outlook.com', 
             subject: 'WellBot Password Reset',
             html: `
                 <p>You are receiving this because you (or someone else) have requested the reset of the password for your account.</p>
                 <p>Please click on the following link, or paste this into your browser to complete the process:</p>
-                <a href="${resetLink}">${resetLink}</a>
+                <a href="${he.encode(resetLink)}">${he.encode(resetLink)}</a>
                 <p>This link will expire in 1 hour.</p>
                 <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>
             `,
