@@ -9,7 +9,7 @@ const RoutineSchema = new mongoose.Schema({
     exercises: [
         {
             name: { type: String, required: true },
-            repetitions: { type: Number, default: 0},
+            repetitions: { type: Number, default: 0 },
             sets: { type: Number, default: 0 },
             weight: { type: Number, default: 0 },
             time: { type: Number, default: 0 },
@@ -31,9 +31,16 @@ router.get('/', isAuthenticated, async (req, res) => {
         const myDatabase = mongoose.connection.useDb('test');
         const Routines = myDatabase.model('Routine', RoutineSchema);
 
+        // Fetch all routines for the user
         const routines = await Routines.find({ user: req.session.user._id });
 
-        res.render('logExercise', { user: req.session.user, page: 'Log Exercise', routines });
+        // Flatten the exercises into a single array
+        const exercises = routines.flatMap(routine => routine.exercises.map(exercise => ({
+            ...exercise.toObject(),
+            routineId: routine._id
+        })));
+
+        res.render('logExercise', { user: req.session.user, page: 'Log Exercise', exercises });
     } catch (err) {
         console.error('Error fetching routines:', err);
         res.status(500).send('An error occurred');
@@ -51,9 +58,10 @@ router.post('/', isAuthenticated, async (req, res) => {
             return res.status(400).json({ error: 'Name is required' });
         }
 
-        const routine = await Routines.findOne({ user: req.session.user._id });
-
         const newExercise = { name, repetitions, sets, weight, time, completion };
+
+        // Find the most recent routine for the user
+        const routine = await Routines.findOne({ user: req.session.user._id }).sort({ createdAt: -1 });
 
         if (routine) {
             routine.exercises.push(newExercise);
@@ -81,7 +89,8 @@ router.put('/:id', isAuthenticated, async (req, res) => {
         const { id } = req.params;
         const { name, repetitions, sets, weight, time, completion } = req.body;
 
-        const routine = await Routines.findOne({ user: req.session.user._id });
+        // Find the routine containing the exercise
+        const routine = await Routines.findOne({ user: req.session.user._id, 'exercises._id': id });
 
         if (!routine) {
             return res.status(404).json({ error: 'Routine not found' });
@@ -114,7 +123,8 @@ router.delete('/:id', isAuthenticated, async (req, res) => {
         const myDatabase = mongoose.connection.useDb('test');
         const { id } = req.params;
 
-        const routine = await Routine.findOne({ user: req.session.user._id });
+        // Find the routine containing the exercise
+        const routine = await Routine.findOne({ user: req.session.user._id, 'exercises._id': id });
         if (!routine) {
             return res.status(404).json({ error: 'Routine not found' });
         }

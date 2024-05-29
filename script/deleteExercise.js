@@ -33,5 +33,5 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    container.removeEventListener('click', deleteExerciseCard);
+    container.addEventListener('click', deleteExerciseCard);
 });
