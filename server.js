@@ -65,7 +65,7 @@ mongoose.connect(mongoUri, {
   const botRoute = require('./routes/botRoute');
   const historyRoute = require('./routes/historyRoute');
   const userProfileRoute = require('./routes/userProfileRoute');
-  const weightRoute = require('./routes/weightRoute');
+  const { router: weightRoute } = require('./routes/weightRoute');
   const logExerciseRoute = require('./routes/logExerciseRoute');
   const homeRoute = require('./routes/homeRoute');
   const addFoodRoute = require('./routes/addFoodRoute');

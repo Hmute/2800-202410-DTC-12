@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const User = require("./User");
+const { Weight } = require("./weightRoute"); // Correctly importing Weight model
 const multer = require("multer");
 const cloudinary = require("../setup/cloudinary");
 
@@ -108,6 +109,28 @@ router.post("/profile/edit", upload, async (req, res) => {
     user.twitter = twitter || user.twitter;
 
     await user.save();
+
+    // Update weight in Weight collection
+    if (weight) {
+      const normalizedDate = new Date();
+      normalizedDate.setHours(0, 0, 0, 0);
+
+      const existingWeights = await Weight.find({ userId: user._id }).exec();
+
+      if (existingWeights.length === 0) {
+        // Set start weight if no existing weight logs
+        await User.findByIdAndUpdate(user._id, { startWeight: parseFloat(weight).toFixed(2) });
+      }
+
+      await Weight.findOneAndUpdate(
+        { userId: user._id, date: normalizedDate },
+        { $set: { weightKg: parseFloat(weight).toFixed(2) } },
+        { new: true, upsert: true }
+      );
+
+      await User.findByIdAndUpdate(user._id, { weight: parseFloat(weight).toFixed(2) });
+    }
+
     res.redirect(`/user/profile`);
   } catch (err) {
     console.error("Server error:", err);

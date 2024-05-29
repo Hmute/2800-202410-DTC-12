@@ -109,4 +109,7 @@ function calculateChange(prevWeight, currentWeight) {
   return change.toFixed(2);
 }
 
-module.exports = router;
+module.exports = {
+  router, // Exporting the router
+  Weight // Exporting the Weight model
+};
