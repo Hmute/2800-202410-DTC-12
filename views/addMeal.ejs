@@ -1,0 +1,33 @@
+<%- include('templates/header') %>
+<div class="container mt-5">
+  <h2 class="text-center mb-4">Add <%= mealType.charAt(0).toUpperCase() + mealType.slice(1) %></h2>
+
+  <form action="/health/addMeal" method="post">
+    <input type="hidden" name="mealType" value="<%= mealType %>">
+    <div class="mb-3">
+      <label for="foodName" class="form-label">Food Name:</label>
+      <input type="text" class="form-control" id="foodName" name="foodName" required>
+    </div>
+    <div id="ingredientsContainer">
+      <div class="ingredient-group mb-3">
+        <label for="ingredient" class="form-label">Ingredient:</label>
+        <input type="text" class="form-control ingredient" name="ingredients[]" required>
+        <label for="portionSize" class="form-label mt-2">Portion Size:</label>
+        <div class="input-group">
+          <input type="number" class="form-control portionSize" name="portionSizes[]" step="any" required>
+          <select class="form-select" name="portionUnits[]">
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+            <option value="oz">oz</option>
+            <option value="cup">cup</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button type="button" id="addIngredient" class="btn btn-secondary">Add Another Ingredient</button>
+    <button type="submit" class="btn btn-primary">Add Food</button>
+  </form>
+  <ul id="autocomplete-results" class="list-group mt-3" style="display: none;"></ul>
+</div>
+<%- include('templates/footer') %>
+<script src="/script/addMeal.js"></script>

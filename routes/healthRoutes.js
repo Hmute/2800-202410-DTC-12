@@ -13,7 +13,16 @@ const dailyMacroSchema = new mongoose.Schema({
   calories: { type: Number, required: true },
   protein: { type: Number, required: true },
   carbs: { type: Number, required: true },
-  fats: { type: Number, required: true }
+  fats: { type: Number, required: true },
+  meals: [{
+    mealType: { type: String, required: true },
+    foodName: { type: String, required: true },
+    calories: { type: Number, required: true },
+    protein: { type: Number, required: true },
+    carbs: { type: Number, required: true },
+    fats: { type: Number, required: true },
+    date: { type: Date, required: true }
+  }]
 });
 
 const DailyMacro = mongoose.model('DailyMacro', dailyMacroSchema);
@@ -99,20 +108,172 @@ const checkWeightGoal = async (req, res, next) => {
   next();
 };
 
+// Function to get nutritional info from Spoonacular API
+const getNutritionalInfo = async (ingredients) => {
+  try {
+    const ingredientList = ingredients.map(ingredient => `${ingredient.name} ${ingredient.amount}${ingredient.unit}`).join('\n');
+    console.log('Formatted ingredientList:', ingredientList);
+
+    // Step 1: Parse ingredients to get IDs
+    const parseResponse = await axios.post(
+      `https://api.spoonacular.com/recipes/parseIngredients?apiKey=${API_KEY}`,
+      { ingredientList, servings: 1 },
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        transformRequest: [(data, headers) => {
+          return `ingredientList=${encodeURIComponent(data.ingredientList)}&servings=${data.servings}`;
+        }]
+      }
+    );
+
+    const parsedIngredients = parseResponse.data;
+    console.log('Parsed Ingredients:', parsedIngredients);
+
+    let totalCalories = 0;
+    let totalProtein = 0;
+    let totalCarbs = 0;
+    let totalFats = 0;
+
+    // Step 2: Fetch detailed nutritional information using ingredient IDs
+    for (const ingredient of parsedIngredients) {
+      const ingredientId = ingredient.id;
+      const ingredientInfoResponse = await axios.get(`https://api.spoonacular.com/food/ingredients/${ingredientId}/information?apiKey=${API_KEY}&amount=${ingredient.amount}&unit=${ingredient.unit}`);
+      const nutrition = ingredientInfoResponse.data.nutrition?.nutrients;
+
+      if (nutrition) {
+        const calories = nutrition.find(nutrient => nutrient.name === 'Calories')?.amount || 0;
+        const protein = nutrition.find(nutrient => nutrient.name === 'Protein')?.amount || 0;
+        const carbs = nutrition.find(nutrient => nutrient.name === 'Carbohydrates')?.amount || 0;
+        const fats = nutrition.find(nutrient => nutrient.name === 'Fat')?.amount || 0;
+
+        totalCalories += calories;
+        totalProtein += protein;
+        totalCarbs += carbs;
+        totalFats += fats;
+
+        console.log(`Ingredient: ${ingredient.name}, Calories: ${calories}, Protein: ${protein}, Carbs: ${carbs}, Fats: ${fats}`);
+      } else {
+        console.log(`No nutrition data found for ingredient: ${ingredient.name}`);
+      }
+    }
+
+    return {
+      calories: totalCalories,
+      protein: totalProtein,
+      carbs: totalCarbs,
+      fats: totalFats
+    };
+  } catch (error) {
+    console.error('Error fetching nutritional info:', error);
+    throw error;
+  }
+};
+
+
+
+
+// Route to render the add meal page
+router.get('/addMeal', checkWeightGoal, async (req, res) => {
+  const { mealType } = req.query;
+  if (!mealType) {
+    return res.status(400).send('Meal type is required');
+  }
+  res.render('addMeal', { page: 'Add Meal', mealType });
+});
+
+// Route to handle adding food and updating macros
+router.post('/addMeal', async (req, res) => {
+  const { mealType, foodName, ingredients, portionSizes, portionUnits } = req.body;
+  try {
+    const userId = req.session.user._id;
+
+    const ingredientList = ingredients.map((ingredient, index) => ({
+      name: ingredient,
+      amount: portionSizes[index],
+      unit: portionUnits[index]
+    }));
+
+    console.log('Ingredient List:', ingredientList); // Log the ingredientList for debugging
+
+    const nutritionalInfo = await getNutritionalInfo(ingredientList);
+    const meal = {
+      mealType,
+      foodName,
+      calories: nutritionalInfo.calories,
+      protein: nutritionalInfo.protein,
+      carbs: nutritionalInfo.carbs,
+      fats: nutritionalInfo.fats,
+      date: new Date().setHours(0, 0, 0, 0)
+    };
+
+    const today = new Date().setHours(0, 0, 0, 0);
+    let dailyMacro = await DailyMacro.findOne({ userId, date: today });
+
+    if (!dailyMacro) {
+      dailyMacro = new DailyMacro({
+        userId,
+        date: today,
+        calories: meal.calories,
+        protein: meal.protein,
+        carbs: meal.carbs,
+        fats: meal.fats,
+        meals: [meal]
+      });
+    } else {
+      dailyMacro.calories += meal.calories;
+      dailyMacro.protein += meal.protein;
+      dailyMacro.carbs += meal.carbs;
+      dailyMacro.fats += meal.fats;
+      dailyMacro.meals.push(meal);
+    }
+
+    await dailyMacro.save();
+    res.redirect('/health/meals');
+  } catch (error) {
+    console.error('Error adding meal:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+
+// Route to render the meal page
+router.get('/meals', checkWeightGoal, async (req, res) => {
+  try {
+    const userId = req.session.user._id;
+    const today = new Date().setHours(0, 0, 0, 0);
+    const dailyMacro = await DailyMacro.findOne({ userId, date: today });
+
+    res.render('meals', { page: 'Meals', dailyMacros: dailyMacro ? dailyMacro.meals : [] });
+  } catch (error) {
+    console.error('Error fetching meals:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 // Route to macro progression page
 router.get('/macroProgression', checkWeightGoal, async (req, res) => {
   try {
     const userId = req.session.user._id;
     const user = await User.findById(userId);
 
-    // Default values when no meals have been logged
+    const today = new Date().setHours(0, 0, 0, 0);
+    const dailyMacro = await DailyMacro.findOne({ userId, date: today });
+
     let consumedCalories = 0;
     let totalProtein = 0;
     let totalCarbs = 0;
     let totalFats = 0;
 
-    // Calculate the goal based on the user's calorie goal
-    const goalCalories = user.calorieGoal || 2500; 
+    if (dailyMacro) {
+      consumedCalories = dailyMacro.calories;
+      totalProtein = dailyMacro.protein;
+      totalCarbs = dailyMacro.carbs;
+      totalFats = dailyMacro.fats;
+    }
+
+    const goalCalories = user.calorieGoal || 2500;
     const remainingCalories = goalCalories - consumedCalories;
 
     const goalProtein = (goalCalories * 0.30) / 4; // 30% of calories from protein, 4 cal per gram
@@ -121,7 +282,6 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
 
     res.render('macroProgression', {
       page: 'Nutrition',
-      macros: [], 
       goalCalories,
       consumedCalories,
       remainingCalories,
@@ -134,42 +294,6 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
     });
   } catch (error) {
     console.error('Error rendering macroProgression:', error);
-    res.status(500).send('Internal Server Error');
-  }
-});
-
-// Route to fetch nutritional info and add food entry from spoonacular api
-const getNutritionalInfo = async (foodItems) => {
-  try {
-    const response = await axios.post(`https://api.spoonacular.com/recipes/visualizeNutrition`, {
-      ingredientList: foodItems,
-      servings: 1
-    }, {
-      params: { apiKey: API_KEY }
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching nutritional info:', error);
-    throw error;
-  }
-};
-
-router.post('/addFood', async (req, res) => {
-  const { foodItems } = req.body;
-  try {
-    const nutritionalInfo = await getNutritionalInfo(foodItems);
-    const dailyMacro = new DailyMacro({
-      userId: req.session.user._id,
-      date: new Date(),
-      calories: nutritionalInfo.calories,
-      protein: nutritionalInfo.protein,
-      carbs: nutritionalInfo.carbs,
-      fats: nutritionalInfo.fat
-    });
-    await dailyMacro.save();
-    res.status(201).send('Food added and nutritional info saved successfully');
-  } catch (error) {
-    console.error('Error adding food:', error);
     res.status(500).send('Internal Server Error');
   }
 });
@@ -276,6 +400,27 @@ router.post('/setWeightGoal', async (req, res) => {
     res.redirect('/health/macroProgression');
   } catch (error) {
     console.error('Error setting weight goal:', error.message); 
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+router.get('/autocomplete', async (req, res) => {
+  const query = req.query.q;
+  if (!query) {
+    return res.status(400).send('Query parameter "q" is required');
+  }
+
+  try {
+    const response = await axios.get(`https://api.spoonacular.com/food/ingredients/autocomplete`, {
+      params: {
+        apiKey: API_KEY,
+        query,
+        number: 10
+      }
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching autocomplete suggestions:', error);
     res.status(500).send('Internal Server Error');
   }
 });
