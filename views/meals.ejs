@@ -1,82 +1,32 @@
 <%- include('templates/header') %>
 <div class="container mt-5">
-  <h2 class="text-center mb-4">Meals</h2>
 
-  <div class="meal-section mb-4">
-    <h3>Breakfast <a href="/health/addMeal?mealType=breakfast" class="btn btn-sm btn-secondary">Add food</a></h3>
-    <div>
-      <% if (dailyMacros && dailyMacros.length) { %>
-        <% dailyMacros.forEach(macro => { if (macro.mealType === 'breakfast') { %>
-          <div class="meal-item">
-            <p><strong><%= macro.foodName %></strong></p>
-            <p>Protein: <%= macro.protein %> g</p>
-            <p>Carbohydrates: <%= macro.carbs %> g</p>
-            <p>Fat: <%= macro.fats %> g</p>
-            <p>Calories: <%= macro.calories %></p>
-          </div>
-        <% } }); %>
-      <% } else { %>
-        <p>No breakfast items added yet.</p>
-      <% } %>
+  <% const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack']; %>
+  <% mealTypes.forEach(mealType => { %>
+    <div class="meal-section mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 bar" data-toggle="collapse" data-target="#<%= mealType %>Collapse" aria-expanded="false" aria-controls="<%= mealType %>Collapse">
+        <h3 class="mb-0 text-capitalize"><%= mealType %></h3>
+        <a href="/health/addMeal?mealType=<%= mealType %>" class="btn btn-sm btn-secondary ml-3">Add food</a>
+      </div>
+      <div class="collapse" id="<%= mealType %>Collapse">
+        <div class="meal-content">
+          <% if (dailyMacros && dailyMacros.length) { %>
+            <% dailyMacros.forEach(macro => { if (macro.mealType === mealType) { %>
+              <div class="meal-item card p-3 mb-3 bg-dark text-white">
+                <p><strong><%= macro.foodName %></strong></p>
+                <p>Protein: <%= macro.protein %> g</p>
+                <p>Carbohydrates: <%= macro.carbs %> g</p>
+                <p>Fat: <%= macro.fats %> g</p>
+                <p>Calories: <%= macro.calories %></p>
+              </div>
+            <% } }); %>
+          <% } else { %>
+            <p class="text-white">No <%= mealType %> items added yet.</p>
+          <% } %>
+        </div>
+      </div>
     </div>
-  </div>
-
-  <div class="meal-section mb-4">
-    <h3>Lunch <a href="/health/addMeal?mealType=lunch" class="btn btn-sm btn-secondary">Add food</a></h3>
-    <div>
-      <% if (dailyMacros && dailyMacros.length) { %>
-        <% dailyMacros.forEach(macro => { if (macro.mealType === 'lunch') { %>
-          <div class="meal-item">
-            <p><strong><%= macro.foodName %></strong></p>
-            <p>Protein: <%= macro.protein %> g</p>
-            <p>Carbohydrates: <%= macro.carbs %> g</p>
-            <p>Fat: <%= macro.fats %></p>
-            <p>Calories: <%= macro.calories %></p>
-          </div>
-        <% } }); %>
-      <% } else { %>
-        <p>No lunch items added yet.</p>
-      <% } %>
-    </div>
-  </div>
-
-  <div class="meal-section mb-4">
-    <h3>Dinner <a href="/health/addMeal?mealType=dinner" class="btn btn-sm btn-secondary">Add food</a></h3>
-    <div>
-      <% if (dailyMacros && dailyMacros.length) { %>
-        <% dailyMacros.forEach(macro => { if (macro.mealType === 'dinner') { %>
-          <div class="meal-item">
-            <p><strong><%= macro.foodName %></strong></p>
-            <p>Protein: <%= macro.protein %> g</p>
-            <p>Carbohydrates: <%= macro.carbs %> g</p>
-            <p>Fat: <%= macro.fats %></p>
-            <p>Calories: <%= macro.calories %></p>
-          </div>
-        <% } }); %>
-      <% } else { %>
-        <p>No dinner items added yet.</p>
-      <% } %>
-    </div>
-  </div>
-
-  <div class="meal-section mb-4">
-    <h3>Snack <a href="/health/addMeal?mealType=snack" class="btn btn-sm btn-secondary">Add food</a></h3>
-    <div>
-      <% if (dailyMacros && dailyMacros.length) { %>
-        <% dailyMacros.forEach(macro => { if (macro.mealType === 'snack') { %>
-          <div class="meal-item">
-            <p><strong><%= macro.foodName %></strong></p>
-            <p>Protein: <%= macro.protein %> g</p>
-            <p>Carbohydrates: <%= macro.carbs %> g</p>
-            <p>Fat: <%= macro.fats %></p>
-            <p>Calories: <%= macro.calories %></p>
-          </div>
-        <% } }); %>
-      <% } else { %>
-        <p>No snack items added yet.</p>
-      <% } %>
-    </div>
-  </div>
+  <% }); %>
 </div>
 <%- include('templates/footer') %>
 
@@ -85,18 +35,42 @@
     margin-bottom: 20px;
   }
 
-  .meal-section h3 {
-    margin-bottom: 10px;
+  .bar {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .meal-content {
+    max-height: 200px; /* Adjust the height as needed */
+    overflow-y: auto;
   }
 
   .meal-item {
-    background-color: #f5f5f5;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 10px;
+    background-color: #343a40; /* Dark background color */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
   }
 
   .meal-item p {
     margin: 5px 0;
   }
+
+  .text-white {
+    color: #ffffff !important;
+  }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('.collapse').on('show.bs.collapse', function () {
+      $(this).siblings('.bar').find('.toggle-button').text('Hide');
+    });
+
+    $('.collapse').on('hide.bs.collapse', function () {
+      $(this).siblings('.bar').find('.toggle-button').text('Toggle');
+    });
+  });
+</script>
