@@ -437,4 +437,7 @@ cron.schedule('0 0 * * *', async () => {
   }
 });
 
-module.exports = router;
+module.exports = {
+  router,
+  DailyMacro
+};
