@@ -57,3 +57,26 @@
     margin-top: 10px;
     margin-right: 10px;
 }
+
+.modal-header .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+.modal-header .close,
+.modal-header .close:hover,
+.modal-header .close:focus {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #000; 
+}
+
+.modal-header .close span {
+    color: #000; 
+}
+
+.modal-header .close:hover span {
+    color: #333; 
+}

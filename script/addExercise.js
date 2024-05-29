@@ -2,6 +2,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.querySelector('.exercise-container');
     const addButton = document.getElementById('addButton');
 
+    function showNotification(message) {
+        const notificationMessage = document.getElementById('notificationMessage');
+        notificationMessage.textContent = message;
+        $('#notificationModal').modal('show');
+    }
+
     function createNewExerciseCard() {
         const card = document.createElement('div');
         card.classList.add('exercise-card');
@@ -81,13 +87,13 @@ document.addEventListener("DOMContentLoaded", function () {
                         card.setAttribute('data-id', result._id);
                         card.setAttribute('data-routine-id', routineId);
                     }
-                    alert('Exercise saved successfully');
+                    showNotification('Exercise saved successfully');
                 } else {
-                    alert(`Error: ${result.error}`);
+                    showNotification(`Error: ${result.error}`);
                 }
             } catch (error) {
                 console.error('Error saving exercise:', error);
-                alert('An error occurred while saving the exercise');
+                showNotification('An error occurred while saving the exercise');
             }
         }
     }
@@ -109,13 +115,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (response.ok) {
                     card.remove();
-                    alert('Exercise deleted successfully');
+                    showNotification('Exercise deleted successfully');
                 } else {
-                    alert('Error deleting exercise');
+                    showNotification('Error deleting exercise');
                 }
             } catch (error) {
                 console.error('Error deleting exercise:', error);
-                alert('An error occurred while deleting the exercise');
+                showNotification('An error occurred while deleting the exercise');
             }
         }
     }

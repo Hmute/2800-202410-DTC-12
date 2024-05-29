@@ -1,6 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
     const container = document.querySelector('.exercise-container');
 
+    function showNotification(message) {
+        const notificationMessage = document.getElementById('notificationMessage');
+        notificationMessage.textContent = message;
+        $('#notificationModal').modal('show');
+    }
+
     async function deleteExerciseCard(event) {
         if (event.target.classList.contains('delete-button')) {
             event.preventDefault(); 
@@ -11,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!id) {
                 console.log('No ID found, removing card locally');
                 card.remove();
+                showNotification('Exercise removed locally');
                 return;
             }
 
@@ -21,14 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (response.ok) {
-                    alert('Exercise deleted successfully');
                     card.remove();
+                    showNotification('Exercise deleted successfully');
                 } else {
-                    alert('Error deleting exercise');
+                    showNotification('Error deleting exercise');
                 }
             } catch (error) {
                 console.error('Error deleting exercise:', error);
-                alert('An error occurred while deleting the exercise');
+                showNotification('An error occurred while deleting the exercise');
             }
         }
     }
