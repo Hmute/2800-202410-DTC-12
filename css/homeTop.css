@@ -1,100 +1,21 @@
-.calender-body {
-    font-family: Arial, sans-serif;
+body {
     background-color: #2E2F38;
-    color: white;
+    color: #FFFFFF;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-.calendar-bar {
-    width: 90%;
-    background-color: #3E3F48;
-    padding: 10px;
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 10px;
-    flex-direction: column;
+.greeting-body {
+    margin-bottom: 20px;
 }
-
-.calendar-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.calendar-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    overflow-x: auto;
-}
-
-.calendar-container::-webkit-scrollbar {
-    display: none;
-}
-
-.calendar-item {
-    display: inline-block;
-    text-align: center;
-    width: 50px;
-    padding: 10px;
-    margin: 5px;
-    background-color: #2E2F38;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.selected {
-    background-color: #00B4D8;
-    color: #FFFFFF;
-}
-
-.modal-calendar-container {
-    width: 100%;
-    margin-top: 20px;
-}
-
-#history {
-    margin-top: 20px;
-    color: white;
-}
-
-.month-button {
-    background-color: #2E2F38;
-    border: none;
-    border-radius: 5px;
-    color: white;
-    padding: 5px 10px;
-    cursor: pointer;
-}
-
 
 .progression-body {
-    font-family: Arial, sans-serif;
     background-color: #2E2F38;
     color: white;
-    margin: 0;
-    padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-
-}
-
-.progression-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    width: 90%;
-    margin-top: 20px;
 }
 
 .progression-box {
@@ -103,6 +24,8 @@
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
+    transition: background-color 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .progression-box:hover {
@@ -110,9 +33,25 @@
 }
 
 .progression-box h3 {
-    margin: 10px 0;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
 }
 
 .progression-box p {
     margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+@media (max-width: 576px) {
+    .progression-box {
+        padding: 15px;
+    }
+
+    .progression-box h3 {
+        font-size: 1.25rem;
+    }
+
+    .progression-box p {
+        font-size: 1rem;
+    }
 }

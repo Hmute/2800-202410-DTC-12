@@ -12,7 +12,7 @@ router.get('/', async (req, res) => {
         const Routines = myDatabase.model('Routine', Routine.schema);
         const routines = await Routines.find({ user: user._id });
 
-        res.render('home', { user, page: 'Home', saved, routines });
+        res.render('home', {  userName: user.fullName, user, page: 'Home', saved, routines });
     } catch (err) {
         console.error('Error fetching routines:', err);
         res.status(500).send('An error occurred');
