@@ -1,12 +1,11 @@
 <%- include('templates/header') %>
 <div class="container mt-5">
-
   <% const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack']; %>
   <% mealTypes.forEach(mealType => { %>
     <div class="meal-section mb-4">
       <div class="d-flex justify-content-between align-items-center mb-3 bar" data-toggle="collapse" data-target="#<%= mealType %>Collapse" aria-expanded="false" aria-controls="<%= mealType %>Collapse">
         <h3 class="mb-0 text-capitalize"><%= mealType %></h3>
-        <a href="/health/addMeal?mealType=<%= mealType %>" class="btn btn-sm btn-secondary ml-3">Add food</a>
+        <a href="/health/addMeal?mealType=<%= mealType %>" class="btn btn-sm btn-secondary ml-3 add-food-button">Add food</a>
       </div>
       <div class="collapse" id="<%= mealType %>Collapse">
         <div class="meal-content">
@@ -61,16 +60,22 @@
   .text-white {
     color: #ffffff !important;
   }
+
+  .add-food-button {
+    cursor: pointer;
+    z-index: 2;
+  }
 </style>
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    $('.collapse').on('show.bs.collapse', function () {
-      $(this).siblings('.bar').find('.toggle-button').text('Hide');
+    $('.bar').on('click', function () {
+      $(this).next('.collapse').collapse('toggle');
     });
 
-    $('.collapse').on('hide.bs.collapse', function () {
-      $(this).siblings('.bar').find('.toggle-button').text('Toggle');
+    $('.add-food-button').on('click', function (e) {
+      e.stopPropagation();
+      // Let the default action of the button proceed
     });
   });
 </script>

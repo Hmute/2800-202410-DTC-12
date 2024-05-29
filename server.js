@@ -71,6 +71,7 @@ mongoose.connect(mongoUri, {
   const addFoodRoute = require('./routes/addFoodRoute');
   const { router: healthRoutes } = require('./routes/healthRoutes'); 
   const dashboardRoute = require('./routes/dashboardRoute');
+  const exerciseRoutes = require('./routes/exerciseRoutes');
 
 
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
@@ -87,6 +88,7 @@ mongoose.connect(mongoUri, {
   app.use('/addFood', addFoodRoute);
   app.use('/health', healthRoutes);
   app.use('/dashboard', dashboardRoute);
+  app.use('/exercises', exerciseRoutes);
 
 
   // Sign-out route

@@ -1,20 +1,17 @@
 <%- include('templates/header') %>
     <%- include('templates/footer', { user: user }) %>
         <%- include("homeTop") %>
-            <%- include("homeBot") %>
 
                 <!-- Popup modal for saved workouts -->
-                <% if (saved==='true' ) { %>
-                    <div class="modal fade" id="savedModal" tabindex="-1" aria-labelledby="savedModalLabel"
-                        aria-hidden="true">
+                <% if (saved === 'true') { %>
+                    <div class="modal fade" id="savedModal" tabindex="-1" aria-labelledby="savedModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-body text-black">
                                     Your workouts have been saved successfully!
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary text-black"
-                                        data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary text-black" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
                         </div>
@@ -24,6 +21,7 @@
                             $('#savedModal').modal('show');
                         });
                     </script>
-                    <% } %>
-                        <script src="/script/savePopup.js"></script>
-                        <%- include('templates/footer') %>
+                <% } %>
+                <script src="/script/savePopup.js"></script>
+                <%- include('templates/footer') %>
+                
