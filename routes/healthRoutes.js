@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const axios = require('axios');
-const User = require('./User'); 
+const User = require('./User');
 
 const API_KEY = 'c67a4478403a4b289ed42b3d73447701';
 
@@ -65,6 +65,31 @@ const adjustTDEEForWeightGoal = (tdee, weightGoal, currentWeight, goalTimeframe)
   return tdee - dailyCaloricAdjustment;
 };
 
+// Function to correct negative values
+const correctNegativeValues = (entry) => {
+  entry.calories = Math.max(entry.calories, 0);
+  entry.protein = Math.max(entry.protein, 0);
+  entry.carbs = Math.max(entry.carbs, 0);
+  entry.fats = Math.max(entry.fats, 0);
+  return entry;
+};
+
+// Function to check if the goal is reasonable
+const isReasonableGoal = (weightGoal, currentWeight, goalTimeframe) => {
+  const weightDifference = Math.abs(currentWeight - weightGoal);
+  const weeklyWeightChange = weightDifference / goalTimeframe;
+  const maxWeeklyWeightLoss = 1; // Maximum safe weight loss per week in kg
+
+  return weeklyWeightChange <= maxWeeklyWeightLoss;
+};
+
+// Function to calculate recommended timeframe
+const calculateRecommendedTimeframe = (weightGoal, currentWeight) => {
+  const weightDifference = Math.abs(currentWeight - weightGoal);
+  const maxWeeklyWeightLoss = 1; // Maximum safe weight loss per week in kg
+  return Math.ceil(weightDifference / maxWeeklyWeightLoss);
+};
+
 // Middleware to check if the user has set a weight goal
 const checkWeightGoal = async (req, res, next) => {
   const user = await User.findById(req.session.user._id);
@@ -113,7 +138,6 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
   }
 });
 
-
 // Route to fetch nutritional info and add food entry from spoonacular api
 const getNutritionalInfo = async (foodItems) => {
   try {
@@ -154,10 +178,12 @@ router.post('/addFood', async (req, res) => {
 router.get('/setWeightGoal', async (req, res) => {
   try {
     const user = await User.findById(req.session.user._id);
+    const errorMessage = req.query.error;
+    const recommendedTimeframe = req.query.recommendedTimeframe;
     if (!user.gender || !user.weight || !user.height || !user.age) {
       res.render('completeProfile', { user, page: 'Complete Profile' });
     } else {
-      res.render('setWeightGoal', { user, page: 'Set Weight Goal' });
+      res.render('setWeightGoal', { user, page: 'Set Weight Goal', errorMessage, recommendedTimeframe });
     }
   } catch (error) {
     console.error('Error rendering setWeightGoal:', error);
@@ -215,6 +241,12 @@ router.post('/setWeightGoal', async (req, res) => {
       throw new Error('Invalid BMR or TDEE calculation');
     }
 
+    // Validate the weight goal and timeframe
+    if (!isReasonableGoal(weightGoal, weight, goalTimeframe)) {
+      const recommendedTimeframe = calculateRecommendedTimeframe(weightGoal, weight);
+      return res.redirect(`/health/setWeightGoal?error=Extreme weight goals are not recommended. Please set a more reasonable timeframe.&recommendedTimeframe=${recommendedTimeframe}`);
+    }
+
     const adjustedTDEE = adjustTDEEForWeightGoal(tdee, weightGoal, weight, goalTimeframe);
 
     console.log('Calculated BMR:', bmr);
@@ -235,11 +267,12 @@ router.post('/setWeightGoal', async (req, res) => {
       carbs: (adjustedTDEE * 0.40) / 4, // 40% of calories from carbs
       fats: (adjustedTDEE * 0.30) / 9 // 30% of calories from fats
     });
-
-    await dailyMacro.save();
-
-    console.log('Daily macro entry saved:', dailyMacro);
-
+  
+    const correctedDailyMacro = correctNegativeValues(dailyMacro);
+    await correctedDailyMacro.save();
+  
+    console.log('Daily macro entry saved:', correctedDailyMacro);
+  
     res.redirect('/health/macroProgression');
   } catch (error) {
     console.error('Error setting weight goal:', error.message); 
