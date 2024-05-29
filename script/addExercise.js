@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.target.classList.contains('save-button')) {
             const card = event.target.closest('.exercise-card');
             const id = card.getAttribute('data-id');
+            const routineId = card.getAttribute('data-routine-id');
             const name = card.querySelector('input[name="name"]').value;
             const repetitions = card.querySelector('input[name="repetitions"]').value;
             const sets = card.querySelector('input[name="sets"]').value;
@@ -78,6 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (response.ok) {
                     if (!id) {
                         card.setAttribute('data-id', result._id);
+                        card.setAttribute('data-routine-id', routineId);
                     }
                     alert('Exercise saved successfully');
                 } else {
