@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Routine = require('../routes/Routine'); // Ensure this path is correct
+const Routine = require('../routes/Routine'); 
 
 // Route to render the exercise log page
 router.get('/', (req, res) => {
