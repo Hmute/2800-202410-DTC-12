@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 
 // Route to display the signup form
 router.get('/', (req, res) => {
+    if (req.session.isAuthenticated) {
+        return res.redirect('/home');
+      }
     res.render('signup', { error: null });
 });
 

@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const Routine = require('../routes/Routine'); // Import the central model
 
 router.get('/', async (req, res) => {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+    }
     const { saved } = req.query;
     const user = req.session.user;
 

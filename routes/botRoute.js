@@ -144,11 +144,8 @@ function shuffleArray(array) {
 
 // Render the initial form page
 router.get('/', async (req, res) => {
-  const userId = req.session.userId;
-
-  if (!userId) {
-    console.error('User ID not found in session');
-    return res.status(400).send('User ID not found in session');
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
   }
 
   try {

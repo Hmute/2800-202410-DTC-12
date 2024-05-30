@@ -16,8 +16,8 @@ const Weight = mongoose.model('Weight', weightSchema);
 
 // Authentication middleware
 function authMiddleware(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).send('Unauthorized');
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
   }
   next();
 }
