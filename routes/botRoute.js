@@ -144,6 +144,8 @@ function shuffleArray(array) {
 
 // Render the initial form page
 router.get('/', async (req, res) => {
+  const userId = req.session.userId;
+
   if (!req.session.isAuthenticated) {
     return res.redirect('/login');
   }
