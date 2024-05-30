@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   fetchExerciseLogs();
 
-  // Add event listener to the delete confirmation button
   document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
     const routineId = document.getElementById('confirmDeleteBtn').dataset.routineId;
     const exerciseId = document.getElementById('confirmDeleteBtn').dataset.exerciseId;
@@ -9,12 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function fetchExerciseLogs() {
+function fetchExerciseLogs(expandedSections = []) {
   fetch('/exercises/data')
     .then(response => response.json())
     .then(data => {
       const groupedRoutines = groupRoutinesByDate(data);
-      populateExerciseLogs(groupedRoutines);
+      populateExerciseLogs(groupedRoutines, expandedSections);
     })
     .catch(error => {
       console.error('Error fetching exercise logs:', error);
@@ -33,7 +32,7 @@ function groupRoutinesByDate(routines) {
   return grouped;
 }
 
-function populateExerciseLogs(groupedRoutines) {
+function populateExerciseLogs(groupedRoutines, expandedSections) {
   const container = document.getElementById('exerciseLogContainer');
   container.innerHTML = ''; // Clear existing content
 
@@ -47,10 +46,13 @@ function populateExerciseLogs(groupedRoutines) {
     const allComplete = routines.every(routine =>
       routine.exercises.every(exercise => exercise.completion === 'Yes')
     );
+    const hasExercises = routines.some(routine => routine.exercises.length > 0);
     const isToday = date === today;
-    const statusText = isToday
-      ? allComplete ? 'Complete' : 'In Progress'
-      : allComplete ? 'Complete' : 'Incomplete';
+    const statusText = hasExercises
+      ? isToday
+        ? allComplete ? 'Complete' : 'In Progress'
+        : allComplete ? 'Complete' : 'Incomplete'
+      : '';
 
     dateGroup.innerHTML = `
       <div class="routine-header" data-bs-toggle="collapse" data-bs-target="#routine-${date.replace(/\//g, '-')}" aria-expanded="false" aria-controls="routine-${date.replace(/\//g, '-')}">
@@ -61,7 +63,7 @@ function populateExerciseLogs(groupedRoutines) {
       </div>
       <div id="routine-${date.replace(/\//g, '-')}" class="collapse">
         ${routines.map(routine => routine.exercises.map(exercise => `
-          <div class="card mb-3">
+          <div class="card mb-3" id="exercise-${exercise._id}">
             <div class="card-body" data-id="${exercise._id}">
               <h5 class="card-title">${exercise.name}</h5>
               <p class="card-text">${exercise.sets} Sets ${exercise.repetitions} Reps</p>
@@ -77,10 +79,14 @@ function populateExerciseLogs(groupedRoutines) {
     `;
     container.appendChild(dateGroup);
 
+    const collapseElement = document.getElementById(`routine-${date.replace(/\//g, '-')}`);
+    if (expandedSections.includes(collapseElement.id)) {
+      bootstrap.Collapse.getOrCreateInstance(collapseElement).show();
+    }
+
     // Add event listener for collapsing
     const headerElement = dateGroup.querySelector('.routine-header');
     headerElement.addEventListener('click', () => {
-      const collapseElement = document.getElementById(`routine-${date.replace(/\//g, '-')}`);
       const allOtherCollapses = document.querySelectorAll('.collapse');
       allOtherCollapses.forEach(collapse => {
         if (collapse !== collapseElement) {
@@ -92,7 +98,22 @@ function populateExerciseLogs(groupedRoutines) {
   });
 }
 
+function getExpandedSections() {
+  return Array.from(document.querySelectorAll('.collapse.show')).map(section => section.id);
+}
+
+function restoreExpandedSections(expandedSections) {
+  expandedSections.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      bootstrap.Collapse.getOrCreateInstance(element).show();
+    }
+  });
+}
+
 function editExercise(routineId, exerciseId) {
+  const expandedSections = getExpandedSections();
+
   fetch(`/exercises/data/${routineId}/${exerciseId}`)
     .then(response => response.json())
     .then(data => {
@@ -127,8 +148,8 @@ function editExercise(routineId, exerciseId) {
               <option value="No" ${data.completion === 'No' ? 'selected' : ''}>No</option>
             </select>
           </div>
-          <button type="button" class="btn btn-primary" onclick="saveExercise('${routineId}', '${exerciseId}')">Save</button>
-          <button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick='saveExercise("${routineId}", "${exerciseId}", ${JSON.stringify(expandedSections)})'>Save</button>
+          <button type="button" class="btn btn-secondary" onclick='cancelEdit(${JSON.stringify(expandedSections)})'>Cancel</button>
         </form>
       `;
     })
@@ -137,7 +158,7 @@ function editExercise(routineId, exerciseId) {
     });
 }
 
-function saveExercise(routineId, exerciseId) {
+function saveExercise(routineId, exerciseId, expandedSections) {
   const updatedExercise = {
     repetitions: document.getElementById('exerciseReps').value,
     sets: document.getElementById('exerciseSets').value,
@@ -156,15 +177,15 @@ function saveExercise(routineId, exerciseId) {
     .then(response => response.json())
     .then(data => {
       console.log('Exercise updated successfully:', data);
-      fetchExerciseLogs(); // Refresh the exercise logs
+      fetchExerciseLogs(expandedSections); // Refresh the exercise logs
     })
     .catch(error => {
       console.error('Error updating exercise:', error);
     });
 }
 
-function cancelEdit() {
-  fetchExerciseLogs();
+function cancelEdit(expandedSections) {
+  fetchExerciseLogs(expandedSections);
 }
 
 function showDeleteModal(routineId, exerciseId) {
@@ -176,15 +197,21 @@ function showDeleteModal(routineId, exerciseId) {
 }
 
 function deleteExercise(routineId, exerciseId) {
+  const expandedSections = getExpandedSections();
+
   fetch(`/exercises/data/${routineId}/${exerciseId}`, {
     method: 'DELETE',
   })
     .then(response => response.json())
     .then(data => {
       console.log('Exercise deleted successfully:', data);
+      const exerciseElement = document.getElementById(`exercise-${exerciseId}`);
+      if (exerciseElement) {
+        exerciseElement.remove();
+      }
       const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
       deleteModal.hide();
-      fetchExerciseLogs(); // Refresh the exercise logs
+      fetchExerciseLogs(expandedSections); // Refresh the exercise logs
     })
     .catch(error => {
       console.error('Error deleting exercise:', error);
