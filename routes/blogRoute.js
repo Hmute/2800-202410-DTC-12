@@ -9,6 +9,9 @@ const upload = multer({ storage: storage });
 const isAuthenticated = require("../middlewares/blogMiddlewares");
 
 router.get("/", async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
   try {
     // Fetch the latest blogs
     const blogs = await Blog.find().sort({ fullDate: -1 });

@@ -4,6 +4,9 @@ const Routine = require('../routes/Routine');
 
 // Route to render the exercise log page
 router.get('/', (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect("/login");
+  }
   res.render('exercise', { page: 'Exercises' });
 });
 

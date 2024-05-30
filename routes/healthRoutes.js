@@ -102,6 +102,10 @@ const calculateRecommendedTimeframe = (weightGoal, currentWeight) => {
 
 // Middleware to check if the user has set a weight goal
 const checkWeightGoal = async (req, res, next) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const user = await User.findById(req.session.user._id);
   if (!user.weightGoal) {
     return res.redirect('/health/setWeightGoal');
@@ -174,6 +178,10 @@ const getNutritionalInfo = async (ingredients) => {
 
 // Route to render the add meal page
 router.get('/addMeal', checkWeightGoal, async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const { mealType } = req.query;
   if (!mealType) {
     return res.status(400).send('Meal type is required');
@@ -183,6 +191,10 @@ router.get('/addMeal', checkWeightGoal, async (req, res) => {
 
 // Route to handle adding food and updating macros
 router.post('/addMeal', async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const { mealType, foodName, ingredients, portionSizes, portionUnits } = req.body;
   try {
     const userId = req.session.user._id;
@@ -237,6 +249,10 @@ router.post('/addMeal', async (req, res) => {
 
 // Route to render the meal page
 router.get('/meals', checkWeightGoal, async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   try {
     const userId = req.session.user._id;
     const today = new Date().setHours(0, 0, 0, 0);
@@ -251,6 +267,10 @@ router.get('/meals', checkWeightGoal, async (req, res) => {
 
 // Route to macro progression page
 router.get('/macroProgression', checkWeightGoal, async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   try {
     const userId = req.session.user._id;
     const user = await User.findById(userId);
@@ -297,6 +317,10 @@ router.get('/macroProgression', checkWeightGoal, async (req, res) => {
 
 // Route to render the weight goal setting page
 router.get('/setWeightGoal', async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   try {
     const user = await User.findById(req.session.user._id);
     const errorMessage = req.query.error;
@@ -314,6 +338,10 @@ router.get('/setWeightGoal', async (req, res) => {
 
 // Route to handle profile completion submission
 router.post('/completeProfile', async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const { gender, weight, height, age } = req.body;
   try {
     const user = await User.findById(req.session.user._id);
@@ -331,6 +359,10 @@ router.post('/completeProfile', async (req, res) => {
 
 // Route to handle weight goal submission
 router.post('/setWeightGoal', async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const { weightGoal, goalTimeframe } = req.body;
   try {
     console.log('Form data received:', req.body);
@@ -402,6 +434,10 @@ router.post('/setWeightGoal', async (req, res) => {
 });
 
 router.get('/autocomplete', async (req, res) => {
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
+  }
+  
   const query = req.query.q;
   if (!query) {
     return res.status(400).send('Query parameter "q" is required');

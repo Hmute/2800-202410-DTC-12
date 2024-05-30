@@ -14,10 +14,10 @@ const upload = multer({ storage: storage }).fields([
 
 // Get profile page
 router.get("/profile", async (req, res) => {
-  const username = req.session.username;
-  if (!username) {
-    return res.status(401).send("Unauthorized: No username in session");
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
   }
+  const username = req.session.username;
   try {
     const user = await User.findOne({ username: username });
     if (!user) {

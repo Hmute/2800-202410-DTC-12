@@ -4,6 +4,9 @@ const Routine = require('../routes/Routine');
 const User = require('../routes/User');
 
 router.get('/', async (req, res) => {
+    if (!req.session.isAuthenticated) {
+        return res.redirect('/login');
+      }
     const userId = req.session.userId;
 
     if (!userId) {

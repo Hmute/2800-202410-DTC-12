@@ -5,6 +5,9 @@ const bcrypt = require("bcrypt");
 
 // GET: Display login form
 router.get("/", (req, res) => {
+  if (req.session.isAuthenticated) {
+    return res.redirect('/home');
+  }
   res.render("login", { error: null, user: req.session.user });
 });
 
