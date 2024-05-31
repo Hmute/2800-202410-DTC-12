@@ -1,12 +1,17 @@
-document.addEventListener("DOMContentLoaded", function() {
+// Wait for the DOM to fully load before running the script
+document.addEventListener("DOMContentLoaded", function () {
+  // Select the close button element by its class
   const closeButton = document.querySelector(".close-btn");
 
+  // Check if the close button exists
   if (closeButton) {
+    // Add a click event listener to the close button
     closeButton.addEventListener("click", () => {
-      // This gives me the url of a previous link. So I go back to the proper place on where I clicked the card.
+      // Get the URL of the previous page
       const referrer = document.referrer;
       console.log("Referrer:", referrer);
-      
+
+      // Redirect based on the referrer URL
       if (referrer.includes("/blog/posts")) {
         console.log("Redirecting to /blog/posts");
         window.location.href = "/blog/posts";

@@ -1,21 +1,26 @@
+// Wait for the DOM to fully load before running the script
 document.addEventListener("DOMContentLoaded", () => {
   const logoWrap = document.getElementById("logoWrap");
   const music = document.getElementById("explosionMusic");
   const discoBall = document.getElementById("discoBall");
   let longPressTimer;
 
+  // Set a timer to trigger the easter egg if the logo is pressed for 1 second
   logoWrap.addEventListener("mousedown", () => {
     longPressTimer = setTimeout(triggerEasterEgg, 1000); // 1 second to trigger event
   });
 
+  // Clear the timer if the mouse is released before 1 second
   logoWrap.addEventListener("mouseup", () => {
     clearTimeout(longPressTimer);
   });
 
+  // Clear the timer if the mouse leaves the logo before 1 second
   logoWrap.addEventListener("mouseleave", () => {
     clearTimeout(longPressTimer);
   });
 
+  // Function to trigger the easter egg
   function triggerEasterEgg() {
     hideLogo(() => {
       const images = [
@@ -31,10 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         "images/Easter_Egg/yoga-pose.png",
       ];
 
+      // Get the center position of the logo
       const logoRect = logoWrap.getBoundingClientRect();
       const logoCenterX = logoRect.left + logoRect.width / 2;
       const logoCenterY = logoRect.top + logoRect.height / 2;
 
+      // Create and position 30 random images around the logo
       for (let i = 0; i < 30; i++) {
         const img = document.createElement("img");
         img.src = images[Math.floor(Math.random() * images.length)];
@@ -51,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 100);
       }
 
+      // Trigger the explosion, music, and disco ball effects after 1 second
       setTimeout(() => {
         showRobot();
         explodeEasterEggs();
@@ -58,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showDiscoBall();
       }, 1000); // Explode after 1 second
 
+      // Clear the effects after 15 seconds
       setTimeout(() => {
         clearEasterEggs();
         hideRobot();
@@ -67,12 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Function to hide the logo
   function hideLogo(callback) {
     const logo = logoWrap.querySelector("img");
     logo.style.display = "none";
     callback();
   }
 
+  // Function to show the robot
   function showRobot() {
     const robot = document.createElement("img");
     robot.src = "images/robot.gif";
@@ -82,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     window.robot = robot;
   }
 
+  // Function to hide the robot
   function hideRobot() {
     const robot = window.robot;
     if (robot) {
@@ -89,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Function to animate the easter eggs
   function explodeEasterEggs() {
     const eggs = document.querySelectorAll(".easter-egg");
     eggs.forEach((egg) => {
@@ -114,6 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(startBouncing, 1000);
   }
 
+  // Function to start bouncing the easter eggs
   function startBouncing() {
     const eggs = document.querySelectorAll(".easter-egg");
     eggs.forEach((egg) => {
@@ -167,6 +181,7 @@ document.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(bounce);
   }
 
+  // Function to clear the easter eggs and show the logo again
   function clearEasterEggs() {
     const eggs = document.querySelectorAll(".easter-egg");
     eggs.forEach((egg) => egg.remove());
@@ -174,24 +189,29 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogo();
   }
 
+  // Function to show the logo
   function showLogo() {
     const logo = logoWrap.querySelector("img");
     logo.style.display = "block";
   }
 
+  // Function to play the explosion music
   function playMusic() {
     music.play();
   }
 
+  // Function to stop the explosion music
   function stopMusic() {
     music.pause();
     music.currentTime = 0;
   }
 
+  // Function to show the disco ball
   function showDiscoBall() {
     discoBall.style.display = "block";
   }
 
+  // Function to hide the disco ball
   function hideDiscoBall() {
     discoBall.style.display = "none";
   }
