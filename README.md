@@ -17,131 +17,127 @@ Database: MongoDB
 
 ## Table of Contents:
 
-│   .env \
-│   .gitignore \ 
-│   package-lock.json \
-│   package.json \
-│   README.md \
-│   server.js \
-│ \ 
-├───.vscode \
-│       settings.json \
-│ \
-├───css \
-│       addFood.css \
-│       blog.css \
-│       blogCreate.css \
-│       blogPosts.css \
-│       blogView.css \
-│       easterEgg.css \
-│       forgotPasswordReset.css \
-│       homeBot.css \
-│       homeTop.css \
-│       launch.css \
-│       logExercise.css \
-│       login.css \
-│       signup.css \
-│       style.css \
-│       userProfile.css \
-│       weight.css \
-│ \
-├───images \
-│   │   dance.mp3 \
-│   │   Default_pfp.png \
-│   │   discoball.gif \
-│   │   dog.jpg \
-│   │   robot.gif \
-│   │   Wellbot.png \
-│   │ \
-│   └───Easter_Egg \
-│           dumbbell.png \
-│           dumbbell_press.png \
-│           exercise.png \
-│           fitness.png \
-│           mobile-phone.png \
-│           muscle.png \
-│           schedule.png \
-│           weights1.png \
-│           Wellbot.png \
-│           yoga-pose.png \
-│ \
-├───middlewares \
-│       blogMiddlewares.js \
-│ \
-├───routes \
-│       addFoodRoute.js \
-│       blogRoute.js \
-│       blogSchema.js \
-│       botRoute.js \
-│       forgotPasswordResetRoute.js \
-│       healthRoutes.js \
-│       historyRoute.js \
-│       homeRoute.js \
-│       launchRoute.js \
-│       logExerciseRoute.js \
-│       loginRoute.js \
-│       PastRoutine.js \
-│       Routine.js \
-│       signupRoute.js \
-│       User.js \
-│       userProfileRoute.js \
-│       weightRoute.js \
-│       Workout.js \
-│ \
-├───script \
-│       addExercise.js \
-│       addMeal.js \
-│       blogCreateContent.js \
-│       blogCreateImage.js \
-│       blogCreateTags.js \
-│       blogDeletePost.js \
-│       blogPage.js \
-│       blogView.js \
-│       botResults.js \
-│       calendar.js \
-│       calender.js \
-│       deleteExercise.js \
-│       easterEgg.js \
-│       footer.js \
-│       homeHiddenPTag.js \
-│       macroProgression.js \
-│       progression.js \
-│       savePopup.js \
-│       userProfile.js \
-│       weight.js \
-│ \
-├───setup \
-│       cloudinary.js \
-│ \
-└───views \
-    │   addfood.ejs \
-    │   addMeal.ejs \
-    │   blogCreate.ejs \
-    │   blogPage.ejs \
-    │   blogUserPost.ejs \
-    │   blogView.ejs \
-    │   botInitial.ejs \
-    │   botResults.ejs  \
-    │   completeProfile.ejs \
-    │   forgotPasswordReset.ejs \
-    │   history.ejs \
-    │   home.ejs \
-    │   homeBot.ejs \
-    │   homeTop.ejs \
-    │   launch.ejs \
-    │   logExercise.ejs \
-    │   login.ejs \
-    │   macroProgression.ejs \
-    │   meals.ejs \
-    │   setWeightGoal.ejs \
-    │   signup.ejs \
-    │   userProfile.ejs \
-    │   weight.ejs \
-    │ \
-    └───templates \
-            footer.ejs \
-            header.ejs \
+.env
+.gitignore
+package-lock.json
+package.json
+README.md
+server.js
 
+├── .vscode\
+│ └── settings.json \
+\
+├── css\
+│ ├── addFood.css\
+│ ├── blog.css\
+│ ├── blogCreate.css\
+│ ├── blogPosts.css\
+│ ├── blogView.css\
+│ ├── easterEgg.css\
+│ ├── forgotPasswordReset.css\
+│ ├── homeBot.css\
+│ ├── homeTop.css\
+│ ├── launch.css\
+│ ├── logExercise.css\
+│ ├── login.css\
+│ ├── signup.css\
+│ ├── style.css\
+│ ├── userProfile.css\
+│ └── weight.css
+\
+├── images\
+│ ├── dance.mp3\
+│ ├── Default_pfp.png\
+│ ├── discoball.gif\
+│ ├── dog.jpg\
+│ ├── robot.gif\
+│ ├── Wellbot.png\
+│ └── Easter_Egg\
+│ ├── dumbbell.png\
+│ ├── dumbbell_press.png\
+│ ├── exercise.png\
+│ ├── fitness.png\
+│ ├── mobile-phone.png\
+│ ├── muscle.png\
+│ ├── schedule.png\
+│ ├── weights1.png\
+│ ├── Wellbot.png\
+│ └── yoga-pose.png\
+\
+├── middlewares\
+│ └── blogMiddlewares.js\
+\
+├── routes\
+│ ├── addFoodRoute.js\
+│ ├── blogRoute.js\
+│ ├── blogSchema.js\
+│ ├── botRoute.js\
+│ ├── forgotPasswordResetRoute.js\
+│ ├── healthRoutes.js\
+│ ├── historyRoute.js\
+│ ├── homeRoute.js\
+│ ├── launchRoute.js\
+│ ├── logExerciseRoute.js\
+│ ├── loginRoute.js\
+│ ├── PastRoutine.js\
+│ ├── Routine.js\
+│ ├── signupRoute.js\
+│ ├── User.js\
+│ ├── userProfileRoute.js\
+│ └── weightRoute.js\
+\
+├── script\
+│ ├── addExercise.js\
+│ ├── addMeal.js\
+│ ├── blogCreateContent.js\
+│ ├── blogCreateImage.js\
+│ ├── blogCreateTags.js\
+│ ├── blogDeletePost.js\
+│ ├── blogPage.js\
+│ ├── blogView.js\
+│ ├── botResults.js\
+│ ├── calendar.js\
+│ ├── calender.js\
+│ ├── deleteExercise.js\
+│ ├── easterEgg.js\
+│ ├── footer.js\
+│ ├── homeHiddenPTag.js\
+│ ├── macroProgression.js\
+│ ├── progression.js\
+│ ├── savePopup.js\
+│ ├── userProfile.js\
+│ └── weight.js\
+\
+├── setup\
+│ └── cloudinary.js\
+\
+└── views\
+├── addfood.ejs\
+├── addMeal.ejs\
+├── blogCreate.ejs\
+├── blogPage.ejs\
+├── blogUserPost.ejs\
+├── blogView.ejs\
+├── botInitial.ejs\
+├── botResults.ejs\
+├── completeProfile.ejs\
+├── forgotPasswordReset.ejs\
+├── history.ejs\
+├── home.ejs\
+├── homeBot.ejs\
+├── homeTop.ejs\
+├── launch.ejs\
+├── logExercise.ejs\
+├── login.ejs\
+├── macroProgression.ejs\
+├── meals.ejs\
+├── setWeightGoal.ejs\
+├── signup.ejs\
+├── userProfile.ejs\
+├── weight.ejs\
+└── templates\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── footer.ejs\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── header.ejs
 
 ## How to Install and Run
 
@@ -166,7 +162,7 @@ MONGODB_OPTIONS=<your_mongodb_options> \
 SESSION_SECRET=<your_session_secret> \
 PORT=3000  \
 WORKOUT_API_KEY=<your_workout_api_key> \
-MEAL_API_KEY=<your_meal_api_key> \
+MEAL_API_KEY=<your_meal_api_key> 
 
 d. Directory Structure: Ensure your project directory structure matches the expected setup.
 
@@ -216,6 +212,6 @@ p. Navigate back to your profile page and click the ‘Sign out’ button to sig
 	Marc Arnaldo A01383660 Togo1
 	Richard Li A00995183 RichardLi6
 	Sebastian Taylor A01368621 Sebastian-Taylor
-	Ben Oh A0137682 Ben Oh
+	Ben Oh A01378682 Ben Oh
 
 
