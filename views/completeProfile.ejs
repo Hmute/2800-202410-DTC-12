@@ -1,0 +1,60 @@
+<%- include('templates/header') %>
+<div class="container mt-5">
+  <form action="/health/completeProfile" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="gender" class="form-label">Gender:</label>
+      <select id="gender" name="gender" class="form-select" required>
+        <option value="" disabled selected>Select your gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+      <div class="invalid-feedback">
+        Please select your gender.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="weight" class="form-label">Weight (kg):</label>
+      <input type="number" id="weight" name="weight" class="form-control" required>
+      <div class="invalid-feedback">
+        Please enter your weight.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="height" class="form-label">Height (cm):</label>
+      <input type="number" id="height" name="height" class="form-control" required>
+      <div class="invalid-feedback">
+        Please enter your height.
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="age" class="form-label">Age:</label>
+      <input type="number" id="age" name="age" class="form-control" required>
+      <div class="invalid-feedback">
+        Please enter your age.
+      </div>
+    </div>
+    <div class="d-grid">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+<%- include('templates/footer') %>
+
+<script>
+  // function to validate user's input and prevent them from leaving the form blank
+  (function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+          form.classList.add('was-validated')
+        }, false)
+      })
+  })()
+</script>

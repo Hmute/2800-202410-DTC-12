@@ -5,6 +5,9 @@ const bcrypt = require('bcrypt');
 
 // Route to display the signup form
 router.get('/', (req, res) => {
+    if (req.session.isAuthenticated) {
+        return res.redirect('/home');
+      }
     res.render('signup', { error: null });
 });
 
@@ -23,7 +26,14 @@ router.post('/', async (req, res) => {
         const existingUser = await User.findOne({ username: req.body.username });
         if (existingUser) {
             console.log('Username already exists');
-            return res.render('signup', { error: 'Username already exists' });
+            return res.render('signup', { error: 'Username already in use' });
+        }
+
+        // Check if the email already exists
+        const existingEmail = await User.findOne({ email: req.body.email });
+        if (existingEmail) {
+            console.log('Email already exists');
+            return res.render('signup', { error: 'Email already exists' });
         }
 
         // Create a new user with the provided information
@@ -35,18 +45,18 @@ router.post('/', async (req, res) => {
         });
         await user.save();
 
-        console.log('User successfully created:', user);
+        req.session.username = req.body.username;
+        req.session.email = req.body.email;
+        req.session.fullName = req.body.fullName;
+        req.session.userId = user._id;
+        
+        console.log(req.session.userId);
 
         // Redirect to the user's profile page after successful signup
-        res.redirect(`/user/${user.username}`);
+        res.redirect(`/user/profile`);
     } catch (err) {
-        if (err.code === 11000) {
-            console.log('Email already exists');
-            res.render('signup', { error: 'Email already exists' });
-        } else {
-            console.error('Signup error:', err);
-            res.render('signup', { error: 'An error occurred during signup' });
-        }
+        console.error('Signup error:', err);
+        res.render('signup', { error: 'An error occurred during signup' });
     }
 });
 

@@ -3,6 +3,9 @@ const router = express.Router();
 
 // Route to display the launch form
 router.get('/', (req, res) => {
+  if (req.session.isAuthenticated) {
+    return res.redirect("/home");
+  }
   res.render('launch'); // Render the form on GET request to /launch
 });
 

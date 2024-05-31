@@ -1,48 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Document</title>
-      <link rel="stylesheet" href="css/launch.css" /> <!-- Link to the external CSS file -->
-   </head>
-   <body>
-      <div class="container">
-         <!-- Wrapper for the logo -->
-         <div class="logo-wrap">
-            <img
-               src="images/Wellbot.png"
-               alt="Wellbot Logo"
-               class="main-logo"
-            /> <!-- Display the Wellbot logo -->
-         </div>
-         <h1 class="brand-name">WELLBOT</h1> <!-- Display the brand name -->
-         <p class="tagline">AI-powered fitness, tailored to you.</p> <!-- Display the tagline -->
 
-         <div class="button-container">
-            <!-- Form to handle the 'Get Started' action -->
-            <form method="POST" action="/">
-               <button
-                  type="submit"
-                  name="action"
-                  value="getStarted"
-                  class="btn btn-primary"
-               >
-                  Get Started
-               </button> <!-- Button to submit the form and trigger the 'getStarted' action -->
-            </form>
-            <!-- Form to handle the 'Log In' action -->
-            <form method="POST" action="/">
-               <button
-                  type="submit"
-                  name="action"
-                  value="login"
-                  class="btn btn-secondary"
-               >
-                  Log In
-               </button> <!-- Button to submit the form and trigger the 'login' action -->
-            </form>
-         </div>
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Document</title>
+   <link rel="stylesheet" href="css/launch.css" /> <!-- Link to the external CSS file -->
+   <link rel="stylesheet" href="css/easterEgg.css" /> <!-- Link to the external CSS file -->
+</head>
+
+<body>
+   <div class="container">
+      <!-- Wrapper for the logo -->
+      <div class="logo-wrap" id="logoWrap">
+         <img src="images/Wellbot.png" alt="Wellbot Logo" class="main-logo" /> <!-- Display the Wellbot logo -->
       </div>
-   </body>
+      <h1 class="brand-name" id="brandName">WELLBOT</h1> <!-- Display the brand name -->
+      <p class="tagline">AI-powered fitness, tailored to you.</p> <!-- Display the tagline -->
+
+      <div class="button-container">
+         <!-- Form to handle the 'Get Started' action -->
+         <form method="POST" action="/">
+            <button type="submit" name="action" value="getStarted" class="btn btn-primary">
+               Get Started
+            </button> <!-- Button to submit the form and trigger the 'getStarted' action -->
+         </form>
+         <!-- Form to handle the 'Log In' action -->
+         <form method="POST" action="/">
+            <button type="submit" name="action" value="login" class="btn btn-secondary">
+               Log In
+            </button> <!-- Button to submit the form and trigger the 'login' action -->
+         </form>
+      </div>
+   </div>
+   <img src="images/discoball.gif" alt="Disco Ball" id="discoBall" class="disco-ball">
+
+   <audio id="explosionMusic">
+      <source src="images/dance.mp3" type="audio/mpeg">
+   </audio>
+
+   <script src="/script/easterEgg.js"></script>
+</body>
+
 </html>

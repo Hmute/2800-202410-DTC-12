@@ -13,7 +13,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // Define rate limit for API requests (adjust settings as needed)
 const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
+  windowMs: 60 * 60 * 1000, // 60 minutes
   max: 100,
   message: 'Too many requests, please try again later.'
 });
@@ -28,6 +28,7 @@ app.use('/css', express.static(path.join(__dirname, 'css')));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/script', express.static(path.join(__dirname, 'script')));
 app.use('/setup', express.static(path.join(__dirname, 'setup')));
+app.use('/middlewares', express.static(path.join(__dirname, 'middlewares')));
 
 // Database Connection
 const mongoUser = process.env.MONGODB_USER;
@@ -51,8 +52,8 @@ mongoose.connect(mongoUri, {
 
   // Middleware to make user available in all templates (must be after session middleware)
   app.use((req, res, next) => {
-      res.locals.user = req.session.user || null;
-      next();
+    res.locals.user = req.session.user || null;
+    next();
   });
 
   // Routes
@@ -62,8 +63,15 @@ mongoose.connect(mongoUri, {
   const signupRoute = require('./routes/signupRoute');
   const blogRoute = require('./routes/blogRoute');
   const botRoute = require('./routes/botRoute');
+  const historyRoute = require('./routes/historyRoute');
   const userProfileRoute = require('./routes/userProfileRoute');
-  const weightRoute = require('./routes/weightRoute');
+  const { router: weightRoute } = require('./routes/weightRoute');
+  const homeRoute = require('./routes/homeRoute');
+  const addFoodRoute = require('./routes/addFoodRoute');
+  const { router: healthRoutes } = require('./routes/healthRoutes'); 
+  const dashboardRoute = require('./routes/dashboardRoute');
+  const exerciseRoutes = require('./routes/exerciseRoutes');
+
 
   app.use('/forgotPasswordReset', forgotPasswordResetRoute);
   app.use('/', launchRoute);
@@ -71,13 +79,15 @@ mongoose.connect(mongoUri, {
   app.use('/signup', signupRoute);
   app.use('/blog', blogRoute);
   app.use('/bot', botRoute);
+  app.use('/history', historyRoute);
   app.use('/user', userProfileRoute);
   app.use('/weight', weightRoute);
+  app.use('/home', homeRoute);
+  app.use('/addFood', addFoodRoute);
+  app.use('/health', healthRoutes);
+  app.use('/dashboard', dashboardRoute);
+  app.use('/exercises', exerciseRoutes);
 
-  app.get('/home', (req, res) => {
-    const user = req.session.user;
-    res.render('home', { user, page: 'Home' });
-  });
 
   // Sign-out route
   app.post('/logout', (req, res) => {

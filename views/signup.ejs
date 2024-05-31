@@ -82,6 +82,20 @@
                 });
             }
         });
+
+        window.onload = function() {
+            const serverError = "<%= error %>";
+            if (serverError) {
+                const errorContainer = document.getElementById('error-container');
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.innerText = serverError;
+                errorContainer.appendChild(errorDiv);
+                setTimeout(() => {
+                    errorDiv.style.opacity = 1;
+                }, 100);
+            }
+        };
     </script>
 </body>
 </html>

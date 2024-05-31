@@ -1,0 +1,3 @@
+#start-weight, #current-weight, #progress, #the-current, #the-progress, #the-start {
+    color: black; /* Ensure the texts inside the graph is visible */
+}

@@ -1,111 +1,73 @@
-// routes/userProfileRoute.js
+// Wait for the DOM to fully load before running the script
+document.addEventListener("DOMContentLoaded", function () {
+  const editBtn = document.querySelector(".edit-profile-btn");
+  const signOutBtn = document.getElementById("sign-out-btn");
+  const signOutForm = document.getElementById("signout-form");
+  const profilePicture = document.getElementById("profile-picture");
+  const profilePictureInput = document.getElementById("profilePicture");
 
-const express = require('express');
-const router = express.Router();
-const User = require('./User'); // Adjust the path as needed
-const multer = require('multer');
-const path = require('path');
+  // Handle edit profile button click
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      const detailsCard = document.querySelector(".details");
+      const bioCard = document.querySelector(".bio");
+      const editDetails = document.querySelector(
+        "#edit-health-details-section"
+      );
+      const editBio = document.querySelector("#edit-bio-section");
+      const editProfileForm = document.getElementById("edit-profile-form");
+      const editLinks = document.getElementById("edit-social-icons-section");
 
-// Set storage engine
-const storage = multer.diskStorage({
-    destination: './public/images',
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-});
+      // Toggle the editing state
+      const isEditing = editBtn.classList.toggle("editing");
 
-// Init upload
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1000000 },
-    fileFilter: function (req, file, cb) {
-        checkFileType(file, cb);
-    }
-}).fields([{ name: 'profilePicture', maxCount: 1 }, { name: 'photos', maxCount: 10 }]);
+      if (isEditing) {
+        // Show edit sections and hide view sections
+        detailsCard.style.display = "none";
+        bioCard.style.display = "none";
+        editDetails.style.display = "block";
+        editBio.style.display = "block";
+        editLinks.style.display = "block";
+        editProfileForm.style.display = "block";
+        editBtn.textContent = "Save Profile";
 
-// Check File Type
-function checkFileType(file, cb) {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
+        // Handle profile picture click and change
+        if (profilePicture && profilePictureInput) {
+          profilePicture.addEventListener("click", function () {
+            profilePictureInput.click();
+          });
 
-    if (mimetype && extname) {
-        return cb(null, true);
-    } else {
-        cb('Error: Images Only!');
-    }
-}
-
-// Get profile page
-router.get('/:username', async (req, res) => {
-    const username = req.params.username;
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
+          profilePictureInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                profilePicture.src = e.target.result;
+              };
+              reader.readAsDataURL(file);
+            }
+          });
         }
-        console.log('Displaying profile for user:', user);
-        res.render('userProfile', { user, page: 'Profile' });
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
-    }
-});
+      } else {
+        // Show view sections and hide edit sections
+        detailsCard.style.display = "block";
+        bioCard.style.display = "block";
+        editDetails.style.display = "none";
+        editBio.style.display = "none";
+        editLinks.style.display = "none";
+        editProfileForm.style.display = "none";
+        editBtn.textContent = "Edit Profile";
 
-// Edit profile page
-router.post('/:username/edit', upload, async (req, res) => {
-    const username = req.params.username;
-    const { fullName, gender, age, height, weight } = req.body;
-    const profilePicture = req.files['profilePicture'] ? req.files['profilePicture'][0].filename : null;
-    const photos = req.files['photos'] ? req.files['photos'].map(file => file.filename) : [];
+        // Submit the profile edit form
+        editProfileForm.submit();
+      }
+    });
+  }
 
-    console.log('Uploaded Profile Picture:', profilePicture);
-    console.log('Uploaded Photos:', photos);
-
-    try {
-        const user = await User.findOne({ username });
-        if (!user) {
-            console.log('User not found:', username);
-            return res.status(404).send('User not found');
-        }
-
-        user.fullName = fullName || user.fullName;
-        user.gender = gender || user.gender;
-        user.age = age || user.age;
-        user.height = height || user.height;
-        user.weight = weight || user.weight;
-        if (profilePicture) user.profilePicture = profilePicture;
-        if (photos.length) user.photos.push(...photos);
-
-        await user.save();
-        res.redirect(`/user/${username}`);
-    } catch (err) {
-        console.error('Server error:', err);
-        res.status(500).send('Server error');
-    }
-});
-
-module.exports = router;
-// public/script/userProfile.js
-
-document.getElementById('edit-profile-btn').addEventListener('click', function() {
-    document.getElementById('edit-profile-form').style.display = 'block';
-    this.style.display = 'none';
-});
-
-document.getElementById('profile-picture').addEventListener('click', function() {
-    document.getElementById('profile-picture-input').click();
-});
-
-document.getElementById('profile-picture-input').addEventListener('change', function(event) {
-    const reader = new FileReader();
-    reader.onload = function() {
-        document.getElementById('profile-picture').src = reader.result;
-    };
-    reader.readAsDataURL(event.target.files[0]);
-});
-
-document.getElementById('sign-out-btn').addEventListener('click', function() {
-    window.location.href = '/login';
+  // Handle sign-out button click
+  if (signOutBtn) {
+    signOutBtn.addEventListener("click", function () {
+      signOutForm.submit();
+    });
+  }
 });

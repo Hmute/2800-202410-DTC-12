@@ -1,0 +1,81 @@
+<%- include('templates/header') %>
+<div class="container mt-5">
+  <% const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack']; %>
+  <% mealTypes.forEach(mealType => { %>
+    <div class="meal-section mb-4">
+      <div class="d-flex justify-content-between align-items-center mb-3 bar" data-toggle="collapse" data-target="#<%= mealType %>Collapse" aria-expanded="false" aria-controls="<%= mealType %>Collapse">
+        <h3 class="mb-0 text-capitalize"><%= mealType %></h3>
+        <a href="/health/addMeal?mealType=<%= mealType %>" class="btn btn-sm btn-secondary ml-3 add-food-button">Add food</a>
+      </div>
+      <div class="collapse" id="<%= mealType %>Collapse">
+        <div class="meal-content">
+          <% if (dailyMacros && dailyMacros.length) { %>
+            <% dailyMacros.forEach(macro => { if (macro.mealType === mealType) { %>
+              <div class="meal-item card p-3 mb-3 bg-dark text-white">
+                <p><strong><%= macro.foodName %></strong></p>
+                <p>Protein: <%= macro.protein %> g</p>
+                <p>Carbohydrates: <%= macro.carbs %> g</p>
+                <p>Fat: <%= macro.fats %> g</p>
+                <p>Calories: <%= macro.calories %></p>
+              </div>
+            <% } }); %>
+          <% } else { %>
+            <p class="text-white">No <%= mealType %> items added yet.</p>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+</div>
+<%- include('templates/footer') %>
+
+<style>
+  .meal-section {
+    margin-bottom: 20px;
+  }
+
+  .bar {
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .meal-content {
+    max-height: 200px; /* Adjust the height as needed */
+    overflow-y: auto;
+  }
+
+  .meal-item {
+    background-color: #343a40; /* Dark background color */
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+
+  .meal-item p {
+    margin: 5px 0;
+  }
+
+  .text-white {
+    color: #ffffff !important;
+  }
+
+  .add-food-button {
+    cursor: pointer;
+    z-index: 2;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    $('.bar').on('click', function () {
+      $(this).next('.collapse').collapse('toggle');
+    });
+
+    $('.add-food-button').on('click', function (e) {
+      e.stopPropagation();
+      // Let the default action of the button proceed
+    });
+  });
+</script>

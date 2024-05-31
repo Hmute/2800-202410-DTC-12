@@ -1,42 +1,102 @@
 <%- include('templates/header') %>
-    <div class="container mt-5">
-        <div id="weight-section">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <button class="btn btn-secondary" onclick="window.history.back();">Back</button>
-                <h1>Weight Tracker</h1>
-            </div>
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <span>Body Weight</span>
-                        <span>All</span>
+<link rel="stylesheet" href="/css/weight.css">
+<div class="container mt-5">
+    <div id="weight-section">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between my-2 text-center">
+                    <div>             
+                        <span class="chart-texts">Start:</span><br>
+                        <span id="start-weight" class="weight-value"></span>
                     </div>
-                    <div class="d-flex justify-content-between my-2">
-                        <span>Start: <span id="start-weight"></span></span>
-                        <span>Current: <span id="current-weight"></span></span>
-                        <span>Progress: <span id="progress"></span></span>
+                    <div>
+                        <span class="chart-texts">Current:</span><br>
+                        <span id="current-weight" class="weight-value"></span>
                     </div>
-                    <canvas id="weightGraph" width="400" height="200"></canvas>
+                    <div>
+                        <span class="chart-texts">Progress:</span><br>
+                        <span id="progress" class="weight-value"></span>
+                    </div>
                 </div>
+                <canvas id="weightGraph" width="400" height="200"></canvas>
             </div>
-            <div class="btn-group btn-group-toggle mb-3" data-toggle="buttons">
-                <label class="btn btn-primary active" id="kgButton">
-                    <input type="radio" name="options" autocomplete="off" checked> kg
-                </label>
-                <label class="btn btn-primary" id="lbsButton">
-                    <input type="radio" name="options" autocomplete="off"> lbs
-                </label>
-            </div>
-            <div id="weight-entries" class="list-group mb-3">
-                <!-- Weight entries will be populated here -->
-            </div>
-            <form id="addWeightForm" class="form-inline">
-                <input type="number" id="weightInput" class="form-control mr-2" placeholder="Enter weight in kg" required>
-                <button type="submit" class="btn btn-primary">Add Body Weight</button>
+        </div>
+        <div id="addWeightFormWrapper" class="form-inline">
+            <form id="addWeightForm" class="d-flex align-items-center">
+                <input type="number" id="weightInput" class="form-control mr-2" placeholder="Enter weight" required>
+                <button type="submit" class="btn btn-primary">Add</button>
             </form>
         </div>
+        <div id="weight-entries" class="list-group mb-3">
+            <!-- Weight entries will be populated here -->
+        </div>
     </div>
+</div>
 
-    <script src="/script/weight.js"></script>
+<script src="/script/weight.js"></script>
 <%- include('templates/footer') %>
 
+<style>
+    /* weight.css */
+
+#addWeightFormWrapper {
+    padding: 10px;
+}
+.chart-texts {
+    color: black;
+}
+
+#addWeightForm {
+    display: flex;
+    align-items: center;
+}
+
+#weightInput {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #f8f8f8;
+    margin-right: 10px;
+    outline: none;
+}
+
+#weightInput::placeholder {
+    font-weight: bold;
+    color: #aaa;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge-pill {
+    margin-left: 10px;
+}
+
+.weight-value {
+    display: block;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+</style>

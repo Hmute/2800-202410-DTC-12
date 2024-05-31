@@ -1,23 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
+const User = require('./User'); 
 
 // Define the weight schema and model
 const weightSchema = new mongoose.Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   date: { type: Date, required: true },
-  weightKg: { type: Number, required: true },
-  weightLbs: { type: Number, required: true }
+  weightKg: { type: Number, required: true }
 });
 
-weightSchema.index({ userId: 1, date: 1 }, { unique: true }); 
+weightSchema.index({ userId: 1, date: 1 }, { unique: true });
 
 const Weight = mongoose.model('Weight', weightSchema);
 
 // Authentication middleware
 function authMiddleware(req, res, next) {
-  if (!req.session.userId) {
-    return res.status(401).send('Unauthorized');
+  if (!req.session.isAuthenticated) {
+    return res.redirect('/login');
   }
   next();
 }
@@ -31,45 +31,85 @@ router.get('/', authMiddleware, (req, res) => {
 router.get('/weight-data', authMiddleware, async (req, res) => {
   const userId = req.session.userId;
   try {
+    const user = await User.findById(userId);
+    let startingWeight = parseFloat(user.startWeight) || null;
+
     const weightDataKg = await Weight.find({ userId }).sort({ date: 1 }).exec();
-    const weightDataLbs = weightDataKg.map(entry => ({
-      ...entry.toObject(),
-      weightKg: undefined,
-      weightLbs: (entry.weightKg * 2.20462).toFixed(2),
-      change: calculateChange(entry, weightDataKg)
-    }));
+
+    // If there are no weight logs and user weight exists, set startingWeight to user's weight
+    if (!weightDataKg.length && user.weight) {
+      startingWeight = parseFloat(user.weight);
+
+      // Add the startWeight to the user collection
+      await User.findByIdAndUpdate(userId, { startWeight: startingWeight });
+    } else if (!startingWeight && weightDataKg.length > 0) {
+      startingWeight = weightDataKg[0].weightKg;
+    }
+
+    const currentWeight = weightDataKg.length > 0 ? weightDataKg[weightDataKg.length - 1].weightKg : startingWeight;
+    const progress = startingWeight && currentWeight ? currentWeight - startingWeight : 0;
+
+    console.log('Starting Weight:', startingWeight);
+    console.log('Current Weight:', currentWeight);
+    console.log('Progress:', progress);
+
     res.json({
-      kg: weightDataKg.map(entry => ({
+      startingWeight: startingWeight ? startingWeight.toFixed(2) : 'N/A',
+      currentWeight: currentWeight ? currentWeight.toFixed(2) : 'N/A',
+      progress: progress ? progress.toFixed(2) : 'N/A',
+      weights: weightDataKg.map((entry, index) => ({
         ...entry.toObject(),
-        weightLbs: undefined,
-        change: calculateChange(entry, weightDataKg)
-      })),
-      lbs: weightDataLbs
+        weightKg: entry.weightKg.toFixed(2),
+        change: index === 0 && startingWeight ? calculateChange(startingWeight, entry.weightKg) : index === 0 ? 0 : calculateChange(weightDataKg[index - 1].weightKg, entry.weightKg)
+      }))
     });
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
-// Route to add a new weight entry
+// Route to add or update a weight entry
 router.post('/weight-data', authMiddleware, async (req, res) => {
-  const { date, weightKg, weightLbs } = req.body;
+  const { date, weightKg } = req.body;
   const userId = req.session.userId;
+  const weightInKg = parseFloat(weightKg).toFixed(2);
+
   try {
-    const newWeightEntry = new Weight({ userId, date, weightKg, weightLbs });
-    await newWeightEntry.save();
-    res.status(201).send(newWeightEntry);
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0);
+
+    const updatedWeightEntry = await Weight.findOneAndUpdate(
+      { userId, date: normalizedDate },
+      { $set: { weightKg: weightInKg } },
+      { new: true, upsert: true }
+    );
+
+    const user = await User.findById(userId);
+
+    // Set startWeight only if it doesn't exist
+    if (!user.startWeight) {
+      console.log('Setting start weight:', weightInKg);
+      await User.findByIdAndUpdate(userId, { startWeight: weightInKg });
+    } else {
+      console.log('Start weight already set:', user.startWeight);
+    }
+
+    // Update current weight
+    await User.findByIdAndUpdate(userId, { weight: weightInKg });
+
+    res.status(201).send(updatedWeightEntry);
   } catch (error) {
     res.status(500).send(error);
   }
 });
 
 // Helper function to calculate change percentage
-function calculateChange(entry, data) {
-  const prevEntry = data.find(e => e.date < entry.date);
-  if (!prevEntry) return 0;
-  const change = ((entry.weightKg - prevEntry.weightKg) / prevEntry.weightKg) * 100;
+function calculateChange(prevWeight, currentWeight) {
+  const change = ((currentWeight - prevWeight) / prevWeight) * 100;
   return change.toFixed(2);
 }
 
-module.exports = router;
+module.exports = {
+  router, // Exporting the router
+  Weight // Exporting the Weight model
+};

@@ -1,30 +1,48 @@
 <%- include('templates/header') %>
-
-
     <div class="container mt-5 d-flex justify-content-center align-items-center">
-        <div class="card p-4" style="width: 100%; max-width: 600px;">
-            <form action="/bot/save" method="POST" class="form">
+        <div id="botCard" class="card p-4 bg-transparent" style="width: 100%; max-width: 600px;">
+            <form action="/bot/generate" method="POST" class="form" id="regenerateForm">
+                <input type="hidden" name="goal" value="<%= data.goal %>">
+                <input type="hidden" name="method" value="<%= data.method %>">
+                <input type="hidden" name="type" value="<%= data.type %>">
+                <input type="hidden" name="level" value="<%= data.level %>">
+                <input type="hidden" name="days" value="<%= data.days %>">
+                <input type="hidden" name="time" value="<%= data.time %>">
+
                 <input type="hidden" name="selectedExercises" id="selectedExercises">
                 <input type="hidden" name="generatedAt" id="generatedAt" value="<%= generatedAt.toISOString() %>">
 
                 <div class="form-group">
-                    <% recommendations.forEach(function(recommendation, index) { %>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox"
-                                value='<%= JSON.stringify(recommendation) %>' id="exercise<%= index %>">
-                            <label class="form-check-label" for="exercise<%= index %>">
-                                <%= recommendation.name %>: <%= recommendation.repetitions %> reps
-                            </label>
-                        </div>
-                        <% }) %>
+                    <% if (recommendations.length> 0) { %>
+                        <% recommendations.forEach(function(recommendation, index) { %>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox"
+                                    value='<%= JSON.stringify(recommendation) %>' id="exercise-<%= index %>">
+                                <label class="form-check-label" for="exercise-<%= index %>">
+                                    <%= recommendation.name %>: <%= recommendation.repetitions %> reps, <%=
+                                                recommendation.sets %> sets, <%= recommendation.date.toDateString() %>
+                                </label>
+                            </div>
+                            <% }) %>
+                                <% } else { %>
+                                    <p class="text-center text-white">No exercises found. Please try generating again.
+                                    </p>
+                                    <% } %>
                 </div>
 
-                <div class="d-flex justify-content-around">
-                    <button type="button" class="btn btn-primary py-2" onclick="saveSelectedExercises()">Save Selected
-                        Exercises</button>
-                    <a href="/bot" class="btn btn-secondary py-2">Back to Bot</a>
-                    <button type="button" class="btn btn-secondary py-2" onclick="regenerateWorkout()">Regenerate
-                        Workout</button>
+                <div class="form-group d-flex flex-column align-items-center mt-3">
+                    <button type="button" class="btn btn-primary mb-2" id="save-button"
+                        onclick="saveSelectedExercises()">Save Selected Exercises</button>
+                    <span id="warning-message" class="text-danger small" style="display: none;">Please select at least
+                        one exercise.</span>
+                </div>
+
+                <div class="d-flex justify-content-center mt-3">
+                    <div class="btn-group" role="group" style="width: 100%;">
+                        <a href="/bot" class="btn btn-secondary" style="flex: 1;">Back to Bot</a>
+                        <button type="button" class="btn btn-secondary" style="flex: 1;"
+                            onclick="regenerateWorkout()">Regenerate Workout</button>
+                    </div>
                 </div>
             </form>
         </div>

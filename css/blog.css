@@ -1,7 +1,5 @@
 .main-content {
-  padding: 20px;
-  padding-bottom: 60px;
-  /* Adjust for floating action buttons */
+  padding: 10px;
 }
 
 /* Section Headers */
@@ -27,8 +25,7 @@ h2 {
   margin-bottom: 20px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  min-width: 300px;
-  max-width: 300px;
+  width: 100%;
   /* Ensure cards are of uniform width */
   flex: 0 0 auto;
 }
@@ -159,10 +156,10 @@ small {
   }
 
   .fab-container {
-    bottom: 60px;
+    bottom: 120px;
   }
 
   .fab-container-view {
-    bottom: 120px;
+    bottom: 180px;
   }
 }
