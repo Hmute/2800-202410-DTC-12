@@ -8,16 +8,14 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const isAuthenticated = require("../middlewares/blogMiddlewares");
 
+// Route to fetch and display blog posts
 router.get("/", async (req, res) => {
   if (!req.session.isAuthenticated) {
-    return res.redirect('/login');
+    return res.redirect("/login");
   }
   try {
-    // Fetch the latest blogs
-    const blogs = await Blog.find().sort({ fullDate: -1 });
-
-    // Fetch the top 5 popular blogs
-    const popularBlogs = await Blog.find().sort({ views: -1 }).limit(5);
+    const blogs = await Blog.find().sort({ fullDate: -1 }); // Fetch latest blogs
+    const popularBlogs = await Blog.find().sort({ views: -1 }).limit(5); // Fetch top 5 popular blogs
 
     res.render("blogPage", {
       page: "Blog Posts",
@@ -30,10 +28,12 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Route to render the blog creation page
 router.get("/create", (req, res) => {
   res.render("blogCreate");
 });
 
+// Route to handle blog saving with image upload
 router.post("/save", upload.single("image"), async (req, res) => {
   const { title, content, tags } = req.body;
 
@@ -45,7 +45,6 @@ router.post("/save", upload.single("image"), async (req, res) => {
   }
 
   try {
-    // Upload the file to Cloudinary
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "blog_images" },
@@ -83,6 +82,7 @@ router.post("/save", upload.single("image"), async (req, res) => {
   }
 });
 
+// Route to save the blog post to the user's list
 router.get("/postSave", async (req, res) => {
   const blogId = req.query.blogId;
 
@@ -102,6 +102,7 @@ router.get("/postSave", async (req, res) => {
   }
 });
 
+// Route to view a specific blog post
 router.get("/view", isAuthenticated, async (req, res) => {
   const blogId = req.query.id;
   try {
@@ -111,15 +112,16 @@ router.get("/view", isAuthenticated, async (req, res) => {
     }
     const user = await User.findById(req.session.userId);
     if (!user) {
-      res.status(404).send('User not found.')
+      res.status(404).send("User not found.");
     }
-    const profile = user.profilePicture || '/images/Default_pfp.png'
+    const profile = user.profilePicture || "/images/Default_pfp.png";
     res.render("blogView", { blog, profile });
   } catch (err) {
     res.status(500).send("Error loading blog post.");
   }
 });
 
+// Route to display user's blog posts
 router.get("/posts", async (req, res) => {
   if (!req.session.userId) {
     console.log("No user currently logged in.");
@@ -140,19 +142,18 @@ router.get("/posts", async (req, res) => {
   }
 });
 
+// Route to delete a blog post
 router.post("/posts/delete", async (req, res) => {
   const { blogId } = req.body;
 
   try {
-    // Delete from Blog db
-    await Blog.findByIdAndDelete(blogId);
+    await Blog.findByIdAndDelete(blogId); // Delete from Blog db
     console.log(`${blogId} has been delete from the blog collection.`);
 
-    // Delete from User blogPosts Array
     await User.updateOne(
       { blogPosts: blogId },
       { $pull: { blogPosts: blogId } }
-    );
+    ); // Delete from User blogPosts Array
     console.log(`${blogId} has been delete from the User blogPosts Array.`);
     res.redirect("/blog/posts");
   } catch (err) {
